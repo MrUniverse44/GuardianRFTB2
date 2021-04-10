@@ -1,0 +1,3 @@
+name: GuardianRFTB
+version: ${project.version}
+main: dev.mruniverse.guardianrftb.bungeemode.GuardianRFTB
