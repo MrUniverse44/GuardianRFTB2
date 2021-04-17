@@ -1,0 +1,143 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+runnerKits:
+  default:
+    KitInfo:
+      item: BEACON
+      name: '&e&lDEFAULT'
+      kitID: '0'
+      slot: 0
+      price: 0
+      lore:
+        - '&7Kit Runner Default'
+        - '&aClick to select'
+    Armor:
+      Helmet:
+        item: DISABLE
+        name: '&eBeast Helmet'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Chestplate:
+        item: DISABLE
+        name: '&eBeast Helmet'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Leggings:
+        item: DISABLE
+        name: '&eBeast Leggings'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Boots:
+        item: DISABLE
+        name: '&eBeast Boots'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+    Inventory:
+      Beacon:
+        item: BEACON
+        name: '&bCheckpoint'
+        slot: 0
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+beastKits:
+  default:
+    KitInfo:
+      item: DIAMOND_SWORD
+      name: '&e&lDEFAULT'
+      kitID: '0'
+      slot: 0
+      price: 0
+      lore:
+        - '&7Kit Beast Default'
+        - '&aClick to select'
+    Armor:
+      Helmet:
+        item: DIAMOND_HELMET
+        name: '&eBeast Helmet'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Chestplate:
+        item: DIAMOND_CHESTPLATE
+        name: '&eBeast Helmet'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Leggings:
+        item: DIAMOND_LEGGINGS
+        name: '&eBeast Leggings'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Boots:
+        item: DIAMOND_BOOTS
+        name: '&eBeast Boots'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+    Inventory:
+      Sword:
+        item: DIAMOND_SWORD
+        name: '&eBeast Sword'
+        slot: 0
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+killerKits:
+  default:
+    KitInfo:
+      item: IRON_SWORD
+      name: '&e&lDEFAULT'
+      kitID: '0'
+      price: 0
+      lore:
+        - '&7Kit Killer Default'
+        - '&aClick to select'
+    Armor:
+      Helmet:
+        item: DISABLED
+        name: '&eKiller Helmet'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Chestplate:
+        item: DISABLED
+        name: '&eKiller Helmet'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Leggings:
+        item: DISABLED
+        name: '&eKiller Leggings'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+      Boots:
+        item: DISABLED
+        name: '&eKiller Boots'
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'
+    Inventory:
+      Sword:
+        item: IRON_SWORD
+        name: '&cKiller Sword'
+        slot: 0
+        lore:
+          - '&7Here your lore'
+          - '&eplay.servername.net'

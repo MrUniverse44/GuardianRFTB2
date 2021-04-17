@@ -1,0 +1,246 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+menus:
+  shop:
+    inventoryName: '&8Shop Menu'
+    inventoryRows: 6
+    inventorySounds:
+      - ORB_PICKUP
+    items:
+      KitRunner:
+        name: '&aKits: Runner'
+        slot: 21
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to open kit runners menu'
+        item: MAP
+        toggle: true
+      Craft:
+        name: '&aCraft Coins'
+        slot: 22
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to open Craft Coins menu'
+        item: BREWING_STAND
+        toggle: true
+      KitBeast:
+        name: '&aKits: Beast'
+        slot: 23
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to open kit beasts menu'
+        item: FIREWORK
+        toggle: true
+      Boost:
+        name: '&aGame Booster'
+        slot: 31
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to open boost menu'
+        item: EXPERIENCE_BOTTLE
+        toggle: true
+  gameMain:
+    inventoryName: '&8Game Selector'
+    inventoryRows: 6
+    inventorySounds:
+      - ORB_PICKUP
+    inventoryGameOpen:
+      toggle: true
+      gameType: CLASSIC
+    items:
+      Classic:
+        name: '&aMode: Classic'
+        slot: 21
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see classic maps'
+        item: LIME_BANNER
+        toggle: true
+      Infected:
+        name: '&aMode: Infected'
+        slot: 22
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see infected maps'
+        item: PINK_BANNER
+      Double:
+        name: '&aMode: Double Beast'
+        slot: 23
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see infected maps'
+        item: CYAN_BANNER
+        toggle: true
+      Killer:
+        name: '&aMode: Killer'
+        slot: 30
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see infected maps'
+        item: RED_BANNER
+        toggle: true
+      Island:
+        name: '&aMode: Island'
+        slot: 31
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see island maps'
+        item: YELLOW_BANNER
+        toggle: true
+      IslandDouble:
+        name: '&aMode: Island Double'
+        slot: 32
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see island double maps'
+        item: GREEN_BANNER
+        toggle: true
+      IslandKiller:
+        name: '&aMode: Island Killer'
+        slot: 40
+        lore:
+          - '&8RigoxRFTB'
+          - '&eClick to see island killer maps'
+        item: ORANGE_BANNER
+        toggle: true
+  kits:
+    inventoryName: '&8Kit Menu'
+    inventoryRows: 3
+    inventorySounds:
+      - ORB_PICKUP
+    blocked-item:
+      toggle: true
+      item: STAINED_GLASS_PANE:14
+      name: '&c&nKit: %kit_name%'
+      lore:
+        - ' '
+        - '&7Price: &6%price%'
+        - ' '
+        - '&eplay.servername.net'
+  game:
+    inventoryName: '&8Games'
+    inventoryRows: 3
+    inventorySounds:
+      - ORB_PICKUP
+    item-status:
+      waiting: STAINED_CLAY:5
+      starting: STAINED_CLAY:4
+      playing: STAINED_CLAY:14
+      ending: STAINED_CLAY:11
+    item:
+      name: '&e&nMap: %map_name%'
+      lore:
+        - ' '
+        - '&7Status: &b%map_status%'
+        - '&7Mode: &b%map_mode%'
+        - '&7Players: &b%map_on%/%map_max%'
+        - ' '
+        - '&eplay.servername.net'
+fill-inventory:
+  gameMain:
+    fillOne:
+      item: STAINED_GLASS_PANE:53
+      name: '&aRFTB Shop'
+      lore:
+        - '&8RigoxRFTB &7F-1'
+        - '&eplay.servername.net'
+      list:
+        type: ONLY
+        values:
+          - 0
+          - 1
+          - 7
+          - 8
+          - 9
+          - 17
+          - 36
+          - 44
+          - 45
+          - 46
+          - 52
+          - 53
+    fillTwo:
+      item: STAINED_GLASS_PANE:15
+      name: '&aRFTB Shop'
+      lore:
+        - '&8RigoxRFTB &7F-2'
+        - '&eplay.servername.net'
+      list:
+        type: IGNORE
+        values:
+          - 0
+          - 1
+          - 7
+          - 8
+          - 9
+          - 17
+          - 36
+          - 44
+          - 45
+          - 46
+          - 52
+          - 53
+          - 21
+          - 22
+          - 30
+          - 32
+          - 40
+          - 23
+          - 31
+  shop:
+    fillOne:
+      item: STAINED_GLASS_PANE:5
+      name: '&aRFTB Shop'
+      lore:
+        - '&8RigoxRFTB &7F-1'
+        - '&eplay.servername.net'
+      list:
+        type: ONLY
+        values:
+          - 0
+          - 1
+          - 7
+          - 8
+          - 9
+          - 17
+          - 36
+          - 44
+          - 45
+          - 46
+          - 52
+          - 53
+    fillTwo:
+      item: STAINED_GLASS_PANE:15
+      name: '&aRFTB Shop'
+      lore:
+        - '&8RigoxRFTB &7F-2'
+        - '&eplay.servername.net'
+      list:
+        type: IGNORE
+        values:
+          - 0
+          - 1
+          - 7
+          - 8
+          - 9
+          - 17
+          - 36
+          - 44
+          - 45
+          - 46
+          - 52
+          - 53
+          - 21
+          - 22
+          - 23
+          - 31

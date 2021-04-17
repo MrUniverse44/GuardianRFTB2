@@ -1,0 +1,179 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+settings:
+  # Enable Check update when the plugin load
+  update-check: true
+  # Plugin language file, if you want add your custom lang file you need put the name ("messages_<code>.yml") and in the language you put the code, example:
+  # messages_en.yml | code: en
+  # messages_es.yml | code: es
+  language: en
+  # Give default kits on first join
+  default-kits:
+    # Toggle
+    toggle: true
+    # Runner Kit (For this, you need use only KitID's, by default: 0)
+    runner: 0
+    # Beast Kit (For this, you need use only KitID's, by default: 0)
+    beast: 0
+  # Leave Commands
+  leaveCMDs:
+    - /leave
+    - /quit
+    - /salir
+  # Plugin Date Format
+  dateFormat: 'dd/MM/yyyy'
+  # Leave Cancel Time (In Seconds)
+  leaveCancelTime: 3
+  # Lobby Options
+  lobby:
+    # Lobby Location ("notSet" by default)
+    locatio: notSet
+    # Plugin Custom Chat
+    chat: true
+    # Lobby BossBar
+    bossBar: true
+    # Toggle Lobby-ActionBar
+    actionBar: true
+    # Toggle Damage in Lobby
+    cancelDamage: true
+    # Toggle Inventory Click
+    blockInventoryClick: true
+    # Toggle Hunger in Lobby
+    noHunger: true
+    # Toggle Weather in Lobby
+    disableWeather: true
+    # Cancel BlockPlaceEvent in LobbyWorld
+    cancelBlockPlace: true
+    # Cancel BlockBreakEvent in LobbyWorld
+    cancelBlockBreak: true
+    # Teleport to the lobby when the player is in the void of the lobby world.
+    voidSpawnTP: true
+    # Lobby Scoreboard only in the lobby World
+    scoreboard-only-in-lobby-world: false
+    # Join Options
+    join:
+      # Teleport to the lobby when the player join
+      teleport: true
+      # Auto Heal
+      autoHeal: true
+      # Clear Inventory
+      clearInventory: true
+      # Gamemode
+      gamemode: ADVENTURE
+      # Hide default minecraft join message
+      message: false
+    quit:
+      # Hide default minecraft quit message
+      message: false
+      # Update statics (RECOMMENDED: false) All statics are updated when the server turns off for a better performance)
+      statics: false
+    # Hub servers
+    Hub-servers:
+      - Hub1
+      - Hub2
+  # Point System
+  pointSystem:
+    # Runner Points
+    runners:
+      # Runner death
+      death: -6
+      # Runner Win
+      win: 4
+      # Runner kill
+      kill: 2
+    # Beast Points
+    beasts:
+      # Beast death
+      death: -4
+      # Beast Win
+      win: 4
+      # Beast Kill
+      kill: 1
+  # Custom Tags
+  tags:
+    # Runners
+    runners:
+      toggle: true
+      tag: '&b&lRUNNER'
+    # Beasts
+    beasts:
+      toggle: true
+      tag: '&e&lBEAST'
+    # Killers
+    killer:
+      toggle: true
+      tag: '&a&lKILLER'
+  # Signs
+  signs:
+    line1: '&l%arena%'
+    line2: '%gameStatus%'
+    line3: '%on%/%max%'
+    line4: '&nClick to join'
+  # Status
+  status:
+    # Color Status
+    color:
+      preparing: '&5Config'
+      waiting: '&aWaiting'
+      starting: '&eStarting'
+      playing: '&cPlaying'
+      InGame: '&4InGame'
+      ending: '&9Restarting'
+    # Names
+    names:
+      preparing: Preparing
+      waiting: Waiting
+      starting: Starting
+      playing: Playing
+      InGame: InGame
+      ending: Restarting
+  # Game Options
+  game:
+    # Show Beast distance in a actionbar or BossBar
+    beastDistance:
+      # Toggle
+      toggle: true
+      #ShowBeast distance formats:
+      # - ACTIONBAR (ACTION_BAR,ACTION BAR)
+      # - BOSSBAR (BOSS BAR,BOSS_BAR)
+      Format: BOSSBAR
+    # Game Roles
+    roles:
+      beast: Beast
+      beasts: Beasts
+      runner: Runner
+      runners: Runners
+      killer: Killer
+      killers: Killers
+    # Game Modes
+    modes:
+      DOUBLE_BEAST: Double Beast
+      CLASSIC: Classic
+      INFECTED: Infected
+      KILLER: Killer Mode
+      ISLAND_OF_THE_BEAST: Island of the beast
+      ISLAND_OF_THE_BEAST_DOUBLE: Island of the beast Double
+      ISLAND_OF_THE_BEAST_KILLER: Island of the beast Killer
+      HISTORY_MODE: History Mode
+  # Time Option
+  timer:
+    weeks: weeks
+    week: week
+    days: days
+    day: day
+    minutes: minutes
+    minute: minute
+    seconds: seconds
+    second: second
+
+

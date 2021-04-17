@@ -9,10 +9,13 @@
 * Developer API
 * Customizable
 ```YAML
-  Scoreboards: With Animation System & Condition System for lines
-  Messages: With Condition System, Permissions & with a language System
-  Sounds: With support for all plugin names, thanks to XSounds
-  Game Names: If you are using the same arena for different modes, you can use this to use the same name and dont show game1, game2 (something like this)
+  Scoreboards: With Animation System & Condition System for lines.
+  Messages: With Condition System, Permissions & with a language System.
+  Sounds: With support for all plugin names, thanks to XSounds.
+  Game Names: 
+    - If you are using the same arena for different modes
+      you can use this to use the same name and dont show game1,
+      game2,game3 (something like this).
 ```
 * BossBar,Titles,ActionBar System
 * Free & Open-Source

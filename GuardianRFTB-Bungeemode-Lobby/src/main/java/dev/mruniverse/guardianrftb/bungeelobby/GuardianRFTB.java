@@ -1,16 +1,16 @@
 package dev.mruniverse.guardianrftb.bungeelobby;
 
-import net.md_5.bungee.api.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public final class GuardianRFTB extends Plugin {
+public final class GuardianRFTB extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+
     }
 }
