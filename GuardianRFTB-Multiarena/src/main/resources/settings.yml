@@ -14,8 +14,8 @@ settings:
   # Enable Check update when the plugin load
   update-check: true
   # Plugin language file, if you want add your custom lang file you need put the name ("messages_<code>.yml") and in the language you put the code, example:
-  # messages_en.yml | code: en
-  # messages_es.yml | code: es
+  # messages_en.yml | code: en | language: en
+  # messages_es.yml | code: es | language: es
   language: en
   # Give default kits on first join
   default-kits:
