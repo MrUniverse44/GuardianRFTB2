@@ -87,10 +87,7 @@ public class PlayerRunnable extends BukkitRunnable {
                             message = bossGameRunners;
                         }
                         if(gameBossFormat.equals(GameBossFormat.BOSSBAR)) {
-                            boolean changeLife = false;
-                            if(!plugin.getUtils().isBeast(player)) {
-                                changeLife = true;
-                            }
+                            boolean changeLife = !plugin.getUtils().isBeast(player);
                             Player beast = plugin.getUtils().getRandomBeast(player);
                             if(Objects.requireNonNull(beast.getLocation().getWorld()).equals(player.getLocation().getWorld())) {
                                 double mainDistance = player.getLocation().distance(beast.getLocation());

@@ -7,7 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 import java.util.UUID;
-
+@SuppressWarnings("unused")
 public class TitleRunnable extends BukkitRunnable {
     private final GuardianRFTB plugin;
     private boolean isEnabled;

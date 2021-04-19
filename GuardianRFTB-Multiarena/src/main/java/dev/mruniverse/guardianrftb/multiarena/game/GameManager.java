@@ -16,8 +16,8 @@ import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class GameManager {
-    private final ArrayList<Game> games = new ArrayList<>();
-    private final HashMap<World,Game> gamesWorlds = new HashMap<>();
+    private final ArrayList<GameInfo> games = new ArrayList<>();
+    private final HashMap<World,GameInfo> gamesWorlds = new HashMap<>();
     public HashMap<String,GameChests> gameChests = new HashMap<>();
     public HashMap<GameType,GameMenu> gameMenu = new HashMap<>();
     private final GameMainMenu gameMainMenu;
@@ -36,10 +36,10 @@ public class GameManager {
     public GameChests getGameChest(String chestName) {
         return gameChests.get(chestName);
     }
-    public Game getGame(String gameName) {
+    public GameInfo getGame(String gameName) {
         if (this.games.size() < 1)
             return null;
-        for (Game game : this.games) {
+        for (GameInfo game : this.games) {
             if (game.getConfigName().equalsIgnoreCase(gameName))
                 return game;
         }
@@ -64,7 +64,7 @@ public class GameManager {
                             mapName = gameName;
                             plugin.getStorage().save(SaveMode.GAMES_FILES);
                         }
-                        Game game = new Game(plugin, gameName, mapName);
+                        GameInfo game = new GameInfo(plugin, gameName, mapName);
                         this.games.add(game);
                         plugin.getLogs().debug("Game " + gameName + " loaded!");
                     } else {
@@ -82,8 +82,8 @@ public class GameManager {
         }
     }
     public void loadGameWorlds() {
-        for(Game game : getGames()) {
-            gamesWorlds.put(game.runnersLocation.getWorld(),game);
+        for(GameInfo game : getGames()) {
+            gamesWorlds.put(game.getRunnerSpawn().getWorld(),game);
         }
     }
     public GameMainMenu getGameMainMenu() { return gameMainMenu; }
@@ -102,7 +102,7 @@ public class GameManager {
             gameName = configName;
             plugin.getStorage().save(SaveMode.GAMES_FILES);
         }
-        Game game = new Game(plugin,configName,gameName);
+        GameInfo game = new GameInfo(plugin,configName,gameName);
         this.games.add(game);
         plugin.getLogs().debug("Game " + gameName + " loaded!");
     }
@@ -112,19 +112,19 @@ public class GameManager {
         }
         plugin.getLogs().debug("Game " + gameName + " unloaded!");
     }
-    public ArrayList<Game> getGames() {
+    public ArrayList<GameInfo> getGames() {
         return games;
     }
-    public HashMap<World,Game> getGameWorlds() { return gamesWorlds; }
+    public HashMap<World,GameInfo> getGameWorlds() { return gamesWorlds; }
 
-    public Game getGame(Player player) {
+    public GameInfo getGame(Player player) {
         return plugin.getPlayerData(player.getUniqueId()).getGame();
     }
 
-    public Game getConfigGame(String name) {
+    public GameInfo getConfigGame(String name) {
         if (this.games.size() < 1)
             return null;
-        for (Game game : this.games) {
+        for (GameInfo game : this.games) {
             if (game.getConfigName().equalsIgnoreCase(name))
                 return game;
         }
@@ -132,9 +132,7 @@ public class GameManager {
     }
 
     public boolean existGame(String name) {
-        boolean exist = false;
-        if(getConfigGame(name) != null) exist = true;
-        return exist;
+        return getConfigGame(name) != null;
     }
 
     public void joinGame(Player player,String gameName) {
@@ -142,7 +140,7 @@ public class GameManager {
             plugin.getLib().getUtils().sendMessage(player, Objects.requireNonNull(plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.admin.arenaError")).replace("%arena_id%",gameName));
             return;
         }
-        Game game = getGame(gameName);
+        GameInfo game = getGame(gameName);
         game.join(player);
     }
     public void createGameFiles(String gameName) {

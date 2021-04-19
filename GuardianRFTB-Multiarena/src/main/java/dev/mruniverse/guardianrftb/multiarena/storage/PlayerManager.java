@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.storage;
 
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
-import dev.mruniverse.guardianrftb.multiarena.game.Game;
+import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -15,7 +15,7 @@ public class PlayerManager {
     private final Player player;
     private boolean pointStatus;
     private Location lastCheckpoint;
-    private Game currentGame;
+    private GameInfo currentGame;
     private int leaveDelay;
     private int kills = 0;
     private int wins = 0;
@@ -37,7 +37,7 @@ public class PlayerManager {
     public void setBoard(GuardianBoard board) {
         guardianBoard = board;
     }
-    public void setGame(Game game) { currentGame = game; }
+    public void setGame(GameInfo game) { currentGame = game; }
     public GuardianBoard getBoard() {
         return guardianBoard;
     }
@@ -47,7 +47,7 @@ public class PlayerManager {
     public String getName() {
         return player.getName();
     }
-    public Game getGame() { return currentGame; }
+    public GameInfo getGame() { return currentGame; }
     public Player getPlayer() {
         return player;
     }

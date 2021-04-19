@@ -101,8 +101,8 @@ InGame:
     lore:
       - '&8GuardianRFTB'
       - '&eClick to back'
-Playing:
-  BeastInventory:
+playing:
+  beast-inventory:
     Sword:
       item: DIAMOND_SWORD
       name: '&eBeast Sword'
@@ -110,7 +110,7 @@ Playing:
         - '&7Here your lore'
         - '&eplay.servername.net'
       slot: 0
-  BeastArmor:
+  beast-armor:
     Helmet:
       item: DIAMOND_HELMET
       name: '&eBeast Helmet'

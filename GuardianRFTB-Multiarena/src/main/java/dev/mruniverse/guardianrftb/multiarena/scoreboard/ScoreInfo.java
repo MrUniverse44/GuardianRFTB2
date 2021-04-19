@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.scoreboard;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.Game;
+import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 public class ScoreInfo {
@@ -164,23 +163,20 @@ public class ScoreInfo {
 
         if(plugin.getPlayerData(player.getUniqueId()) != null) {
             if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-                Game playerGame = plugin.getPlayerData(player.getUniqueId()).getGame();
+                GameInfo playerGame = plugin.getPlayerData(player.getUniqueId()).getGame();
                 text = text.replace("<arena_name>",playerGame.getName())
                         .replace("<arena_online>","" + playerGame.getPlayers().size())
-                        .replace("<arena_max>","" + playerGame.max)
+                        .replace("<arena_max>","" + playerGame.getMax())
                         .replace("<arena_need>","" + playerGame.getNeedPlayers())
                         .replace("<arena_time_text>","...")
                         .replace("<arena_beast>","...")
                         .replace("<arena_runners>","" + playerGame.getRunners().size())
-                        .replace("<arena_mode>",playerGame.getGameType().getType())
-                        .replace("<arena_timeLeft>",playerGame.timer + "")
-                        .replace("<arena_status>",playerGame.gameStatus.getStatus())
-                        .replace("<player_role>","...");
-                if(plugin.getPlayerData(player.getUniqueId()).getBoard().equals(GuardianBoard.SELECTING)) {
-                    text = text.replace("<arena_time_number>", playerGame.starting + "");
-                } else {
-                    text = text.replace("<arena_time_number>", playerGame.fakeStarting + "");
-                }
+                        .replace("<arena_mode>",playerGame.getType().getType())
+                        .replace("<arena_timeLeft>",playerGame.getLastTimer() + "")
+                        .replace("<arena_status>",playerGame.getStatus().getStatus())
+                        .replace("<player_role>","...")
+                        .replace("<arena_time_number>", playerGame.getLastTimer() + "");
+
             }
         }
         if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }

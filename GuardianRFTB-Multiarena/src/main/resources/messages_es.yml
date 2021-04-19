@@ -14,8 +14,10 @@ messages:
   game:
     join-game: '&b%player% &7ha entrado a la partida! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game: '&b%player% &7ha abandonado la partida! &3(&b%game_online%&3/&b%game_max%&3)&7!'
+    leave-game-in-game: '&b%player% &7ha abandonado la partida!'
     chosenBeast: '&eEl jugador &b%player% &efue escogido como la bestia!'
     game-count:
+      selecting: '&eLa bestia sera seleccionada en &c%current_time% &e%current_time_letter%'
       start: '&eEl juego inicia en &c%current_time% &e%current_time_letter%!'
       beast: '&eLa bestia aparece en &c%current_time% &e%current_time_letter%!'
       enough-players: '&cLa partida no puede iniciar, faltan jugadores'
@@ -94,6 +96,7 @@ messages:
     actionBar: '&bEstas jugando &e&lRFTB &bcon &e&lGuardianRFTB'
     bossBar: '&bEstas jugando en &e&nServerName Network&b.'
   others:
+    already: '&cTu ya estas en una partida.'
     leave:
       confirm: '&a&lTeletransportandote al lobby en <leaveCancelTime> segundos...[new line]&a&lClick-Derecho para cancelar!'
       cancelled: '&c&lCancelado!'

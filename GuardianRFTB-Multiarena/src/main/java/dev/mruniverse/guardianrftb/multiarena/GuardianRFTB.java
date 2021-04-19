@@ -9,6 +9,8 @@ import dev.mruniverse.guardianrftb.multiarena.enums.ItemFunction;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
 import dev.mruniverse.guardianrftb.multiarena.game.GameManager;
 import dev.mruniverse.guardianrftb.multiarena.listeners.ListenerController;
+import dev.mruniverse.guardianrftb.multiarena.runnables.PlayerRunnable;
+import dev.mruniverse.guardianrftb.multiarena.runnables.TitleRunnable;
 import dev.mruniverse.guardianrftb.multiarena.scoreboard.BoardController;
 import dev.mruniverse.guardianrftb.multiarena.storage.FileStorage;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
@@ -47,6 +49,8 @@ public final class GuardianRFTB extends JavaPlugin {
     private settingsInfo sInfo;
     private GameManager gameManager;
     private BoardController boardController;
+    private PlayerRunnable runnable;
+    private TitleRunnable titleRunnable;
 
     public ExternalLogger getLogs() { return logger; }
     public ListenerController getListener() { return listenerController; }
@@ -57,7 +61,10 @@ public final class GuardianRFTB extends JavaPlugin {
     public GameManager getGameManager() { return gameManager; }
     public GuardianUtils getUtils() { return guardianUtils; }
     public BoardController getScoreboards() { return boardController; }
+    public PlayerRunnable getRunnable() { return runnable; }
+    public TitleRunnable getTitleRunnable() { return titleRunnable; }
     public boolean hasPAPI() { return hasPAPI; }
+
 
     public void addPlayer(Player player){
         if(!existPlayer(player)) {
@@ -104,6 +111,7 @@ public final class GuardianRFTB extends JavaPlugin {
                 loadLobbyItems();
                 loadGameItems();
                 loadBeastKit();
+                loadRunnable();
             }
         };
         runnable.runTaskLater(this, 1L);
@@ -346,7 +354,7 @@ public final class GuardianRFTB extends JavaPlugin {
         }
     }
 
-    private ItemFunction getCurrent(String path) {
+    public ItemFunction getCurrent(String path) {
         if(path.equalsIgnoreCase("gameSelector")) {
             return ItemFunction.GAME_SELECTOR;
         }
@@ -360,5 +368,14 @@ public final class GuardianRFTB extends JavaPlugin {
             return ItemFunction.LOBBY_SELECTOR;
         }
         return ItemFunction.EXIT_LOBBY;
+    }
+    @SuppressWarnings("deprecation")
+    public void loadRunnable() {
+        runnable = new PlayerRunnable(this);
+        if (getStorage().getControl(GuardianFiles.SCOREBOARD).getBoolean("scoreboards.animatedTitle.toggle")) {
+            titleRunnable = new TitleRunnable(instance);
+            getServer().getScheduler().runTaskTimerAsynchronously(instance, instance.titleRunnable, 0L, getStorage().getControl(GuardianFiles.SCOREBOARD).getLong("scoreboards.animatedTitle.repeatTime"));
+        }
+        getServer().getScheduler().runTaskTimerAsynchronously(instance, instance.runnable, 0L, 20L);
     }
 }

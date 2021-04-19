@@ -61,7 +61,6 @@ public class GameChests {
                 int amount = getAmount(loadConfig,path + item + ".amount");
                 if(material == null) material = "BEDROCK";
                 Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(material);
-                XMaterial m;
                 if(optionalXMaterial.isPresent()) {
                     String itemName = loadConfig.getString(path + item + ".name");
                     Integer slot = loadConfig.getInt(path + item + ".slot");

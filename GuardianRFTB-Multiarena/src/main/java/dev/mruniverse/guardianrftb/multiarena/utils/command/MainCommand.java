@@ -1,0 +1,212 @@
+package dev.mruniverse.guardianrftb.multiarena.utils.command;
+
+import dev.mruniverse.guardianlib.core.utils.Utils;
+import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
+import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
+import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
+import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
+import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
+import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.NPCCommand;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+public class MainCommand implements CommandExecutor {
+
+    private final GuardianRFTB plugin;
+    private final String cmdPrefix;
+    private final GameCommand gameCommand;
+    private final NPCCommand npcCommand;
+    private final HoloCommand holoCommand;
+    private final CoinCommand coinCommand;
+
+    public MainCommand(GuardianRFTB plugin, String command) {
+        this.plugin = plugin;
+        this.cmdPrefix = "&e/" + command;
+        gameCommand = new GameCommand(plugin,command);
+        npcCommand = new NPCCommand(plugin,command);
+        holoCommand = new HoloCommand(plugin,command);
+        coinCommand = new CoinCommand(plugin,command);
+    }
+
+    private boolean hasPermission(CommandSender sender,String permission,boolean sendMessage) {
+        boolean check = true;
+        if(sender instanceof Player) {
+            Player player = (Player)sender;
+            check = player.hasPermission(permission);
+            if(sendMessage) {
+                String permissionMsg = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.no-perms");
+                if (permissionMsg == null) permissionMsg = "&cYou need permission &7%permission% &cfor this action.";
+                if (!check)
+                    plugin.getLib().getUtils().sendMessage(player, permissionMsg.replace("%permission%", permission));
+            }
+        }
+        return check;
+    }
+
+
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        try {
+            Utils utils = plugin.getLib().getUtils();
+            if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+                sender.sendMessage(" ");
+                utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
+                utils.sendMessage(sender,cmdPrefix + " join (name) &e- &fJoin Arena");
+                utils.sendMessage(sender,cmdPrefix + " randomJoin (mode)");
+                utils.sendMessage(sender,cmdPrefix + " leave &e- &fLeave CMD");
+                if(hasPermission(sender,"grftb.admin.help",false)) utils.sendMessage(sender,cmdPrefix + " admin &e- &fAdmin commands");
+                utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("admin")) {
+                if(args.length == 1 || args[1].equalsIgnoreCase("1")) {
+                    if(hasPermission(sender,"grftb.admin.help.game",true)) {
+                        sender.sendMessage(" ");
+                        utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
+                        utils.sendMessage(sender,"&6Admin - Game Commands Page#1:");
+                        utils.sendMessage(sender,cmdPrefix + " admin game create (game) &e- &fCreate Arena");
+                        utils.sendMessage(sender,cmdPrefix + " admin game delete (game) &e- &fDelete Arena");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setName (game) (name) &e- &fSet game name");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setMin (game) (min) &e- &fSet Min Players");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setMax (game) (max) &e- &fSet Max Players");
+                        utils.sendMessage(sender,cmdPrefix + " admin game addChest (game) (chest) &e- &fAdd chest to your game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game delChest (game) (chest) &e- &fRemove chest from your game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game addChestLoc (game) (chest) &e- &fAdd chest-loc to your game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game delChestLoc (game) (chest) &e- &fDel chest-loc of your game");
+                        utils.sendMessage(sender,"&b------------ &a(Page 1&l/4&a) &b------------");
+                    }
+                    return true;
+                }
+
+                if(args[1].equalsIgnoreCase("2")) {
+                    if(hasPermission(sender,"grftb.admin.help.game",true)) {
+                        sender.sendMessage(" ");
+                        utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
+                        utils.sendMessage(sender,"&6Admin - Game Commands Page#2:");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setMode (game) (mode) &e- &fChange Gamemode of your game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setWaiting (game) &e- &fSet Waiting Location");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setBeastSpawn (game) &e- &fBeast Spawn Location");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setRunnerSpawn (game) &e- &fRunner Spawn Location");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setSelectedBeast (game) &e- &fSelected Beast Location");
+                        utils.sendMessage(sender,cmdPrefix + " admin game chests (game) &e- &fSee all chest of your game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game enable (game) &e- &fEnable game to play");
+                        utils.sendMessage(sender,cmdPrefix + " admin game disable (game) &e- &fDisable game to config");
+                        utils.sendMessage(sender,"&b------------ &a(Page 2&l/4&a) &b------------");
+                    }
+                    return true;
+                }
+
+                if(args[1].equalsIgnoreCase("3")) {
+                    if(hasPermission(sender,"grftb.admin.help.others",true)) {
+                        sender.sendMessage(" ");
+                        utils.sendMessage(sender,"&b------------ &aGuardian SkyWars &b------------");
+                        utils.sendMessage(sender,"&6Admin - Holograms Commands:");
+                        utils.sendMessage(sender,cmdPrefix + " admin holo setHolo (kills-wins-stats) &e- &fSet Holo");
+                        utils.sendMessage(sender,cmdPrefix + " admin holo delHolo (kills-wins-stats) &e- &fDel Holo");
+                        utils.sendMessage(sender,cmdPrefix + " admin holo list &e- &fList of holograms");
+                        utils.sendMessage(sender,"&6Admin - Plugin Commands:");
+                        utils.sendMessage(sender,cmdPrefix + " admin reload &e- &fReload the plugin");
+                        utils.sendMessage(sender,cmdPrefix + " admin setlobby &e- &fSet Main Lobby");
+                        utils.sendMessage(sender,cmdPrefix + " admin modes &e- &fView all modes of the plugin");
+                        utils.sendMessage(sender,"&b------------ &a(Page 3&l/4&a) &b------------");
+                    }
+                    return true;
+                }
+                if(args[1].equalsIgnoreCase("4")) {
+                    if(hasPermission(sender,"grftb.admin.help.others",true)) {
+                        sender.sendMessage(" ");
+                        utils.sendMessage(sender,"&b------------ &aGuardian SkyWars &b------------");
+                        utils.sendMessage(sender,"&6Admin - NPC Commands:");
+                        utils.sendMessage(sender,cmdPrefix + " admin npc setNPC (Mode) &e- &fSet NPC");
+                        utils.sendMessage(sender,cmdPrefix + " admin npc delNPC (Mode) &e- &fDel NPC");
+                        utils.sendMessage(sender,cmdPrefix + " admin npc list &e- &fList of NPCs");
+                        utils.sendMessage(sender,"&6Admin - Coins Commands:");
+                        utils.sendMessage(sender,cmdPrefix + " admin coins set (player) (coins) &e- &fSet coins of a player");
+                        utils.sendMessage(sender,cmdPrefix + " admin coins add (player) (coins) &e- &fAdd coins to a player");
+                        utils.sendMessage(sender,cmdPrefix + " admin coins del (player) (coins) &e- &fDel coins of a player");
+                        utils.sendMessage(sender,"&b------------ &a(Page 4&l/4&a) &b------------");
+                    }
+                    return true;
+                }
+
+                if(args[1].equalsIgnoreCase("setlobby")) {
+                    if(hasPermission(sender,"grftb.admin.cmd.lobby",true)) {
+                        if (sender instanceof Player) {
+                            Player player = (Player) sender;
+                            String location = utils.getStringFromLocation(player.getLocation());
+                            plugin.getSettings().setLocation(player.getLocation());
+                            plugin.getStorage().getControl(GuardianFiles.SETTINGS).set("settings.lobby.location", location);
+                            plugin.getStorage().save(SaveMode.SETTINGS);
+                            utils.sendMessage(sender, "&aLocation now is &b" + location + ".");
+                        }
+                    }
+                }
+
+                if(args[1].equalsIgnoreCase("reload")) {
+                    if(hasPermission(sender,"grftb.admin.cmd.reload",true)) {
+                        plugin.getStorage().reloadFile(SaveMode.ALL);
+                        plugin.getGameManager().getGameMenu(GameType.CLASSIC).reloadMenu();
+                        plugin.getGameManager().getGameMenu(GameType.ISLAND_OF_THE_BEAST_KILLER).reloadMenu();
+                        plugin.getGameManager().getGameMenu(GameType.KILLER).reloadMenu();
+                        plugin.getGameManager().getGameMenu(GameType.ISLAND_OF_THE_BEAST).reloadMenu();
+                        plugin.getGameManager().getGameMenu(GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST).reloadMenu();
+                        plugin.getGameManager().getGameMenu(GameType.INFECTED).reloadMenu();
+                        plugin.getGameManager().getGameMenu(GameType.DOUBLE_BEAST).reloadMenu();
+                        plugin.getRunnable().update();
+                        if(plugin.getTitleRunnable() != null) plugin.getTitleRunnable().update();
+                        utils.sendMessage(sender, "&3» &aReload completed!");
+                        plugin.getSettings().update();
+                    }
+                }
+
+                if(args[1].equalsIgnoreCase("game") && args.length >= 4) {
+                    if(hasPermission(sender,"grftb.admin.cmd.game",true)) {
+                        gameCommand.usage(sender,getArguments(args));
+
+                    }
+                    return true;
+                }
+                if(args[1].equalsIgnoreCase("holo") && args.length >= 4) {
+                    if(hasPermission(sender,"grftb.admin.cmd.holo",true)) {
+                        holoCommand.usage(sender,getArguments(args));
+                    }
+                    return true;
+                }
+                if(args[1].equalsIgnoreCase("coins") && args.length >= 4) {
+                    if(hasPermission(sender,"grftb.admin.cmd.coins",true)) {
+                        coinCommand.usage(sender,getArguments(args));
+                    }
+                    return true;
+                }
+                if(args[1].equalsIgnoreCase("npc") && args.length >= 4) {
+                    if(hasPermission(sender,"grftb.admin.cmd.npc",true)) {
+                        npcCommand.usage(sender,getArguments(args));
+                    }
+                    return true;
+                }
+            }
+            return true;
+        } catch (Throwable throwable) {
+            plugin.getLogs().error(throwable);
+        }
+        return true;
+    }
+    private String[] getArguments(String[] args){
+        String[] arguments = new String[args.length - 2];
+        int argID = 0;
+        int aID = 0;
+        for(String arg : args) {
+            if(aID != 0 && aID != 1) {
+                arguments[argID] = arg;
+                argID++;
+            }
+            aID++;
+        }
+        return arguments;
+    }
+}
+

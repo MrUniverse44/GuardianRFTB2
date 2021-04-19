@@ -7,23 +7,37 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.Game;
+import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class GuardianUtils {
     private final GuardianRFTB plugin;
     private final Utils utils = GuardianLIB.getControl().getUtils();
+
     public GuardianUtils(GuardianRFTB plugin) {
         this.plugin = plugin;
     }
+
+    public void sendMessage(Player player,String message) {
+        utils.sendMessage(player,replaceVariables(message,player));
+    }
+    public void sendActionbar(Player player,String message) {
+        utils.sendActionbar(player,replaceVariables(message,player));
+    }
+    public void sendBossbar(Player player,String message) {
+        utils.sendBossBar(player,replaceVariables(message,player));
+    }
+
     public void sendGameList(Player player, List<String> list, GameTeam winnerTeam) {
         if(list == null) list = new ArrayList<>();
         String runnerRole = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("roles.runners");
@@ -39,8 +53,8 @@ public class GuardianUtils {
             lT = runnerRole;
         }
         UUID uuid = player.getUniqueId();
-        Game game = plugin.getPlayerData(uuid).getGame();
-        String gameType = game.getGameType().getType();
+        GameInfo game = plugin.getPlayerData(uuid).getGame();
+        String gameType = game.getType().getType();
         String gameName = game.getName();
         boolean playerBeast = game.getBeasts().contains(player);
         for(String line : list) {
@@ -67,8 +81,8 @@ public class GuardianUtils {
     public void rewardInfo(Player player,List<String> list,boolean winnerTeamIsRunners) {
         if(list == null) list = new ArrayList<>();
         UUID uuid = player.getUniqueId();
-        Game game = plugin.getPlayerData(uuid).getGame();
-        String gameType = game.getGameType().getType();
+        GameInfo game = plugin.getPlayerData(uuid).getGame();
+        String gameType = game.getType().getType();
         String gameName = game.getName();
         boolean playerBeast = game.getBeasts().contains(player);
         int winOrLoss;
@@ -76,13 +90,13 @@ public class GuardianUtils {
             if(winnerTeamIsRunners) {
                 winOrLoss = plugin.getSettings().getSettings().getInt("settings.pointSystem.beasts.death");
             } else {
-                winOrLoss = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.pointSystem.beasts.win");
+                winOrLoss = plugin.getSettings().getSettings().getInt("settings.pointSystem.beasts.win");
             }
         } else {
             if(winnerTeamIsRunners) {
-                winOrLoss = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.pointSystem.runners.win");
+                winOrLoss = plugin.getSettings().getSettings().getInt("settings.pointSystem.runners.win");
             } else {
-                winOrLoss = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.pointSystem.runners.death");
+                winOrLoss = plugin.getSettings().getSettings().getInt("settings.pointSystem.runners.death");
             }
         }
         plugin.getPlayerData(uuid).updateCoins(winOrLoss);
@@ -166,10 +180,11 @@ public class GuardianUtils {
 
     public void sendList(Player player,List<String> list) {
         if(list == null) list = new ArrayList<>();
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
+        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        if(currentData.getGame() != null) {
             UUID uuid = player.getUniqueId();
-            Game game = plugin.getPlayerData(uuid).getGame();
-            String gameType = game.getGameType().getType();
+            GameInfo game = currentData.getGame();
+            String gameType = game.getType().getType();
             String gameName = game.getName();
             boolean playerBeast = game.getBeasts().contains(player);
             for(String line : list) {
@@ -197,10 +212,46 @@ public class GuardianUtils {
         }
     }
 
+    public String replaceVariables(String text,Player player) {
+        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+        if(playerManager == null) {
+            plugin.addPlayer(player);
+            playerManager = plugin.getPlayerData(player.getUniqueId());
+        }
+
+        text = text.replace("<player_name>",player.getName())
+                .replace("<player_coins>",playerManager.getCoins() + "")
+                .replace("<player_wins>",playerManager.getKits().size() + "")
+                .replace("<player_kills>",playerManager.getKills() + "")
+                .replace("<player-deaths>",playerManager.getDeaths() + "")
+                .replace("<player_beast_kit>","Not selected")
+                .replace("<player_runner_kit>","Not selected")
+                .replace("<online>",plugin.getServer().getOnlinePlayers().size() + "")
+                .replace("<timeFormat>",getDateFormat());
+
+        if (playerManager.getGame() != null) {
+            GameInfo currentGame = playerManager.getGame();
+            text = text.replace("<arena_name>",currentGame.getName())
+                    .replace("<arena_online>","" + currentGame.getPlayers().size())
+                    .replace("<arena_max>","" + currentGame.getMax())
+                    .replace("<arena_need>","" + currentGame.getNeedPlayers())
+                    .replace("<arena_beast>","")
+                    .replace("<arena_runners>","" + currentGame.getRunners().size())
+                    .replace("<arena_mode>",currentGame.getType().getType())
+                    .replace("<arena_timeLeft>",currentGame.getLastTimer() + "")
+                    .replace("<arena_status>",currentGame.getStatus().getStatus())
+                    .replace("<player_role>","")
+                    .replace("<arena_time_number>", currentGame.getLastTimer() + "");
+        }
+        if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }
+        return text;
+    }
+
     public Player getRandomBeast(Player player) {
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-            if(plugin.getPlayerData(player.getUniqueId()).getGame().getBeasts().size() != 0) {
-                return plugin.getPlayerData(player.getUniqueId()).getGame().getBeasts().get(0);
+        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        if(currentData.getGame() != null) {
+            if(currentData.getGame().getBeasts().size() != 0) {
+                return currentData.getGame().getBeasts().get(0);
             }
             return player;
         }
@@ -208,14 +259,15 @@ public class GuardianUtils {
     }
 
     public boolean isBeast(Player player) {
-        if(plugin.getPlayerData(player.getUniqueId()) == null) return false;
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-            return plugin.getPlayerData(player.getUniqueId()).getGame().getBeasts().contains(player);
+        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        if(currentData == null) return false;
+        if(currentData.getGame() != null) {
+            return currentData.getGame().getBeasts().contains(player);
         }
         return false;
     }
-    private String getBeast(Game game) {
-        if(game.getGameType().equals(GameType.DOUBLE_BEAST)) {
+    private String getBeast(GameInfo game) {
+        if(game.getType().equals(GameType.DOUBLE_BEAST)) {
             return game.getBeasts().size()+"";
         }
         if(game.getBeasts().size() != 0) {
@@ -223,5 +275,42 @@ public class GuardianUtils {
         }
         return "none";
     }
+
+    public String getDateFormat() {
+        String dateFormat = plugin.getSettings().getSettings().getString("settings.dateFormat");
+        if(dateFormat == null) dateFormat = "dd/MM/yyyy";
+        return "" + (new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime()));
+
+    }
+
+    public void sendServer(Player player,String server) {
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(b);
+        try {
+            out.writeUTF("Connect");
+            out.writeUTF(server);
+        } catch (Throwable ignored) { }
+        player.sendPluginMessage(plugin, "BungeeCord", b.toByteArray());
+    }
+
+    public void sendLeaveCountdown(final Player player, final int delay) {
+        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+        int delayValue = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+            int countdown = delay;
+            public void run() {
+                if (this.countdown == 0) {
+                    plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
+                    playerManager.setLeaveDelay(0);
+                    if(playerManager.getGame() != null) {
+                        playerManager.getGame().leave(player);
+                    }
+                } else {
+                    this.countdown--;
+                }
+            }
+        }, 0L, 20L);
+        plugin.getPlayerData(player.getUniqueId()).setLeaveDelay(delayValue);
+    }
+
 
 }

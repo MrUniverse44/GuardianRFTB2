@@ -32,14 +32,18 @@ settings:
     - /salir
   # Plugin Date Format
   dateFormat: 'dd/MM/yyyy'
+  # Toggle perWorldTab option
+  perWorldTab: true
   # Leave Cancel Time (In Seconds)
   leaveCancelTime: 3
   # Lobby Options
   lobby:
     # Lobby Location ("notSet" by default)
-    locatio: notSet
+    location: notSet
     # Plugin Custom Chat
     chat: true
+    # Show all players including players in games (only for lobby-players)
+    show-all-players: true
     # Lobby BossBar
     bossBar: true
     # Toggle Lobby-ActionBar

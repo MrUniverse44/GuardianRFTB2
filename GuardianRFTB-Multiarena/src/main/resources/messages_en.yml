@@ -14,8 +14,10 @@ messages:
   game:
     join-game: '&b%player% &7has joined the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game: '&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
+    leave-game-in-game: '&b%player% &7has left the game!'
     chosenBeast: '&eThe player &b%player% &enow is a beast!'
     game-count:
+      selecting: '&eThe beast will be chosen in &c%current_time% &e%current_time_letter%'
       start: '&eThe game starts in &c%current_time% &e%current_time_letter%!'
       beast: '&eThe beast spawns in &c%current_time% &e%current_time_letter%!'
       enough-players: '&cThis game can''t start, not enough players'
@@ -94,6 +96,7 @@ messages:
     actionBar: '&bYou are playing &e&lRFTB &bwith &e&lGuardianRFTB'
     bossBar: '&bYou are playing on &e&nServerName Network&b.'
   others:
+    already: '&cYou are already playing'
     leave:
       confirm: '&a&lTeleporting you to the lobby in <leaveCancelTime> seconds...[new line]&a&lRight-Click again to cancel the teleport!'
       cancelled: '&c&lTeleport cancelled!'
