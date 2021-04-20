@@ -27,7 +27,11 @@ public class ScoreInfo {
             case LOBBY:
             default:
                 for (String line : scoreboard.getStringList("scoreboards.lobby.lines")) {
-                    line = replaceVariables(line, player);
+                    if(!lines.contains(replaceVariables(line,player))) {
+                        line = replaceVariables(line, player);
+                    } else {
+                        line = replaceVariables("&f" + line, player);
+                    }
                     lines.add(line);
                 }
                 return lines;
@@ -35,7 +39,11 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isStarting>") && !line.contains("<isSelecting>") && !line.contains("<BeastAppear>")) {
                         if (line.contains("<isWaiting>")) line = line.replace("<isWaiting>", "");
-                        line = replaceVariables(line, player);
+                        if(!lines.contains(replaceVariables(line,player))) {
+                            line = replaceVariables(line, player);
+                        } else {
+                            line = replaceVariables("&f" + line, player);
+                        }
                         lines.add(line);
                     }
                 }
@@ -44,7 +52,11 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isWaiting>") && !line.contains("<isStarting>") && !line.contains("<BeastAppear>")) {
                         if (line.contains("<isSelecting>")) line = line.replace("<isSelecting>", "");
-                        line = replaceVariables(line, player);
+                        if(!lines.contains(replaceVariables(line,player))) {
+                            line = replaceVariables(line, player);
+                        } else {
+                            line = replaceVariables("&f" + line, player);
+                        }
                         lines.add(line);
                     }
                 }
@@ -53,7 +65,11 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isWaiting>") && !line.contains("<isSelecting>") && !line.contains("<BeastAppear>")) {
                         if (line.contains("<isStarting>")) line = line.replace("<isStarting>", "");
-                        line = replaceVariables(line, player);
+                        if(!lines.contains(replaceVariables(line,player))) {
+                            line = replaceVariables(line, player);
+                        } else {
+                            line = replaceVariables("&f" + line, player);
+                        }
                         lines.add(line);
                     }
                 }
@@ -62,38 +78,62 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isWaiting>") && !line.contains("<isSelecting>") && !line.contains("<isStarting>")) {
                         if (line.contains("<BeastAppear>")) line = line.replace("<BeastAppear>", "");
-                        line = replaceVariables(line, player);
+                        if(!lines.contains(replaceVariables(line,player))) {
+                            line = replaceVariables(line, player);
+                        } else {
+                            line = replaceVariables("&f" + line, player);
+                        }
                         lines.add(line);
                     }
                 }
                 return lines;
             case PLAYING:
                 for (String line : scoreboard.getStringList("scoreboards.playing.lines")) {
-                    line = replaceVariables(line, player);
+                    if(!lines.contains(replaceVariables(line,player))) {
+                        line = replaceVariables(line, player);
+                    } else {
+                        line = replaceVariables("&f" + line, player);
+                    }
                     lines.add(line);
                 }
                 return lines;
             case WIN_BEAST_FOR_BEAST:
                 for (String line : scoreboard.getStringList("scoreboards.beastWin.forBeast.lines")) {
-                    line = replaceVariables(line, player);
+                    if(!lines.contains(replaceVariables(line,player))) {
+                        line = replaceVariables(line, player);
+                    } else {
+                        line = replaceVariables("&f" + line, player);
+                    }
                     lines.add(line);
                 }
                 return lines;
             case WIN_BEAST_FOR_RUNNERS:
                 for (String line : scoreboard.getStringList("scoreboards.beastWin.forRunners.lines")) {
-                    line = replaceVariables(line, player);
+                    if(!lines.contains(replaceVariables(line,player))) {
+                        line = replaceVariables(line, player);
+                    } else {
+                        line = replaceVariables("&f" + line, player);
+                    }
                     lines.add(line);
                 }
                 return lines;
             case WIN_RUNNERS_FOR_BEAST:
                 for (String line : scoreboard.getStringList("scoreboards.runnersWin.forBeast.lines")) {
-                    line = replaceVariables(line, player);
+                    if(!lines.contains(replaceVariables(line,player))) {
+                        line = replaceVariables(line, player);
+                    } else {
+                        line = replaceVariables("&f" + line, player);
+                    }
                     lines.add(line);
                 }
                 return lines;
             case WIN_RUNNERS_FOR_RUNNERS:
                 for (String line : scoreboard.getStringList("scoreboards.runnersWin.forRunners.lines")) {
-                    line = replaceVariables(line, player);
+                    if(!lines.contains(replaceVariables(line,player))) {
+                        line = replaceVariables(line, player);
+                    } else {
+                        line = replaceVariables("&f" + line, player);
+                    }
                     lines.add(line);
                 }
                 return lines;
