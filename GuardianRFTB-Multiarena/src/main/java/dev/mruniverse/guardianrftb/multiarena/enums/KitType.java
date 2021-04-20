@@ -1,4 +1,4 @@
-package dev.mruniverse.guardianrftb.multiarena.kits;
+package dev.mruniverse.guardianrftb.multiarena.enums;
 
 public enum KitType {
     BEAST,

@@ -5,7 +5,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
 import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
-import dev.mruniverse.guardianrftb.multiarena.kits.KitType;
+import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

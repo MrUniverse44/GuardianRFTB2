@@ -15,9 +15,11 @@ import dev.mruniverse.guardianrftb.multiarena.runnables.TitleRunnable;
 import dev.mruniverse.guardianrftb.multiarena.scoreboard.BoardController;
 import dev.mruniverse.guardianrftb.multiarena.storage.FileStorage;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.utils.GuardianPlaceholders;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.ItemsInfo;
 import dev.mruniverse.guardianrftb.multiarena.utils.settingsInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -51,6 +53,7 @@ public final class GuardianRFTB extends JavaPlugin {
     private PlayerRunnable runnable;
     private KitLoader kitLoader;
     private TitleRunnable titleRunnable;
+    private GuardianPlaceholders guardianPlaceholders;
 
     public ExternalLogger getLogs() { return logger; }
     public ListenerController getListener() { return listenerController; }
@@ -76,6 +79,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public HashMap<UUID, PlayerManager> getRigoxPlayers() { return guardianPlayers; }
     public PlayerManager getPlayerData(UUID uuid) { return guardianPlayers.get(uuid); }
     public KitLoader getKitLoader() { return kitLoader; }
+    public GuardianPlaceholders getGuardianPlaceholders() { return guardianPlaceholders; }
 
     @Override
     public void onEnable() {
@@ -116,6 +120,10 @@ public final class GuardianRFTB extends JavaPlugin {
                 loadGameItems();
                 loadBeastKit();
                 loadRunnable();
+                if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+                    guardianPlaceholders = new GuardianPlaceholders(instance);
+                    guardianPlaceholders.register();
+                }
             }
         };
         runnable.runTaskLater(this, 1L);
