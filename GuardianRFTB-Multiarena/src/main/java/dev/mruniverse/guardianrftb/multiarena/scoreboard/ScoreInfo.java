@@ -23,6 +23,7 @@ public class ScoreInfo {
     public List<String> getLines(GuardianBoard board, Player player) {
         List<String> lines = new ArrayList<>();
         FileConfiguration scoreboard = plugin.getStorage().getControl(GuardianFiles.SCOREBOARD);
+        StringBuilder white = new StringBuilder("&f");
         switch(board) {
             case LOBBY:
             default:
@@ -30,7 +31,8 @@ public class ScoreInfo {
                     if(!lines.contains(replaceVariables(line,player))) {
                         line = replaceVariables(line, player);
                     } else {
-                        line = replaceVariables("&f" + line, player);
+                        line = replaceVariables(white + line, player);
+                        white.append("&f");
                     }
                     lines.add(line);
                 }
@@ -42,7 +44,8 @@ public class ScoreInfo {
                         if(!lines.contains(replaceVariables(line,player))) {
                             line = replaceVariables(line, player);
                         } else {
-                            line = replaceVariables("&f" + line, player);
+                            line = replaceVariables(white + line, player);
+                            white.append("&f");
                         }
                         lines.add(line);
                     }
@@ -55,7 +58,8 @@ public class ScoreInfo {
                         if(!lines.contains(replaceVariables(line,player))) {
                             line = replaceVariables(line, player);
                         } else {
-                            line = replaceVariables("&f" + line, player);
+                            line = replaceVariables(white + line, player);
+                            white.append("&f");
                         }
                         lines.add(line);
                     }
@@ -68,7 +72,8 @@ public class ScoreInfo {
                         if(!lines.contains(replaceVariables(line,player))) {
                             line = replaceVariables(line, player);
                         } else {
-                            line = replaceVariables("&f" + line, player);
+                            line = replaceVariables(white + line, player);
+                            white.append("&f");
                         }
                         lines.add(line);
                     }
@@ -81,7 +86,8 @@ public class ScoreInfo {
                         if(!lines.contains(replaceVariables(line,player))) {
                             line = replaceVariables(line, player);
                         } else {
-                            line = replaceVariables("&f" + line, player);
+                            line = replaceVariables(white + line, player);
+                            white.append("&f");
                         }
                         lines.add(line);
                     }
@@ -92,7 +98,8 @@ public class ScoreInfo {
                     if(!lines.contains(replaceVariables(line,player))) {
                         line = replaceVariables(line, player);
                     } else {
-                        line = replaceVariables("&f" + line, player);
+                        line = replaceVariables(white + line, player);
+                        white.append("&f");
                     }
                     lines.add(line);
                 }
@@ -102,7 +109,8 @@ public class ScoreInfo {
                     if(!lines.contains(replaceVariables(line,player))) {
                         line = replaceVariables(line, player);
                     } else {
-                        line = replaceVariables("&f" + line, player);
+                        line = replaceVariables(white + line, player);
+                        white.append("&f");
                     }
                     lines.add(line);
                 }
@@ -112,7 +120,8 @@ public class ScoreInfo {
                     if(!lines.contains(replaceVariables(line,player))) {
                         line = replaceVariables(line, player);
                     } else {
-                        line = replaceVariables("&f" + line, player);
+                        line = replaceVariables(white + line, player);
+                        white.append("&f");
                     }
                     lines.add(line);
                 }
@@ -122,13 +131,15 @@ public class ScoreInfo {
                     if(!lines.contains(replaceVariables(line,player))) {
                         line = replaceVariables(line, player);
                     } else {
-                        line = replaceVariables("&f" + line, player);
+                        line = replaceVariables(white + line, player);
+                        white.append("&f");
                     }
                     lines.add(line);
                 }
                 return lines;
             case WIN_RUNNERS_FOR_RUNNERS:
                 for (String line : scoreboard.getStringList("scoreboards.runnersWin.forRunners.lines")) {
+
                     if(!lines.contains(replaceVariables(line,player))) {
                         line = replaceVariables(line, player);
                     } else {
