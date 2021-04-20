@@ -2,9 +2,11 @@ package dev.mruniverse.guardianrftb.multiarena.utils.command;
 
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
+import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
@@ -14,6 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
 
 public class MainCommand implements CommandExecutor {
 
@@ -56,12 +59,46 @@ public class MainCommand implements CommandExecutor {
                 sender.sendMessage(" ");
                 utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
                 utils.sendMessage(sender,cmdPrefix + " join (name) &e- &fJoin Arena");
-                utils.sendMessage(sender,cmdPrefix + " randomJoin (mode)");
+                utils.sendMessage(sender,cmdPrefix + " randomJoin &e- &fRandom Join");
                 utils.sendMessage(sender,cmdPrefix + " leave &e- &fLeave CMD");
                 if(hasPermission(sender,"grftb.admin.help",false)) utils.sendMessage(sender,cmdPrefix + " admin &e- &fAdmin commands");
                 utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
                 return true;
             }
+            if (args[0].equalsIgnoreCase("join")) {
+                if(args.length == 1) {
+                    if(hasPermission(sender,"grftb.menu.join",true)) ((Player)sender).openInventory(plugin.getGameManager().getGameMainMenu().getInventory());
+                    return true;
+                }
+                plugin.getGameManager().joinGame((Player)sender,args[1]);
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("leave")) {
+                if(sender instanceof Player) {
+                    Player player = (Player)sender;
+                    if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
+                        plugin.getPlayerData(player.getUniqueId()).getGame().leave(player);
+                        return true;
+                    }
+                    utils.sendMessage(sender, "&cYou aren't playing");
+                    return true;
+                }
+                utils.sendMessage(sender,"&cThis command only can be used by players.");
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("randomJoin")) {
+                for(GameInfo game : plugin.getGameManager().getGames()) {
+                    if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
+                        if(game.getPlayers().size() < game.getMax()) {
+                            plugin.getGameManager().joinGame((Player)sender,game.getConfigName());
+                            return true;
+                        }
+                    }
+                }
+                utils.sendMessage(sender,"&cAll games are in game or full");
+                return true;
+            }
+
             if (args[0].equalsIgnoreCase("admin")) {
                 if(args.length == 1 || args[1].equalsIgnoreCase("1")) {
                     if(hasPermission(sender,"grftb.admin.help.game",true)) {

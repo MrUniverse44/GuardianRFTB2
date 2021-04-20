@@ -27,15 +27,17 @@ public class EndingRunnable extends BukkitRunnable {
     public void run() {
         int time = currentGame.getLastTimer();
         if(time != 0 || currentGame.getPlayers().size() > 0) {
-            if (currentWinner.equals(GameTeam.RUNNERS)) {
-                for (Player player : currentGame.getRunners()) {
-                    firework(player, timing(time));
+            instance.getServer().getScheduler().runTask(instance, () -> {
+                if (currentWinner.equals(GameTeam.RUNNERS)) {
+                    for (Player player : currentGame.getRunners()) {
+                        firework(player, timing(time));
+                    }
+                } else {
+                    for (Player player : currentGame.getBeasts()) {
+                        firework(player, timing(time));
+                    }
                 }
-            } else {
-                for (Player player : currentGame.getBeasts()) {
-                    firework(player, timing(time));
-                }
-            }
+            });
             currentGame.setLastTimer(time - 1);
         } else {
             for (Player player : currentGame.getPlayers()) {
@@ -61,8 +63,9 @@ public class EndingRunnable extends BukkitRunnable {
                 }
                 player.updateInventory();
             }
+            currentGame.cancelTask();
             currentGame.restart();
-            cancel();
+
         }
     }
 

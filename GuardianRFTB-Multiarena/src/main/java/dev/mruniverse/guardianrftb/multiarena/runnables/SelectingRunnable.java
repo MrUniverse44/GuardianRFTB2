@@ -41,7 +41,7 @@ public class SelectingRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        if(currentGame.getPlayers().size() >= currentGame.getMin() && currentGame.getStatus().equals(GameStatus.SELECTING)) {
+        if(currentGame.getPlayers().size() >= currentGame.getMin()) {
             int time = currentGame.getLastTimer();
             if(time != 0) {
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
@@ -62,18 +62,17 @@ public class SelectingRunnable extends BukkitRunnable {
                     player = currentGame.getRandom().nextInt(currentGame.getRunners().size());
                     setBeast(currentGame.getRunners().get(player));
                 }
-                currentGame.setLastTimer(10);
+                currentGame.cancelTask();
                 currentGame.startCount();
-                cancel();
             }
         } else {
+            currentGame.doubleCountPrevent = false;
             currentGame.setGameStatus(GameStatus.WAITING);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
                 instance.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
-
-            cancel();
+            currentGame.cancelTask();
         }
     }
 

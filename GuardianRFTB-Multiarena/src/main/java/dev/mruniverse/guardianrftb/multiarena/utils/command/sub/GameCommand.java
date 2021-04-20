@@ -116,6 +116,7 @@ public class GameCommand {
                         main.getGameManager().addGame(game,main.getStorage().getControl(GuardianFiles.GAMES).getString("games." + game + ".gameName"));
                         main.getStorage().save(SaveMode.GAMES_FILES);
                         utils.sendMessage(sender,"&aGame &b" + game + "&a enabled.");
+                        return;
                     }
                     arenaIssue(sender, game);
                     return;
@@ -135,6 +136,7 @@ public class GameCommand {
                         main.getGameManager().delGame(game);
                         main.getStorage().save(SaveMode.GAMES_FILES);
                         utils.sendMessage(sender,"&aGame &b" + game + "&a disabled.");
+                        return;
                     }
                     main.getGameManager().delGame(game);
                     arenaIssue(sender, game);
@@ -214,6 +216,7 @@ public class GameCommand {
                     }
                 }
                 arenaIssue(sender, game);
+                return;
             }
             argumentsIssue(sender);
             return;

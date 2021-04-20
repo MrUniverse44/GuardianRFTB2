@@ -25,6 +25,8 @@ public class PlayerManager {
     public PlayerManager(Player p) {
         player = p;
         leaveDelay = 0;
+        guardianBoard = GuardianBoard.LOBBY;
+        playerStatus = PlayerStatus.IN_LOBBY;
         pointStatus = false;
         lastCheckpoint = null;
         currentGame = null;

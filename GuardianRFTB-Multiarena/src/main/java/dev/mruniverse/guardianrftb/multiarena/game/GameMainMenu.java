@@ -1,5 +1,6 @@
 package dev.mruniverse.guardianrftb.multiarena.game;
 
+import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
@@ -36,6 +37,7 @@ public class GameMainMenu {
         createInv();
         loadItems();
     }
+    @SuppressWarnings("unused")
     public void updateInv(){
         gameItems = new HashMap<>();
         gameAction = new HashMap<>();
@@ -132,7 +134,7 @@ public class GameMainMenu {
                     List<String> lore = menu.getStringList(mainAction.getPath() + ".lore");
                     int slot = menu.getInt(mainAction.getPath() + ".slot");
                     Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(material);
-                    ItemStack item = optionalXMaterial.map(xMaterial -> plugin.getLib().getUtils().getItem(xMaterial, name, lore)).orElse(null);
+                    ItemStack item = optionalXMaterial.map(xMaterial -> GuardianLIB.getControl().getUtils().getItem(xMaterial, name, lore)).orElse(null);
                     gameItems.put(item, slot);
                     gameAction.put(item, mainAction);
                 }

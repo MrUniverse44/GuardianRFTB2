@@ -58,8 +58,10 @@ public class GameInfo {
     private int lastTimer;
     private int worldTime;
     private int menuSlot = -1;
+    private int lastListener;
 
     private boolean invincible = true;
+    public boolean doubleCountPrevent = false;
 
     /*
      *
@@ -70,6 +72,7 @@ public class GameInfo {
     public GameInfo(GuardianRFTB plugin, String configName, String gameName) {
         this.plugin = plugin;
         this.configName = configName;
+        this.name = gameName;
         this.lastTimer = 30;
         this.path = "games." + configName + ".";
         setup();
@@ -96,11 +99,16 @@ public class GameInfo {
             }
             loadSigns();
             loadChests();
+            loadStatus();
         }catch (Throwable throwable) {
             plugin.getLogs().error("Unexpected issue when the game was loading");
             plugin.getLogs().error("Game of the issue: " + configName);
             plugin.getLogs().error(throwable);
         }
+    }
+
+    private void loadStatus() {
+        gameStatus = GameStatus.WAITING;
     }
 
     private void loadChests() {
@@ -119,10 +127,25 @@ public class GameInfo {
     }
 
     public int getNeedPlayers() {
+        //* if((gameType == GameType.DOUBLE_BEAST || gameType == GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST) && min == 2) {
+        //*     return 3;
+        //* }
+        //* return min;
+        int RealMin = min;
         if((gameType == GameType.DOUBLE_BEAST || gameType == GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST) && min == 2) {
-            return 3;
+            RealMin = 3;
         }
-        return min;
+        if((RealMin - players.size()) <= 0 && gameStatus.equals(GameStatus.WAITING)) {
+            gameStatus = GameStatus.STARTING;
+            for(Player player : players) {
+                PlayerManager playerData = plugin.getPlayerData(player.getUniqueId());
+                playerData.setBoard(GuardianBoard.STARTING);
+            }
+        }
+        if(players.size() < RealMin) {
+            return (RealMin - players.size());
+        }
+        return 0;
     }
 
     public void loadChestType(String chestName) {
@@ -169,7 +192,7 @@ public class GameInfo {
             plugin.getUtils().sendMessage(player, prefix + messages.getString("messages.others.already"));
             return;
         }
-        if (!gameStatus.equals(GameStatus.WAITING) && !gameStatus.equals(GameStatus.STARTING)) {
+        if (!gameStatus.equals(GameStatus.WAITING) && !gameStatus.equals(GameStatus.SELECTING) && !gameStatus.equals(GameStatus.STARTING)) {
             if (!gameStatus.equals(GameStatus.RESTARTING)) {
                 plugin.getUtils().sendMessage(player, prefix + messages.getString("messages.others.gamePlaying"));
                 return;
@@ -193,7 +216,7 @@ public class GameInfo {
         }
         players.add(player);
         runners.add(player);
-        //currentData.setGame(this);
+        currentData.setGame(this);
         currentData.setStatus(PlayerStatus.IN_GAME);
         if (gameStatus.equals(GameStatus.WAITING)) checkPlayers();
         player.setGameMode(GameMode.ADVENTURE);
@@ -268,47 +291,55 @@ public class GameInfo {
 
     @SuppressWarnings("deprecation")
     private void checkPlayers() {
-        if (players.size() == getNeedPlayers() && !gameStatus.equals(GameStatus.SELECTING)) {
+        if (players.size() == min && !gameStatus.equals(GameStatus.STARTING) && !gameStatus.equals(GameStatus.SELECTING) && !doubleCountPrevent) {
             gameStatus = GameStatus.SELECTING;
-            plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new SelectingRunnable(this), 0L, 20L);
+            lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(this), 0L, 20L);
             lastTimer = 30;
+            doubleCountPrevent = true;
             for(Player player : players) {
                 plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.SELECTING);
             }
         }
     }
 
+    public void cancelTask() {
+        plugin.getServer().getScheduler().cancelTask(lastListener);
+    }
+
     @SuppressWarnings("deprecation")
     public void startCount() {
         this.gameStatus = GameStatus.STARTING;
+        this.lastTimer = 10;
         for(Player player : players) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
         }
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new StartRunnable(this), 0L, 20L);
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(this), 0L, 20L);
     }
 
     @SuppressWarnings("deprecation")
     public void beastCount() {
         this.gameStatus = GameStatus.PLAYING;
+        this.lastTimer = 15;
         for(Player player : runners) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
         }
         for(Player player : beasts) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
         }
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new BeastSpawnRunnable(this), 0L, 20L);
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new BeastSpawnRunnable(this), 0L, 20L);
     }
 
     @SuppressWarnings("deprecation")
     public void playCount() {
         this.gameStatus = GameStatus.IN_GAME;
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new PlayingRunnable(this), 0L, 20L);
+        this.lastTimer = getGameMaxTime();
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new PlayingRunnable(this), 0L, 20L);
     }
 
     @SuppressWarnings("deprecation")
     public void setWinner(GameTeam gameTeam) {
         this.gameStatus = GameStatus.RESTARTING;
-        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, new EndingRunnable(this,gameTeam), 0L, 20L);
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(this,gameTeam), 0L, 20L);
     }
 
 
@@ -363,6 +394,7 @@ public class GameInfo {
         this.lastTimer = 30;
         this.gameStatus = GameStatus.WAITING;
         updateSigns();
+        loadStatus();
     }
 
     public void deathBeast(Player beast) {
@@ -439,6 +471,7 @@ public class GameInfo {
     }
 
     private String replaceGameVariable(String message) {
+        if(message == null) message = "";
         if(message.contains("%arena%")) message = message.replace("%arena%",name);
         if(message.contains("%gameStatus%")) message = message.replace("%gameStatus%",gameStatus.getStatus());
         if(message.contains("%on%")) message = message.replace("%on%",players.size() + "");

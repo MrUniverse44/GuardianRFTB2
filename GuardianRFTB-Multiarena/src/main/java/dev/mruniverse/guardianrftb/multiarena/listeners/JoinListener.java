@@ -34,12 +34,16 @@ public class JoinListener implements Listener {
     @EventHandler
     public void teleport(PlayerJoinEvent event) {
         if(joinTeleport) {
-            try {
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> event.getPlayer().teleport(plugin.getSettings().getLocation()), 4L);
-            } catch (Throwable throwable) {
-                plugin.getLogs().error("Can't teleport " + event.getPlayer().getName() + " to the lobby!");
-                plugin.getLogs().error(throwable);
+            if(plugin.getSettings().getLocation() != null) {
+                try {
+                    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> event.getPlayer().teleport(plugin.getSettings().getLocation()), 4L);
+                } catch (Throwable throwable) {
+                    plugin.getLogs().error("Can't teleport " + event.getPlayer().getName() + " to the lobby!");
+                    plugin.getLogs().error(throwable);
+                }
+                return;
             }
+            plugin.getLogs().error("The lobby is not set!");
         }
     }
     @EventHandler

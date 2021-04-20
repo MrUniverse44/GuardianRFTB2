@@ -1,5 +1,6 @@
 package dev.mruniverse.guardianrftb.multiarena.utils;
 
+import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import org.bukkit.Location;
@@ -18,7 +19,7 @@ public class settingsInfo {
         settingsConfiguration = plugin.getStorage().getControl(GuardianFiles.SETTINGS);
         String loc = settingsConfiguration.getString("settings.lobby.location");
         if(loc == null) loc = "notSet";
-        location = plugin.getLib().getUtils().getLocationFromString(loc);
+        location = GuardianLIB.getControl().getUtils().getLocationFromString(loc);
     }
 
     public void update() {

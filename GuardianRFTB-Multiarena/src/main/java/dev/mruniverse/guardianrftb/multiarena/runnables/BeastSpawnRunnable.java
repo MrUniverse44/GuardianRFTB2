@@ -54,20 +54,20 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                      * GIVE KIT HERE
                      */
                 }
-                currentGame.setLastTimer(currentGame.getGameMaxTime());
+                currentGame.cancelTask();
                 currentGame.playCount();
-                cancel();
+
             }
         } else {
             if(currentGame.getBeasts().size() == 0) {
                 currentGame.setGameStatus(GameStatus.RESTARTING);
                 currentGame.setWinner(GameTeam.RUNNERS);
-                cancel();
+                currentGame.cancelTask();
                 return;
             }
             currentGame.setGameStatus(GameStatus.RESTARTING);
+            currentGame.cancelTask();
             currentGame.setWinner(GameTeam.BEASTS);
-            cancel();
         }
     }
 }

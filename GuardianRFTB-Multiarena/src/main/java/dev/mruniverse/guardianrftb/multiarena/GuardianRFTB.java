@@ -31,8 +31,6 @@ import java.util.UUID;
 
 @SuppressWarnings("unused")
 public final class GuardianRFTB extends JavaPlugin {
-
-    private final GuardianLIB guardianLIB = GuardianLIB.getControl();
     private final HashMap<UUID, PlayerManager> guardianPlayers = new HashMap<>();
     private GuardianUtils guardianUtils;
 
@@ -56,7 +54,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public ListenerController getListener() { return listenerController; }
     public ItemsInfo getItemsInfo() { return itemsInfo; }
     public FileStorage getStorage() { return fileStorage; }
-    public GuardianLIB getLib() { return guardianLIB; }
+    public GuardianLIB getLib() { return GuardianLIB.getControl(); }
     public settingsInfo getSettings() { return sInfo;}
     public GameManager getGameManager() { return gameManager; }
     public GuardianUtils getUtils() { return guardianUtils; }

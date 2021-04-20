@@ -15,8 +15,8 @@ public class PlayingRunnable extends BukkitRunnable {
         if(time != 0) {
             currentGame.setLastTimer(time - 1);
         } else {
+            currentGame.cancelTask();
             currentGame.winRunners();
-            cancel();
         }
     }
 }

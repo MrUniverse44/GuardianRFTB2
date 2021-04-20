@@ -24,6 +24,10 @@ public class ExtrasListener implements Listener {
     @EventHandler
     public void lobbyDrop(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
+        if(plugin.getSettings().getLocation() == null) {
+            plugin.getLogs().error("The lobby location is not set!");
+            return;
+        }
         if (player.getWorld().equals(plugin.getSettings().getLocation().getWorld())) {
             event.setCancelled(true);
         }
@@ -33,6 +37,10 @@ public class ExtrasListener implements Listener {
     public void lobbyHunger(FoodLevelChangeEvent event) {
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
             if(plugin.getSettings().getSettings().getBoolean("settings.lobby.noHunger")) {
+                if(plugin.getSettings().getLocation() == null) {
+                    plugin.getLogs().error("The lobby location is not set!");
+                    return;
+                }
                 if (event.getEntity().getWorld().equals(plugin.getSettings().getLocation().getWorld())) {
                     event.setFoodLevel(20);
                 }
@@ -51,6 +59,10 @@ public class ExtrasListener implements Listener {
         World world = player.getWorld();
         boolean lobbyWorld = false;
         boolean showInGamePlayers = plugin.getSettings().getSettings().getBoolean("settings.lobby.show-all-players");
+        if(plugin.getSettings().getLocation() == null) {
+            plugin.getLogs().error("The lobby location is not set!");
+            return;
+        }
         if(world == plugin.getSettings().getLocation().getWorld()) {
             lobbyWorld = true;
         }
@@ -77,35 +89,51 @@ public class ExtrasListener implements Listener {
 
     @EventHandler
     public void lobbyWeather(WeatherChangeEvent event) {
-        if(plugin.getSettings().getLocation().getWorld() == event.getWorld()) {
-            if (plugin.getSettings().getSettings().getBoolean("settings.lobby.disableWeather")) {
-                event.setCancelled(event.toWeatherState());
+        if(plugin.getSettings().getLocation() != null) {
+            if (plugin.getSettings().getLocation().getWorld() == event.getWorld()) {
+                if (plugin.getSettings().getSettings().getBoolean("settings.lobby.disableWeather")) {
+                    event.setCancelled(event.toWeatherState());
+                }
             }
+            return;
         }
+        plugin.getLogs().error("The lobby is not set!");
     }
 
     @EventHandler
     public void lobbyClickInventory(InventoryClickEvent event) {
         if(plugin.getSettings().getSettings().getBoolean("settings.lobby.blockInventoryClick")) {
-            if(event.getWhoClicked().getWorld() == plugin.getSettings().getLocation().getWorld()) {
-                event.setCancelled(true);
+            if(plugin.getSettings().getLocation() != null) {
+                if (event.getWhoClicked().getWorld() == plugin.getSettings().getLocation().getWorld()) {
+                    event.setCancelled(true);
+                }
+                return;
             }
+            plugin.getLogs().error("The lobby is not set!");
         }
     }
     @EventHandler
     public void lobbyPlaceEvent(BlockPlaceEvent event) {
         if(plugin.getSettings().getSettings().getBoolean("settings.lobby.cancelBlockPlace")) {
-            if(event.getPlayer().getWorld() == plugin.getSettings().getLocation().getWorld()) {
-                event.setCancelled(true);
+            if(plugin.getSettings().getLocation() != null) {
+                if (event.getPlayer().getWorld() == plugin.getSettings().getLocation().getWorld()) {
+                    event.setCancelled(true);
+                }
+                return;
             }
+            plugin.getLogs().error("The lobby is not set!");
         }
     }
     @EventHandler
     public void lobbyBreakEvent(BlockBreakEvent event) {
         if(plugin.getSettings().getSettings().getBoolean("settings.lobby.cancelBlockBreak")) {
-            if(event.getPlayer().getWorld() == plugin.getSettings().getLocation().getWorld()) {
-                event.setCancelled(true);
+            if(plugin.getSettings().getLocation() != null) {
+                if (event.getPlayer().getWorld() == plugin.getSettings().getLocation().getWorld()) {
+                    event.setCancelled(true);
+                }
+                return;
             }
+            plugin.getLogs().error("The lobby is not set!");
         }
     }
 

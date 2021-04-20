@@ -61,11 +61,12 @@ public class StartRunnable  extends BukkitRunnable {
                 }
                 World world = currentGame.getRunnerSpawn().getWorld();
                 if(world != null) world.setTime(currentGame.getWorldTime());
-                currentGame.setLastTimer(15);
+                currentGame.cancelTask();
                 currentGame.beastCount();
-                cancel();
+
             }
         } else {
+            currentGame.doubleCountPrevent = false;
             currentGame.setGameStatus(GameStatus.WAITING);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
@@ -78,8 +79,8 @@ public class StartRunnable  extends BukkitRunnable {
                 beasts.getInventory().setItem(instance.getItemsInfo().getExitSlot(), instance.getItemsInfo().getExit());
                 beasts.teleport(currentGame.getWaiting());
             }
+            currentGame.cancelTask();
             currentGame.getBeasts().clear();
-            cancel();
         }
     }
 }
