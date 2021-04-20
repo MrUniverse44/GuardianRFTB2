@@ -1,8 +1,11 @@
 package dev.mruniverse.guardianrftb.multiarena.storage;
 
+import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
 import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
+import dev.mruniverse.guardianrftb.multiarena.kits.KitType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -16,20 +19,38 @@ public class PlayerManager {
     private boolean pointStatus;
     private Location lastCheckpoint;
     private GameInfo currentGame;
+    private final KitMenu beastMenu;
+    private final KitMenu runnerMenu;
+    private final KitMenu killerMenu;
     private int leaveDelay;
     private int kills = 0;
     private int wins = 0;
     private int coins = 0;
     private int deaths = 0;
 
-    public PlayerManager(Player p) {
+    public PlayerManager(GuardianRFTB plugin, Player p) {
         player = p;
         leaveDelay = 0;
         guardianBoard = GuardianBoard.LOBBY;
         playerStatus = PlayerStatus.IN_LOBBY;
+        beastMenu = new KitMenu(plugin, KitType.BEAST,p);
+        runnerMenu = new KitMenu(plugin, KitType.RUNNER,p);
+        killerMenu = new KitMenu(plugin, KitType.KILLER,p);
         pointStatus = false;
         lastCheckpoint = null;
         currentGame = null;
+    }
+
+    public KitMenu getKitMenu(KitType kitType) {
+        switch (kitType) {
+            case KILLER:
+                return killerMenu;
+            case BEAST:
+                return beastMenu;
+            case RUNNER:
+            default:
+                return runnerMenu;
+        }
     }
 
     public void setLeaveDelay(int delay) { leaveDelay = delay; }

@@ -8,6 +8,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.ItemFunction;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
 import dev.mruniverse.guardianrftb.multiarena.game.GameManager;
+import dev.mruniverse.guardianrftb.multiarena.kits.KitLoader;
 import dev.mruniverse.guardianrftb.multiarena.listeners.ListenerController;
 import dev.mruniverse.guardianrftb.multiarena.runnables.PlayerRunnable;
 import dev.mruniverse.guardianrftb.multiarena.runnables.TitleRunnable;
@@ -48,6 +49,7 @@ public final class GuardianRFTB extends JavaPlugin {
     private GameManager gameManager;
     private BoardController boardController;
     private PlayerRunnable runnable;
+    private KitLoader kitLoader;
     private TitleRunnable titleRunnable;
 
     public ExternalLogger getLogs() { return logger; }
@@ -66,13 +68,14 @@ public final class GuardianRFTB extends JavaPlugin {
 
     public void addPlayer(Player player){
         if(!existPlayer(player)) {
-            guardianPlayers.put(player.getUniqueId(),new PlayerManager(player));
+            guardianPlayers.put(player.getUniqueId(),new PlayerManager(this,player));
         }
     }
     public boolean existPlayer(Player player) { return guardianPlayers.containsKey(player.getUniqueId()); }
     public void removePlayer(Player player) { guardianPlayers.remove(player.getUniqueId()); }
     public HashMap<UUID, PlayerManager> getRigoxPlayers() { return guardianPlayers; }
     public PlayerManager getPlayerData(UUID uuid) { return guardianPlayers.get(uuid); }
+    public KitLoader getKitLoader() { return kitLoader; }
 
     @Override
     public void onEnable() {
@@ -105,6 +108,9 @@ public final class GuardianRFTB extends JavaPlugin {
                 gameManager = new GameManager(instance);
                 gameManager.loadChests();
                 gameManager.loadGames();
+
+                kitLoader = new KitLoader(instance);
+
 
                 loadLobbyItems();
                 loadGameItems();
