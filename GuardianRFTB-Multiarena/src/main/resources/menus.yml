@@ -130,6 +130,7 @@ menus:
   game:
     inventoryName: '&8Games'
     inventoryRows: 3
+    showPlayersInItem: true
     inventorySounds:
       - ORB_PICKUP
     item-status:

@@ -11,6 +11,7 @@ public enum SaveMode {
     GAMES_FILES,
     KITS,
     MYSQL,
+    SOUNDS,
     ITEMS
 }
 

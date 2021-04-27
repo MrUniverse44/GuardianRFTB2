@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class FileStorage {
     private final GuardianRFTB plugin;
-    private FileConfiguration settings,messages,mysql,data,menus,items,games,boards,chests,kits,messagesEn,messagesEs;
+    private FileConfiguration settings,messages,mysql,data,menus,items,games,boards,chests,kits,messagesEn,messagesEs,sounds;
     private final File rxSettings;
     private final File rxMessagesEn;
     private final File rxMessagesEs;
@@ -26,6 +26,7 @@ public class FileStorage {
     private final File rxMenus;
     private final File rxItems;
     private final File rxGames;
+    private final File rxSounds;
     private final File rxBoards;
     private final File rxChests;
     private final File rxKits;
@@ -44,6 +45,7 @@ public class FileStorage {
         rxBoards = new File(dataFolder, "scoreboards.yml");
         rxChests = new File(dataFolder, "chests.yml");
         rxKits = new File(dataFolder, "kits.yml");
+        rxSounds = new File(dataFolder,"sounds.yml");
         settings = loadConfig("settings");
         menus = loadConfig("menus");
         messages = loadConfig("messages_en");
@@ -55,7 +57,9 @@ public class FileStorage {
         games = loadConfig("games");
         boards = loadConfig("scoreboards");
         chests = loadConfig("chests");
+        sounds = loadConfig("sounds");
         kits = loadConfig("kits");
+
     }
 
     public void setMessages(String code) {
@@ -79,6 +83,8 @@ public class FileStorage {
                 return rxMessagesEs;
             case MENUS:
                 return rxMenus;
+            case SOUNDS:
+                return rxSounds;
             case SCOREBOARD:
                 return rxBoards;
             case MYSQL:
@@ -153,6 +159,9 @@ public class FileStorage {
             case ITEMS:
                 items = YamlConfiguration.loadConfiguration(rxItems);
                 break;
+            case SOUNDS:
+                sounds = YamlConfiguration.loadConfiguration(rxSounds);
+                break;
             case DATA:
                 data = YamlConfiguration.loadConfiguration(rxData);
                 break;
@@ -180,11 +189,14 @@ public class FileStorage {
             case ALL:
             default:
                 messages = YamlConfiguration.loadConfiguration(rxMessages);
+                messagesEs = YamlConfiguration.loadConfiguration(rxMessagesEs);
+                messagesEn = YamlConfiguration.loadConfiguration(rxMessagesEn);
                 data = YamlConfiguration.loadConfiguration(rxData);
                 items = YamlConfiguration.loadConfiguration(rxItems);
                 chests = YamlConfiguration.loadConfiguration(rxChests);
                 kits = YamlConfiguration.loadConfiguration(rxKits);
                 menus = YamlConfiguration.loadConfiguration(rxMenus);
+                sounds = YamlConfiguration.loadConfiguration(rxSounds);
                 mysql = YamlConfiguration.loadConfiguration(rxMySQL);
                 settings = YamlConfiguration.loadConfiguration(rxSettings);
                 boards = YamlConfiguration.loadConfiguration(rxBoards);
@@ -201,6 +213,9 @@ public class FileStorage {
     public void save(SaveMode fileToSave) {
         try {
             switch (fileToSave) {
+                case SOUNDS:
+                    getControl(GuardianFiles.SOUNDS).save(rxSounds);
+                    break;
                 case CHESTS:
                     getControl(GuardianFiles.CHESTS).save(rxChests);
                     break;
@@ -238,11 +253,14 @@ public class FileStorage {
                     getControl(GuardianFiles.DATA).save(rxData);
                     getControl(GuardianFiles.KITS).save(rxKits);
                     getControl(GuardianFiles.GAMES).save(rxGames);
+                    getControl(GuardianFiles.SOUNDS).save(rxSounds);
                     getControl(GuardianFiles.SCOREBOARD).save(rxBoards);
                     getControl(GuardianFiles.ITEMS).save(rxItems);
                     getControl(GuardianFiles.MENUS).save(rxMenus);
                     getControl(GuardianFiles.MYSQL).save(rxMySQL);
                     getControl(GuardianFiles.MESSAGES).save(rxMessages);
+                    getControl(GuardianFiles.MESSAGES_EN).save(rxMessagesEn);
+                    getControl(GuardianFiles.MESSAGES_ES).save(rxMessagesEs);
                     break;
             }
         } catch (Throwable throwable) {
@@ -308,6 +326,9 @@ public class FileStorage {
             case CHESTS:
                 if(chests == null) items = loadConfig(rxChests);
                 return chests;
+            case SOUNDS:
+                if(sounds == null) sounds = loadConfig(rxSounds);
+                return sounds;
             case ITEMS:
                 if(items == null) items = loadConfig(rxItems);
                 return items;

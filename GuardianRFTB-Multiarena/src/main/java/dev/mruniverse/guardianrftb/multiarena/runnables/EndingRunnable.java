@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
+import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
 import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
@@ -19,14 +20,22 @@ public class EndingRunnable extends BukkitRunnable {
     private final GameInfo currentGame;
     private final GameTeam currentWinner;
     private final GuardianRFTB instance = GuardianRFTB.getInstance();
+    private boolean winnerIsRunner = false;
     public EndingRunnable(GameInfo game, GameTeam winnerTeam) {
         this.currentGame = game;
         this.currentWinner = winnerTeam;
+        if(winnerTeam == GameTeam.RUNNERS || winnerTeam == GameTeam.KILLER) winnerIsRunner = true;
     }
     @Override
     public void run() {
         int time = currentGame.getLastTimer();
+        int rewardMessage = time - 5;
         if(time != 0 || currentGame.getPlayers().size() > 0) {
+            if(time == rewardMessage) {
+                for(Player player : currentGame.getPlayers()) {
+                    instance.getUtils().rewardInfo(player,instance.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.inGame.infoList.rewardSummary"),winnerIsRunner);
+                }
+            }
             instance.getServer().getScheduler().runTask(instance, () -> {
                 if (currentWinner.equals(GameTeam.RUNNERS)) {
                     for (Player player : currentGame.getRunners()) {

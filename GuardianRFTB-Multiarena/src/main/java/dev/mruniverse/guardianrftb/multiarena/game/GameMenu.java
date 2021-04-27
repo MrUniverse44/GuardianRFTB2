@@ -27,6 +27,7 @@ public class GameMenu {
     private String ending;
     private List<String> lore;
     private String iName;
+    private boolean showPlayersOnline = false;
     public GameMenu(GuardianRFTB plugin,GameType gameType) {
         this.plugin = plugin;
         this.gameType = gameType;
@@ -35,7 +36,7 @@ public class GameMenu {
     }
     private void createInv() {
         String invName = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.game.inventoryName");
-
+        showPlayersOnline = plugin.getStorage().getControl(GuardianFiles.MENUS).getBoolean("menus.game.showPlayersInItem");
         if(invName == null) invName = "&8Games";
 
         invName = ChatColor.translateAlternateColorCodes('&',invName);
@@ -114,18 +115,46 @@ public class GameMenu {
             case ERROR:
             case PLAYING:
                 optionalXMaterial = XMaterial.matchXMaterial(playing);
+                if (showPlayersOnline) {
+                    if (optionalXMaterial.isPresent()) {
+                        ItemStack item = utils.getItem(optionalXMaterial.get(), name, getLore(game));
+                        item.setAmount(game.getPlayers().size());
+                        return item;
+                    }
+                }
                 if(optionalXMaterial.isPresent()) return utils.getItem(optionalXMaterial.get(),name,getLore(game));
             case STARTING:
             case SELECTING:
                 optionalXMaterial = XMaterial.matchXMaterial(starting);
+                if (showPlayersOnline) {
+                    if (optionalXMaterial.isPresent()) {
+                        ItemStack item = utils.getItem(optionalXMaterial.get(), name, getLore(game));
+                        item.setAmount(game.getPlayers().size());
+                        return item;
+                    }
+                }
                 if(optionalXMaterial.isPresent()) return utils.getItem(optionalXMaterial.get(),name,getLore(game));
             case PREPARING:
             case RESTARTING:
                 optionalXMaterial = XMaterial.matchXMaterial(ending);
+                if (showPlayersOnline) {
+                    if (optionalXMaterial.isPresent()) {
+                        ItemStack item = utils.getItem(optionalXMaterial.get(), name, getLore(game));
+                        item.setAmount(game.getPlayers().size());
+                        return item;
+                    }
+                }
                 if(optionalXMaterial.isPresent()) return utils.getItem(optionalXMaterial.get(),name,getLore(game));
             case WAITING:
             default:
                 optionalXMaterial = XMaterial.matchXMaterial(waiting);
+                if (showPlayersOnline) {
+                    if (optionalXMaterial.isPresent()) {
+                        ItemStack item = utils.getItem(optionalXMaterial.get(), name, getLore(game));
+                        item.setAmount(game.getPlayers().size());
+                        return item;
+                    }
+                }
                 return optionalXMaterial.map(xMaterial -> utils.getItem(xMaterial, name, getLore(game))).orElse(null);
         }
     }

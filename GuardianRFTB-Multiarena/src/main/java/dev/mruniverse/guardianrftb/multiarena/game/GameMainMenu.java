@@ -142,6 +142,7 @@ public class GameMainMenu {
         }
         loadFills();
     }
+    @SuppressWarnings("SameParameterValue")
     private boolean getMinigameStatus(FileConfiguration configuration, GuardianFiles CurrentGuardianFile, SaveMode CurrentSaveMode, String path) {
         if(configuration.contains(path)) {
             return configuration.getBoolean(path);

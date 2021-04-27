@@ -64,6 +64,8 @@ settings:
     voidSpawnTP: true
     # Lobby Scoreboard only in the lobby World
     scoreboard-only-in-lobby-world: false
+    # Items only in lobby world (by default: false)
+    items-only-in-lobby-world: false
     # Join Options
     join:
       # Teleport to the lobby when the player join

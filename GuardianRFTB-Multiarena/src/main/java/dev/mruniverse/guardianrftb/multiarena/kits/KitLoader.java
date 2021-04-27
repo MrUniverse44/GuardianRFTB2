@@ -29,7 +29,7 @@ public class KitLoader {
         loadKits(KitType.RUNNER);
         plugin.getLogs().info(runnerKits.keySet().size() + " Runner(s) Kit(s) loaded!");
         loadKits(KitType.KILLER);
-        plugin.getLogs().info(killerKits.keySet().size() + " Runner(s) Kit(s) loaded!");
+        plugin.getLogs().info(killerKits.keySet().size() + " Killer(s) Kit(s) loaded!");
 
     }
     public void loadKits(KitType kitType) {
@@ -198,7 +198,7 @@ public class KitLoader {
         loadKits(KitType.RUNNER);
         plugin.getLogs().info(runnerKits.keySet().size() + " Runner(s) Kit(s) loaded!");
         loadKits(KitType.KILLER);
-        plugin.getLogs().info(killerKits.keySet().size() + " Runner(s) Kit(s) loaded!");
+        plugin.getLogs().info(killerKits.keySet().size() + " Killer(s) Kit(s) loaded!");
     }
     public void loadKit(KitType kitType,String kitName) {
         KitInfo kitInfo = new KitInfo(plugin,kitType,kitName);

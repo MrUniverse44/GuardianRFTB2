@@ -11,5 +11,6 @@ public enum GuardianFiles {
     GAMES,
     KITS,
     MENUS,
+    SOUNDS,
     ITEMS
 }

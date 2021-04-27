@@ -153,9 +153,6 @@ public class GameManager {
         gameFiles.set("games." + gameName + ".min", 2);
         gameFiles.set("games." + gameName + ".worldTime", 0);
         gameFiles.set("games." + gameName + ".gameType","CLASSIC");
-        gameFiles.set("games." + gameName + ".gameSound1",plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.defaultSounds.sound1"));
-        gameFiles.set("games." + gameName + ".gameSound2",plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.defaultSounds.sound2"));
-        gameFiles.set("games." + gameName + ".gameSound3",plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.defaultSounds.sound3"));
         gameFiles.set("games." + gameName + ".locations.waiting", "notSet");
         gameFiles.set("games." + gameName + ".locations.selected-beast", "notSet");
         gameFiles.set("games." + gameName + ".locations.beast", "notSet");

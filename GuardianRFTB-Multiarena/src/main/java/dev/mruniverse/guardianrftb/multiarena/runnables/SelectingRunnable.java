@@ -1,12 +1,10 @@
 package dev.mruniverse.guardianrftb.multiarena.runnables;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
-import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
+import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -44,14 +42,17 @@ public class SelectingRunnable extends BukkitRunnable {
         if(currentGame.getPlayers().size() >= currentGame.getMin()) {
             int time = currentGame.getLastTimer();
             if(time != 0) {
+                SoundsInfo sounds = instance.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
                     for(Player player : currentGame.getPlayers()) {
                         guardianUtils.sendMessage(player,prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
+                        if(sounds.getStatus(GuardianSounds.GAME_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.GAME_COUNT),sounds.getVolume(GuardianSounds.GAME_COUNT),sounds.getPitch(GuardianSounds.GAME_COUNT));
                     }
                 }
                 if(time == 1) {
                     for(Player player : currentGame.getPlayers()) {
                         guardianUtils.sendMessage(player,prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",second));
+                        if(sounds.getStatus(GuardianSounds.GAME_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.GAME_COUNT),sounds.getVolume(GuardianSounds.GAME_COUNT),sounds.getPitch(GuardianSounds.GAME_COUNT));
                     }
                 }
                 currentGame.setLastTimer(time - 1);

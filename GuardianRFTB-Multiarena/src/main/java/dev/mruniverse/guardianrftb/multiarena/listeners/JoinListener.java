@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 public class JoinListener implements Listener {
     private final GuardianRFTB plugin;
     private boolean onlyLobbyScore;
+    private boolean onlyItemsLobby;
     private boolean joinTeleport;
     private boolean joinAutoHeal;
     private boolean joinInventory;
@@ -24,6 +25,7 @@ public class JoinListener implements Listener {
     public JoinListener(GuardianRFTB plugin) {
         this.plugin = plugin;
         onlyLobbyScore = plugin.getSettings().getSettings().getBoolean("settings.lobby.scoreboard-only-in-lobby-world");
+        onlyItemsLobby = plugin.getSettings().getSettings().getBoolean("settings.lobby.items-only-in-lobby-world");
         joinAutoHeal = plugin.getSettings().getSettings().getBoolean("settings.lobby.join.autoHeal");
         joinInventory = plugin.getSettings().getSettings().getBoolean("settings.lobby.join.clearInventory");
         joinTeleport = plugin.getSettings().getSettings().getBoolean("settings.lobby.join.teleport");
@@ -78,21 +80,41 @@ public class JoinListener implements Listener {
             player.setExp(0.0F);
         }
         player.setGameMode(joinGamemode);
-        if(joinInventory) {
-            player.getInventory().clear();
-            player.getInventory().setHelmet(null);
-            player.getInventory().setChestplate(null);
-            player.getInventory().setLeggings(null);
-            player.getInventory().setBoots(null);
+        if(!onlyItemsLobby) {
+            if (joinInventory) {
+                player.getInventory().clear();
+                player.getInventory().setHelmet(null);
+                player.getInventory().setChestplate(null);
+                player.getInventory().setLeggings(null);
+                player.getInventory().setBoots(null);
+            }
+            for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
+                player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
+            }
+            return;
         }
-        for(ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
-            player.getInventory().setItem(plugin.getItemsInfo().getSlot(item),item);
-        }
+        try {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
+                if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
+                    if (joinInventory) {
+                        player.getInventory().clear();
+                        player.getInventory().setHelmet(null);
+                        player.getInventory().setChestplate(null);
+                        player.getInventory().setLeggings(null);
+                        player.getInventory().setBoots(null);
+                    }
+                    for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
+                        player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
+                    }
+                }
+            }, 8L);
+        } catch (Throwable ignored) { }
     }
 
     public void updateAll() {
         onlyLobbyScore = plugin.getSettings().getSettings().getBoolean("settings.lobby.scoreboard-only-in-lobby-world");
         lobbyBoard = plugin.getSettings().getLocation();
+        onlyItemsLobby = plugin.getSettings().getSettings().getBoolean("settings.lobby.items-only-in-lobby-world");
         joinAutoHeal = plugin.getSettings().getSettings().getBoolean("settings.lobby.join.autoHeal");
         joinInventory = plugin.getSettings().getSettings().getBoolean("settings.lobby.join.clearInventory");
         joinTeleport = plugin.getSettings().getSettings().getBoolean("settings.lobby.join.teleport");

@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class ExtrasListener implements Listener {
     private final GuardianRFTB plugin;
@@ -122,6 +123,22 @@ public class ExtrasListener implements Listener {
                 return;
             }
             plugin.getLogs().error("The lobby is not set!");
+        }
+    }
+    @EventHandler
+    public void giveLobbyItems(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
+            if (plugin.getSettings().getSettings().getBoolean("settings.lobby.join.clearInventory")) {
+                player.getInventory().clear();
+                player.getInventory().setHelmet(null);
+                player.getInventory().setChestplate(null);
+                player.getInventory().setLeggings(null);
+                player.getInventory().setBoots(null);
+            }
+            for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
+                player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
+            }
         }
     }
     @EventHandler

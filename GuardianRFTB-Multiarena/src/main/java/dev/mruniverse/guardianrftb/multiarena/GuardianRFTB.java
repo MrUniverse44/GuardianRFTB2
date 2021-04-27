@@ -4,21 +4,18 @@ import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianlib.core.utils.ExternalLogger;
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.enums.ItemFunction;
-import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.game.GameManager;
+import dev.mruniverse.guardianrftb.multiarena.kits.KitInfo;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitLoader;
 import dev.mruniverse.guardianrftb.multiarena.listeners.ListenerController;
 import dev.mruniverse.guardianrftb.multiarena.runnables.PlayerRunnable;
 import dev.mruniverse.guardianrftb.multiarena.runnables.TitleRunnable;
 import dev.mruniverse.guardianrftb.multiarena.scoreboard.BoardController;
+import dev.mruniverse.guardianrftb.multiarena.storage.DataStorage;
 import dev.mruniverse.guardianrftb.multiarena.storage.FileStorage;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
-import dev.mruniverse.guardianrftb.multiarena.utils.GuardianPlaceholders;
-import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
-import dev.mruniverse.guardianrftb.multiarena.utils.ItemsInfo;
-import dev.mruniverse.guardianrftb.multiarena.utils.settingsInfo;
+import dev.mruniverse.guardianrftb.multiarena.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,10 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public final class GuardianRFTB extends JavaPlugin {
@@ -53,7 +47,9 @@ public final class GuardianRFTB extends JavaPlugin {
     private PlayerRunnable runnable;
     private KitLoader kitLoader;
     private TitleRunnable titleRunnable;
+    private SoundsInfo soundsInfo;
     private GuardianPlaceholders guardianPlaceholders;
+    private DataStorage dataStorage;
 
     public ExternalLogger getLogs() { return logger; }
     public ListenerController getListener() { return listenerController; }
@@ -66,6 +62,8 @@ public final class GuardianRFTB extends JavaPlugin {
     public BoardController getScoreboards() { return boardController; }
     public PlayerRunnable getRunnable() { return runnable; }
     public TitleRunnable getTitleRunnable() { return titleRunnable; }
+    public SoundsInfo getSoundsInfo() { return soundsInfo; }
+    public DataStorage getData() { return dataStorage; }
     public boolean hasPAPI() { return hasPAPI; }
 
 
@@ -124,6 +122,7 @@ public final class GuardianRFTB extends JavaPlugin {
                     guardianPlaceholders = new GuardianPlaceholders(instance);
                     guardianPlaceholders.register();
                 }
+                soundsInfo = new SoundsInfo(instance);
             }
         };
         runnable.runTaskLater(this, 1L);
@@ -390,4 +389,50 @@ public final class GuardianRFTB extends JavaPlugin {
         }
         getServer().getScheduler().runTaskTimerAsynchronously(instance, instance.runnable, 0L, 20L);
     }
+
+
+    public void getItems(GameEquip gameEquipment, Player player) {
+        switch (gameEquipment) {
+            case BEAST_KIT:
+                String kitID = getPlayerData(player.getUniqueId()).getSelectedKit();
+                if(kitID.equalsIgnoreCase("NONE")) return;
+                KitInfo kitInfo = getKitLoader().getKitsUsingID(KitType.BEAST).get(kitID);
+                if(kitInfo == null) return;
+                for(Map.Entry<ItemStack,Integer> data : kitInfo.getInventoryItems().entrySet()) {
+                    player.getInventory().setItem(data.getValue(),data.getKey());
+                }
+                if(kitInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.HELMET));
+                if(kitInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.CHESTPLATE));
+                if(kitInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.LEGGINGS));
+                if(kitInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.BOOTS));
+                return;
+            case KILLER_KIT:
+                String killerID = getPlayerData(player.getUniqueId()).getSelectedKit();
+                if(killerID.equalsIgnoreCase("NONE")) return;
+                KitInfo killerInfo = getKitLoader().getKitsUsingID(KitType.KILLER).get(killerID);
+                if(killerInfo == null) return;
+                for(Map.Entry<ItemStack,Integer> data : killerInfo.getInventoryItems().entrySet()) {
+                    player.getInventory().setItem(data.getValue(),data.getKey());
+                }
+                if(killerInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.HELMET));
+                if(killerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.CHESTPLATE));
+                if(killerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.LEGGINGS));
+                if(killerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.BOOTS));
+                return;
+            case RUNNER_KIT:
+            default:
+                String runnerID = getPlayerData(player.getUniqueId()).getSelectedKit();
+                if(runnerID.equalsIgnoreCase("NONE")) return;
+                KitInfo runnerInfo = getKitLoader().getKitsUsingID(KitType.RUNNER).get(runnerID);
+                if(runnerInfo == null) return;
+                for(Map.Entry<ItemStack,Integer> data : runnerInfo.getInventoryItems().entrySet()) {
+                    player.getInventory().setItem(data.getValue(),data.getKey());
+                }
+                if(runnerInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.HELMET));
+                if(runnerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.CHESTPLATE));
+                if(runnerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.LEGGINGS));
+                if(runnerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.BOOTS));
+        }
+    }
+
 }

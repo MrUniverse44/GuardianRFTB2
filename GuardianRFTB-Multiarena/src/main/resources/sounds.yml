@@ -11,35 +11,67 @@
 # SpigotMC Link: https://www.spigotmc.org/resources/88817/
 #
 sounds:
-  # Game Runner Spawn Sound
-  runner:
-    # Volume (Float)
-    volume: '1.0F'
-    # Pitch (Float)
-    pitch: '0.5F'
-    # Sound
-    sound: NOTE_STICKS
-  # Game Beast Spawn Sound
-  beast:
-    # Volume (Float)
-    volume: '1.0F'
-    # Pitch (Float)
-    pitch: '0.5F'
-    # Sound
-    sound: ENDERDRAGON_GROWL
-  # Game Start Sound
-  start:
-    # Volume (Float)
-    volume: '1.0F'
-    # Pitch (Float)
-    pitch: '0.5F'
-    # Sound
-    sound: ORB_PICKUP
-  # Game Death Sound
-  death:
+  # Game Sounds
+  game:
+    # Win Sound
+    win:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: WITHER_SPAWN
+    # Kill Sound
+    kill:
+      # Toggle Sound
+      toggle: true
       # Volume (Float)
       volume: '1.0F'
       # Pitch (Float)
       pitch: '0.5F'
       # Sound
       sound: WITHER_DEATH
+    # Death Sound
+    death:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: WITHER_DEATH
+    # Count List
+    count:
+      # Starting Sound
+      starting:
+        # Toggle Sound
+        toggle: true
+        # Volume (Float)
+        volume: '1.0F'
+        # Pitch (Float)
+        pitch: '0.5F'
+        # Sound
+        sound: NOTE_STICKS
+      # Beast Appear Sound
+      beast-appear:
+        # Toggle Sound
+        toggle: true
+        # Volume (Float)
+        volume: '0.5F'
+        # Pitch (Float)
+        pitch: '0.5F'
+        # Sound
+        sound: ENDERDRAGON_GROWL
+      # Selecting Sound
+      selecting:
+        # Toggle Sound
+        toggle: true
+        # Volume (Float)
+        volume: '1.0F'
+        # Pitch (Float)
+        pitch: '0.5F'
+        # Sound
+        sound: ORB_PICKUP
