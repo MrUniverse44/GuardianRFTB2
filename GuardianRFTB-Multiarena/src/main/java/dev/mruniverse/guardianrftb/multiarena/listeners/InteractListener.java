@@ -140,6 +140,40 @@ public class InteractListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onKitMenuClick(InventoryClickEvent event) {
+        Player player = (Player)event.getWhoClicked();
+        PlayerManager data = plugin.getPlayerData(player.getUniqueId());
+        if(event.getCurrentItem() == null) return;
+        if(event.getInventory().equals(data.getKitMenu(KitType.BEAST).getInventory())) {
+            HashMap<ItemStack, String> hash = data.getKitMenu(KitType.BEAST).getItems();
+            event.setCancelled(true);
+            ItemStack clickedItem = event.getCurrentItem();
+            if (hash.containsKey(clickedItem)) {
+                plugin.getKitLoader().getToSelect(KitType.BEAST, player, hash.get(clickedItem));
+            }
+            return;
+        }
+        if(event.getInventory().equals(data.getKitMenu(KitType.RUNNER).getInventory())) {
+            HashMap<ItemStack, String> hash = data.getKitMenu(KitType.RUNNER).getItems();
+            event.setCancelled(true);
+            ItemStack clickedItem = event.getCurrentItem();
+            if (hash.containsKey(clickedItem)) {
+                plugin.getKitLoader().getToSelect(KitType.RUNNER,player,hash.get(clickedItem));
+            }
+            return;
+        }
+        if(event.getInventory().equals(data.getKitMenu(KitType.KILLER).getInventory())) {
+            HashMap<ItemStack, String> hash = data.getKitMenu(KitType.KILLER).getItems();
+            event.setCancelled(true);
+            ItemStack clickedItem = event.getCurrentItem();
+            if (hash.containsKey(clickedItem)) {
+                plugin.getKitLoader().getToSelect(KitType.KILLER,player,hash.get(clickedItem));
+            }
+        }
+    }
+
     @EventHandler
     public void onGameMainClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
