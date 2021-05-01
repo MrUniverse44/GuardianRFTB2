@@ -150,7 +150,7 @@ menus:
 fill-inventory:
   gameMain:
     fillOne:
-      item: STAINED_GLASS_PANE:53
+      item: STAINED_GLASS_PANE:3
       name: '&aRFTB Shop'
       lore:
         - '&8RigoxRFTB &7F-1'
