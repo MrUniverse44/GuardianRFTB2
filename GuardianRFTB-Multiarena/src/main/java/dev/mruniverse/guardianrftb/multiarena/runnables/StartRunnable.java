@@ -63,6 +63,7 @@ public class StartRunnable  extends BukkitRunnable {
                 String bTitle = messages.getString("messages.game.others.titles.runnersGo.toBeasts.title");
                 String bSubtitle = messages.getString("messages.game.others.titles.runnersGo.toBeasts.subtitle");
                 List<String> startInfo = messages.getStringList("messages.game.gameInfo.startGame");
+                currentGame.setInvincible(false);
                 for(Player player : currentGame.getRunners()) {
                     player.teleport(currentGame.getRunnerSpawn());
                     player.getInventory().clear();

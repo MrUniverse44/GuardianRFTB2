@@ -143,6 +143,7 @@ public class KitLoader {
                 return;
             default:
             case RUNNER:
+                plugin.getLogs().debug(data.getKits().toString());
                 if(data.getKits().contains(kitID)) {
                     data.setSelectedKit(kitID);
                     String selected = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.select");

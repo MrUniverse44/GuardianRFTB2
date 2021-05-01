@@ -423,9 +423,9 @@ public final class GuardianRFTB extends JavaPlugin {
                     player.getInventory().setItem(data.getValue(),data.getKey());
                 }
                 if(kitInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.HELMET));
-                if(kitInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.CHESTPLATE));
-                if(kitInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.LEGGINGS));
-                if(kitInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.BOOTS));
+                if(kitInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(kitInfo.getArmor(GuardianArmor.CHESTPLATE));
+                if(kitInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(kitInfo.getArmor(GuardianArmor.LEGGINGS));
+                if(kitInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(kitInfo.getArmor(GuardianArmor.BOOTS));
                 return;
             case KILLER_KIT:
                 String killerID = getPlayerData(player.getUniqueId()).getSelectedKit();
@@ -436,9 +436,9 @@ public final class GuardianRFTB extends JavaPlugin {
                     player.getInventory().setItem(data.getValue(),data.getKey());
                 }
                 if(killerInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.HELMET));
-                if(killerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.CHESTPLATE));
-                if(killerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.LEGGINGS));
-                if(killerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.BOOTS));
+                if(killerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(killerInfo.getArmor(GuardianArmor.CHESTPLATE));
+                if(killerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(killerInfo.getArmor(GuardianArmor.LEGGINGS));
+                if(killerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(killerInfo.getArmor(GuardianArmor.BOOTS));
                 return;
             case RUNNER_KIT:
             default:
@@ -450,9 +450,9 @@ public final class GuardianRFTB extends JavaPlugin {
                     player.getInventory().setItem(data.getValue(),data.getKey());
                 }
                 if(runnerInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.HELMET));
-                if(runnerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.CHESTPLATE));
-                if(runnerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.LEGGINGS));
-                if(runnerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.BOOTS));
+                if(runnerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(runnerInfo.getArmor(GuardianArmor.CHESTPLATE));
+                if(runnerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(runnerInfo.getArmor(GuardianArmor.LEGGINGS));
+                if(runnerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(runnerInfo.getArmor(GuardianArmor.BOOTS));
         }
     }
 

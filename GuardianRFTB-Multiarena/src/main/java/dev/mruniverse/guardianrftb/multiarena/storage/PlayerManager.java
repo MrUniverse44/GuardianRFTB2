@@ -209,15 +209,28 @@ public class PlayerManager {
 
     public void create() {
         String table = plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.table");
+        String defaultRunner = plugin.getSettings().getSettings().getString("settings.default-kits.runner");
+        String defaultBeast = plugin.getSettings().getSettings().getString("settings.default-kits.beast");
+        String defaultKiller = plugin.getSettings().getSettings().getString("settings.default-kits.killer");
         if (!plugin.getData().isRegistered(table, "Player", getID())) {
             List<String> values = new ArrayList<>();
             values.add("Player-" + getID());
             values.add("Coins-0");
-            values.add("Kits-K" + plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.defaultKitID"));
+            if(plugin.getSettings().getSettings().getBoolean("settings.default-kits.toggle")) {
+
+                values.add("Kits-K" + defaultRunner + ",K" + defaultBeast + ",K" + defaultKiller);
+            } else{
+                values.add("Kits-NONE");
+            }
             values.add("SelectedKit-NONE");
             plugin.getData().register(table, values);
+            return;
         }
-        kits = "K" + plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.defaultKitID");
+        if(plugin.getSettings().getSettings().getBoolean("settings.default-kits.toggle")) {
+            kits = "Kits-K" + defaultRunner + ",K" + defaultBeast + ",K" + defaultKiller;
+        } else {
+            kits = "Kits-NONE";
+        }
         selectedKit = "NONE";
         coins = 0;
         plugin.getData().getData().addPlayer(player.getUniqueId());

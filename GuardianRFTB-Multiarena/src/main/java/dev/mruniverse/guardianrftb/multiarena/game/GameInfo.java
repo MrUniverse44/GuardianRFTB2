@@ -127,6 +127,10 @@ public class GameInfo {
         }
     }
 
+    public void setInvincible(boolean status) {
+        invincible = status;
+    }
+
     public int getNeedPlayers() {
         //* if((gameType == GameType.DOUBLE_BEAST || gameType == GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST) && min == 2) {
         //*     return 3;

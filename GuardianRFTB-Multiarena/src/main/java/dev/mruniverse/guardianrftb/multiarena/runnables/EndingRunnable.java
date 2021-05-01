@@ -21,14 +21,15 @@ public class EndingRunnable extends BukkitRunnable {
     private final GameTeam currentWinner;
     private final GuardianRFTB instance = GuardianRFTB.getInstance();
     private boolean winnerIsRunner = false;
+    private int time;
     public EndingRunnable(GameInfo game, GameTeam winnerTeam) {
         this.currentGame = game;
+        time = 10;
         this.currentWinner = winnerTeam;
         if(winnerTeam == GameTeam.RUNNERS || winnerTeam == GameTeam.KILLER) winnerIsRunner = true;
     }
     @Override
     public void run() {
-        int time = currentGame.getLastTimer();
         int rewardMessage = time - 5;
         if(time != 0 || currentGame.getPlayers().size() > 0) {
             if(time == rewardMessage) {
@@ -47,7 +48,7 @@ public class EndingRunnable extends BukkitRunnable {
                     }
                 }
             });
-            currentGame.setLastTimer(time - 1);
+            time--;
         } else {
             for (Player player : currentGame.getPlayers()) {
                 Location location = instance.getSettings().getLocation();
@@ -74,7 +75,6 @@ public class EndingRunnable extends BukkitRunnable {
             }
             currentGame.cancelTask();
             currentGame.restart();
-
         }
     }
 

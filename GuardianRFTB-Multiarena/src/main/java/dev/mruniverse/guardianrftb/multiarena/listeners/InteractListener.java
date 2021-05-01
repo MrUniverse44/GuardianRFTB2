@@ -105,10 +105,10 @@ public class InteractListener implements Listener {
                         case CHECKPOINT:
                             if(pm.getPointStatus() && pm.getLastCheckpoint() != null) {
                                 player.teleport(pm.getLastCheckpoint());
-                                plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.checkpoint.use"));
                                 pm.setLastCheckpoint(null);
                                 pm.setPointStatus(false);
                                 plugin.getUtils().consumeItem(player,1,plugin.getItemsInfo().getCheckPoint());
+                                plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.others.checkpoint.use"));
                             }
                             return;
                         case GAME_SELECTOR:

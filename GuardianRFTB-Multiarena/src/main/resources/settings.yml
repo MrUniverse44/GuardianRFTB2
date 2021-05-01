@@ -25,6 +25,8 @@ settings:
     runner: 0
     # Beast Kit (For this, you need use only KitID's, by default: 0)
     beast: 0
+    # Killer Kit (For this, you need use only KitID's, by default: 0)
+    killer: 0
   # Leave Commands
   leaveCMDs:
     - /leave

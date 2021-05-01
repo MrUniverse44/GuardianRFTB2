@@ -36,7 +36,7 @@ public class KitInfo {
         loadInventory();
         price = plugin.getStorage().getControl(GuardianFiles.KITS).getInt(getPath() + ".KitInfo.price");
         kitSlot = plugin.getStorage().getControl(GuardianFiles.KITS).getInt(getPath() + ".KitInfo.menuSlot");
-        id = plugin.getStorage().getControl(GuardianFiles.KITS).getString(getPath() + ".KitInfo.kitID");
+        id = "K" + plugin.getStorage().getControl(GuardianFiles.KITS).getString(getPath() + ".KitInfo.kitID");
     }
     public void loadKitItem() {
         FileConfiguration items = plugin.getStorage().getControl(GuardianFiles.KITS);

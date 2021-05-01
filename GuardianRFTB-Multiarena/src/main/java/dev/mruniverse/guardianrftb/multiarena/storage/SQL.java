@@ -58,7 +58,15 @@ public class SQL {
 
     public void createPlayer(Player player) {
         coins.put(player.getUniqueId().toString().replace("-",""), 0);
-        kits.put(player.getUniqueId().toString().replace("-",""),"K" + plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.defaultKitID"));
+        String defaultRunner = plugin.getSettings().getSettings().getString("settings.default-kits.runner");
+        String defaultBeast = plugin.getSettings().getSettings().getString("settings.default-kits.beast");
+        String defaultKiller = plugin.getSettings().getSettings().getString("settings.default-kits.killer");
+        if(plugin.getSettings().getSettings().getBoolean("settings.default-kits.toggle")) {
+
+            kits.put(player.getUniqueId().toString().replace("-",""),"K" + defaultRunner + ",K" + defaultBeast + ",K" + defaultKiller);
+        } else{
+            kits.put(player.getUniqueId().toString().replace("-",""),"NONE");
+        }
         selectedKits.put(player.getUniqueId().toString().replace("-",""),"NONE");
     }
 }
