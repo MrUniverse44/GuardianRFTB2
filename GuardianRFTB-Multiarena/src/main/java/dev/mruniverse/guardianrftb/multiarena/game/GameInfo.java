@@ -109,6 +109,7 @@ public class GameInfo {
 
     private void loadStatus() {
         gameStatus = GameStatus.WAITING;
+        updateSigns();
     }
 
     private void loadChests() {
@@ -175,7 +176,6 @@ public class GameInfo {
                 }
             }
         }
-        updateSigns();
     }
 
     /*
@@ -393,7 +393,6 @@ public class GameInfo {
         this.beasts.clear();
         this.lastTimer = 30;
         this.gameStatus = GameStatus.WAITING;
-        updateSigns();
         loadStatus();
     }
 

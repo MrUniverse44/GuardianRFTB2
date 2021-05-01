@@ -123,6 +123,7 @@ public final class GuardianRFTB extends JavaPlugin {
                     guardianPlaceholders.register();
                 }
                 soundsInfo = new SoundsInfo(instance);
+                dataStorage = new DataStorage(instance);
             }
         };
         runnable.runTaskLater(this, 1L);
