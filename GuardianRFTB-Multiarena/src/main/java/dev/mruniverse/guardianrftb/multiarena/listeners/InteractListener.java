@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -83,11 +84,18 @@ public class InteractListener implements Listener {
                         case SHOP:
                             plugin.getUtils().sendMessage(player,"&cShop is in maintenance");
                             return;
+                        case KIT_KILLERS:
+                            Inventory kInv = pm.getKitMenu(KitType.KILLER).getInventory();
+                            if(kInv == null) return;
+                            player.openInventory(kInv);
                         case KIT_BEASTS:
-                            plugin.getUtils().sendMessage(player,"&cBeast kit are in maintenance");
-                            return;
+                            Inventory inventory = pm.getKitMenu(KitType.BEAST).getInventory();
+                            if(inventory == null) return;
+                            player.openInventory(inventory);
                         case KIT_RUNNERS:
-                            plugin.getUtils().sendMessage(player,"&cRunners kit are in maintenance");
+                            Inventory inv = pm.getKitMenu(KitType.RUNNER).getInventory();
+                            if(inv == null) return;
+                            player.openInventory(inv);
                             return;
                         case EXIT_LOBBY:
                             List<String> servers = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getStringList("settings.lobby.Hub-servers");

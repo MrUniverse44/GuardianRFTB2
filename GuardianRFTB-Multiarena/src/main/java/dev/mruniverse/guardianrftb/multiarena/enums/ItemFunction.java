@@ -7,6 +7,7 @@ public enum ItemFunction {
     LOBBY_SELECTOR,
     EXIT_LOBBY,
     KIT_RUNNERS,
+    KIT_KILLERS,
     KIT_BEASTS,
     CHECKPOINT,
     EXIT_GAME

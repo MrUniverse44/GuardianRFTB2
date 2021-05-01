@@ -179,6 +179,26 @@ public final class GuardianRFTB extends JavaPlugin {
             } else {
                 getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
             }
+            ItemMaterial = items.getString("InGame.KillerKit.item");
+            ItemName = items.getString("InGame.KillerKit.name");
+            ItemLore = items.getStringList("InGame.KillerKit.lore");
+            ItemSlot = items.getInt("InGame.KillerKit.slot");
+            if (ItemMaterial == null) ItemMaterial = "PAPER";
+            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
+            if (optionalXMaterial.isPresent()) {
+                m = optionalXMaterial.get();
+                if (m.parseMaterial() != null) {
+                    item = utils.getItem(m, ItemName, ItemLore);
+                    if (items.get("InGame.KillerKit.enchantments") != null) {
+                        item = utils.getEnchantmentList(item, items.getStringList("InGame.KillerKit.enchantments"),"none");
+                    }
+                    itemsInfo.setKitBeast(item);
+                    itemsInfo.setBeastSlot(ItemSlot);
+                    itemsInfo.getCurrentItem().put(item, ItemFunction.KIT_KILLERS);
+                }
+            } else {
+                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
+            }
             ItemMaterial = items.getString("InGame.BeastKit.item");
             ItemName = items.getString("InGame.BeastKit.name");
             ItemLore = items.getStringList("InGame.BeastKit.lore");
