@@ -105,6 +105,7 @@ killerKits:
       name: '&e&lDEFAULT'
       kitID: '0'
       price: 0
+      slot: 0
       lore:
         - '&7Kit Killer Default'
         - '&aClick to select'
