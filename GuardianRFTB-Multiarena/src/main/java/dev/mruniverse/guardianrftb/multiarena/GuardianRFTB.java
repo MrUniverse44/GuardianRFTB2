@@ -87,18 +87,18 @@ public final class GuardianRFTB extends JavaPlugin {
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
-                instance.logger = new ExternalLogger(instance,"GuardianRFTB","dev.mruniverse.guardianrftb.multiarena");
+                logger = new ExternalLogger(instance,"GuardianRFTB","dev.mruniverse.guardianrftb.multiarena");
 
                 getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
 
-                instance.fileStorage = new FileStorage(instance);
-                instance.fileStorage.save(SaveMode.ALL);
-                instance.sInfo = new settingsInfo(instance);
+                fileStorage = new FileStorage(instance);
+                fileStorage.save(SaveMode.ALL);
+                sInfo = new settingsInfo(instance);
 
-                instance.hasPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
-                instance.listenerController = new ListenerController(instance);
-                instance.listenerController.loadListeners();
-                instance.boardController = new BoardController(instance);
+                hasPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
+                listenerController = new ListenerController(instance);
+                listenerController.loadListeners();
+                boardController = new BoardController(instance);
                 getListener().loadCommand("rftb");
                 getListener().loadCommand("grftb");
                 String lang = instance.sInfo.getSettings().getString("settings.language");
@@ -124,6 +124,7 @@ public final class GuardianRFTB extends JavaPlugin {
                 }
                 soundsInfo = new SoundsInfo(instance);
                 dataStorage = new DataStorage(instance);
+                dataStorage.loadDatabase();
             }
         };
         runnable.runTaskLater(this, 1L);

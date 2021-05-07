@@ -42,7 +42,7 @@ public class BoardController {
             players.put(player.getUniqueId(), netherboard.createBoard(player,"guardianBoard"));
         }
         BPlayerBoard scoreboard = getBoardOfPlayer(player);
-        scoreboard.setName(title);
+        scoreboard.setName(ChatColor.translateAlternateColorCodes('&',title));
     }
     public void updateScoreboard(GuardianBoard board, Player player) {
         BPlayerBoard scoreboard = getBoardOfPlayer(player);
