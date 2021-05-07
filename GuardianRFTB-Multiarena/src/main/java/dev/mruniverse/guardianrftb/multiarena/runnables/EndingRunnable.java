@@ -26,6 +26,7 @@ public class EndingRunnable extends BukkitRunnable {
     }
     @Override
     public void run() {
+        int time = this.time;
         if(time != 0 || currentGame.getPlayers().size() > 0) {
             if(time == rewardTime) {
                 for(Player player : currentGame.getPlayers()) {
@@ -35,15 +36,13 @@ public class EndingRunnable extends BukkitRunnable {
             if (winnerIsRunner) {
                 for (Player player : currentGame.getRunners()) {
                     currentGame.firework(player, currentGame.timing(time));
-                    currentGame.firework(player, currentGame.timing(time));
                 }
             } else {
                 for (Player player : currentGame.getBeasts()) {
                     currentGame.firework(player, currentGame.timing(time));
-                    currentGame.firework(player, currentGame.timing(time));
                 }
             }
-            time--;
+            this.time--;
         } else {
             for (Player player : currentGame.getPlayers()) {
                 Location location = instance.getSettings().getLocation();
