@@ -9,8 +9,10 @@ import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.*;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -346,6 +348,67 @@ public class GameInfo {
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(this,gameTeam), 0L, 20L);
     }
 
+
+    public void firework(Player player,boolean firework) {
+        if(!firework) return;
+        Firework fa = player.getWorld().spawn(player.getLocation(), Firework.class);
+        FireworkMeta fam = fa.getFireworkMeta();
+        int fType = getRandom().nextInt(4) + 1;
+        FireworkEffect.Type fireworkType = null;
+        switch (fType) {
+            case 1:
+                fireworkType = FireworkEffect.Type.STAR;
+                break;
+            case 2:
+                fireworkType = FireworkEffect.Type.BALL;
+                break;
+            case 3:
+                fireworkType = FireworkEffect.Type.BALL_LARGE;
+                break;
+            case 4:
+                fireworkType = FireworkEffect.Type.CREEPER;
+                break;
+            case 5:
+                fireworkType = FireworkEffect.Type.BURST;
+                break;
+        }
+        int co1 = getRandom().nextInt(10) + 1;
+        int co2 = getRandom().nextInt(10) + 1;
+        Color c1 = fireColor(co1);
+        Color c2 = fireColor(co2);
+        FireworkEffect ef = FireworkEffect.builder().flicker(getRandom().nextBoolean()).withColor(c1).withFade(c2).with(fireworkType).trail(getRandom().nextBoolean()).build();
+        fam.addEffect(ef);
+        fam.setPower(1);
+        fa.setFireworkMeta(fam);
+    }
+    public Color fireColor(int c) {
+        switch (c) {
+            default:
+                return Color.YELLOW;
+            case 2:
+                return Color.RED;
+            case 3:
+                return Color.GREEN;
+            case 4:
+                return Color.BLUE;
+            case 5:
+                return Color.AQUA;
+            case 6:
+                return Color.OLIVE;
+            case 7:
+                return Color.WHITE;
+            case 8:
+                return Color.ORANGE;
+            case 9:
+                return Color.TEAL;
+            case 10:
+                break;
+        }
+        return Color.LIME;
+    }
+    public boolean timing(int i) {
+        return i % 3 == 0;
+    }
 
 
     public void winRunners() {
