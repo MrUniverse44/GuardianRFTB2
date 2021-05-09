@@ -102,7 +102,16 @@ public class EndingRunnable extends BukkitRunnable {
     }
     public void sendOptions(Player player, List<String> list) {
         for(String line : list) {
-            checkLine(line.replace("[px]","⚫"),player);
+            if(line.contains("<playAgainButton>")) {
+                sendButtons(player,instance.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.playAgainButton.value"));
+            } else {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',line));
+            }
+        }
+    }
+    private void sendButtons(Player player, List<String> list) {
+        for(String line : list) {
+            checkLine(line.replace("[px]", "⚫"), player);
         }
     }
 
