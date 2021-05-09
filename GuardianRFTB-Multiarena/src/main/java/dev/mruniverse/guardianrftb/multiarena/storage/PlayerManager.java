@@ -157,6 +157,7 @@ public class PlayerManager {
         if (plugin.getStorage().getControl(GuardianFiles.MYSQL).getBoolean("mysql.enabled")) {
             if(!kits.equalsIgnoreCase("")) {
                 plugin.getData().getData().setKits(player.getUniqueId(),kits + ",K" + kitID);
+                kits = kits + ",K" + kitID;
             } else {
                 plugin.getData().getData().setKits(player.getUniqueId(),"K" + kitID);
                 kits = "K" + kitID;
@@ -166,8 +167,10 @@ public class PlayerManager {
             String lastResult = plugin.getData().getSQL().kits.get(getID());
             if(!lastResult.equalsIgnoreCase("")) {
                 plugin.getData().getSQL().kits.put(getID(), lastResult + ",K" + kitID);
+                kits = lastResult + ",K" + kitID;
             } else {
                 plugin.getData().getSQL().kits.put(getID(), "K" + kitID);
+                kits = "K" + kitID;
             }
         }
     }
