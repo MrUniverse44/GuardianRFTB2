@@ -83,7 +83,6 @@ public final class GuardianRFTB extends JavaPlugin {
     public void onEnable() {
         instance = this;
         itemsInfo = new ItemsInfo();
-        guardianUtils = new GuardianUtils(this);
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -125,6 +124,7 @@ public final class GuardianRFTB extends JavaPlugin {
                 soundsInfo = new SoundsInfo(instance);
                 dataStorage = new DataStorage(instance);
                 dataStorage.loadDatabase();
+                guardianUtils = new GuardianUtils(instance);
             }
         };
         runnable.runTaskLater(this, 1L);
