@@ -417,9 +417,27 @@ public final class GuardianRFTB extends JavaPlugin {
         switch (gameEquipment) {
             case BEAST_KIT:
                 String kitID = getPlayerData(player.getUniqueId()).getSelectedKit();
-                if(kitID.equalsIgnoreCase("NONE")) return;
+                if(kitID.equalsIgnoreCase("NONE")) {
+                    for(Map.Entry<ItemStack,Integer> data : itemsInfo.getBeastInventory().entrySet()) {
+                        player.getInventory().setItem(data.getValue(),data.getKey());
+                    }
+                    player.getInventory().setHelmet(itemsInfo.getBeastHelmet());
+                    player.getInventory().setChestplate(itemsInfo.getBeastChestplate());
+                    player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
+                    player.getInventory().setBoots(itemsInfo.getBeastBoots());
+                    return;
+                }
                 KitInfo kitInfo = getKitLoader().getKitsUsingID(KitType.BEAST).get(kitID);
-                if(kitInfo == null) return;
+                if(kitInfo == null) {
+                    for(Map.Entry<ItemStack,Integer> data : itemsInfo.getBeastInventory().entrySet()) {
+                        player.getInventory().setItem(data.getValue(),data.getKey());
+                    }
+                    player.getInventory().setHelmet(itemsInfo.getBeastHelmet());
+                    player.getInventory().setChestplate(itemsInfo.getBeastChestplate());
+                    player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
+                    player.getInventory().setBoots(itemsInfo.getBeastBoots());
+                    return;
+                }
                 for(Map.Entry<ItemStack,Integer> data : kitInfo.getInventoryItems().entrySet()) {
                     player.getInventory().setItem(data.getValue(),data.getKey());
                 }

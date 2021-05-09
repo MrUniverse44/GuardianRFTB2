@@ -235,6 +235,8 @@ public class KitLoader {
     }
     public HashMap<String,KitInfo> getKits(KitType kitType) {
         switch (kitType) {
+            case KILLER:
+                return killerKits;
             case BEAST:
                 return beastKits;
             case RUNNER:
