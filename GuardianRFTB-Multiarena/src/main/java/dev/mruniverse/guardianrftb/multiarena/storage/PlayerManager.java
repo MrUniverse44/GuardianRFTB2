@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PlayerManager {
-    private GuardianRFTB plugin;
+    private final GuardianRFTB plugin;
     private PlayerStatus playerStatus;
     private GuardianBoard guardianBoard;
     private final Player player;
