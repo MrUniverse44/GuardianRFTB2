@@ -21,11 +21,18 @@ import java.util.*;
 
 @SuppressWarnings("unused")
 public class GuardianUtils {
+
     private final GuardianRFTB plugin;
     private final Utils utils = GuardianLIB.getControl().getUtils();
+    private final ShopMenu currentShop;
 
     public GuardianUtils(GuardianRFTB plugin) {
         this.plugin = plugin;
+        currentShop = new ShopMenu(plugin);
+    }
+
+    public ShopMenu getCurrentShop() {
+        return currentShop;
     }
 
     public void sendMessage(Player player,String message) {

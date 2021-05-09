@@ -82,16 +82,20 @@ public class InteractListener implements Listener {
                     event.setCancelled(true);
                     switch(itemAction) {
                         case SHOP:
-                            plugin.getUtils().sendMessage(player,"&cShop is in maintenance");
+                            Inventory sInv = plugin.getUtils().getCurrentShop().getInventory();
+                            if(sInv == null) return;
+                            player.openInventory(sInv);
                             return;
                         case KIT_KILLERS:
                             Inventory kInv = pm.getKitMenu(KitType.KILLER).getInventory();
                             if(kInv == null) return;
                             player.openInventory(kInv);
+                            return;
                         case KIT_BEASTS:
                             Inventory inventory = pm.getKitMenu(KitType.BEAST).getInventory();
                             if(inventory == null) return;
                             player.openInventory(inventory);
+                            return;
                         case KIT_RUNNERS:
                             Inventory inv = pm.getKitMenu(KitType.RUNNER).getInventory();
                             if(inv == null) return;
@@ -170,6 +174,22 @@ public class InteractListener implements Listener {
             ItemStack clickedItem = event.getCurrentItem();
             if (hash.containsKey(clickedItem)) {
                 plugin.getKitLoader().getToSelect(KitType.KILLER,player,hash.get(clickedItem));
+            }
+        }
+    }
+
+    @EventHandler
+    public void onShopMenuClick(InventoryClickEvent event) {
+        Player player = (Player)event.getWhoClicked();
+        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) return;
+        if(event.getCurrentItem() == null) return;
+        if(!event.getInventory().equals(plugin.getUtils().getCurrentShop().getInventory())) return;
+        HashMap<ItemStack, ShopAction> hash = plugin.getUtils().getCurrentShop().getItems();
+        ItemStack clickedItem = event.getCurrentItem();
+        event.setCancelled(true);
+        if(hash.containsKey(clickedItem)) {
+            if(hash.get(clickedItem) != ShopAction.CUSTOM && hash.get(clickedItem) != ShopAction.FILL) {
+                plugin.getUtils().getCurrentShop().execute(player,hash.get(clickedItem));
             }
         }
     }

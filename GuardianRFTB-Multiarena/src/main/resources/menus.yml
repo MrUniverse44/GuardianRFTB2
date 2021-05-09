@@ -25,13 +25,13 @@ menus:
           - '&eClick to open kit runners menu'
         item: MAP
         toggle: true
-      Craft:
-        name: '&aCraft Coins'
+      KitKiller:
+        name: '&aKits: Killer'
         slot: 22
         lore:
           - '&8RigoxRFTB'
-          - '&eClick to open Craft Coins menu'
-        item: BREWING_STAND
+          - '&eClick to open kit killer menu'
+        item: IRON_SWORD
         toggle: true
       KitBeast:
         name: '&aKits: Beast'
