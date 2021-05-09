@@ -147,6 +147,8 @@ settings:
       ending: Restarting
   # Game Options
   game:
+    # Show Buttons message (PlayAgain, AutoPlay, Leave) on game-end
+    show-game-buttons-on-end: false
     # Show Beast distance in a actionbar or BossBar
     beastDistance:
       # Toggle
