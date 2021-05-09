@@ -37,6 +37,12 @@ messages:
         - '<center>&a%winner_team% &e&lWINNER &c%looser_team%'
         - ' '
         - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      playAgain:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - ' '
+        - ' &a<playAgainButton>'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
       rewardSummary:
         - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
         - '<center>&e&l%gameType% - %map_name%'
@@ -46,6 +52,26 @@ messages:
         - '  &f[px] &a%coins% Coins'
         - ' '
         - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+    playAgainButton:
+      value:
+        - '&b[px] <button_play>'
+        - '&b[px] <button_auto>'
+        - '&b[px] <button_leave>'
+      play:
+        value: '&a¿Want play again? &lClick here&e to play again.'
+        hover: '&b&lClick to play again'
+      auto:
+        value: '&a¿Want toggle auto play-again? &lClick here&e to toggle.'
+        hover: '&b&lClick to toggle auto join'
+      leave:
+        value: '&a¿Want leave? &lClick here&e to leave.'
+        hover: '&b&lClick to leave'
+      customOptions:
+        custom1:
+          value: '&aThis is a custom message'
+          hover: '&bThis is a custom hover'
+          customAction: 'URL'
+          customResult: 'https://spigotmc.org'
     deathMessages:
       pvp: '&7%victim% was killed by %attacker%'
       void: '&7%victim% was searching a diamond.'
