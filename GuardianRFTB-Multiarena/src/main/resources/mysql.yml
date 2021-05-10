@@ -11,7 +11,7 @@
 # SpigotMC Link: https://www.spigotmc.org/resources/88817/
 #
 mysql:
-  enabled: true
+  enabled: false
   jdbc-url: jdbc:mysql://[host]:[port]/[db]?autoReconnect=true
   host: localhost
   port: 3306
