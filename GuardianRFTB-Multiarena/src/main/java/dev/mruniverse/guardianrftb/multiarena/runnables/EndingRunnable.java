@@ -111,7 +111,7 @@ public class EndingRunnable extends BukkitRunnable {
     }
     private void sendButtons(Player player, List<String> list) {
         for(String line : list) {
-            checkLine(line.replace("[px]", "⚫"), player);
+            checkLine(line.replace("[px]", "⚫").replace("[bx]","▄"), player);
         }
     }
 
@@ -131,8 +131,6 @@ public class EndingRunnable extends BukkitRunnable {
                         .setActionClick(new ActionClick(currentText.getActionTypeClick(),currentText.getClickValue())))
                         .create();
                 player.spigot().sendMessage(component);
-            } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', line));
             }
         }
     }
