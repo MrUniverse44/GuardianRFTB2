@@ -7,7 +7,7 @@
 #
 scoreboards:
   animatedTitle:
-    toggle: false
+    toggle: true
     repeatTime: 20
     titles:
       - '&e&lRFTB'
@@ -31,7 +31,7 @@ scoreboards:
       - '&fCoins: &b<player_coins>'
       - '&fWins: &b<player_wins>'
       - ' '
-      - '&fKits: &b<player_kits>/1'
+      - '&fKits: &b<player_kits>/3'
       - ' '
       - '&fOnline: &b<server_online>'
       - ' '
@@ -65,8 +65,6 @@ scoreboards:
       - '&fTime Left: &a<arena_timeLeft>'
       - ' '
       - '&fMap: &a<arena_name>'
-      - '&fBeast(s): &a<arena_beast>'
-      - '&fYour role: &a<player_role>'
       - ' '
       - '&eplay.servername.net'
   beastWin:
