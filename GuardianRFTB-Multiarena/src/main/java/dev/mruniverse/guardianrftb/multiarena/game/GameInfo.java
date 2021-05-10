@@ -344,6 +344,7 @@ public class GameInfo {
 
     @SuppressWarnings("deprecation")
     public void setWinner(GameTeam gameTeam) {
+        plugin.getServer().getScheduler().cancelTask(lastListener);
         this.gameStatus = GameStatus.RESTARTING;
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(this,gameTeam), 0L, 20L);
     }
