@@ -81,6 +81,7 @@ public final class GuardianRFTB extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if(dataStorage == null) return;
         dataStorage.disableDatabase();
     }
 
