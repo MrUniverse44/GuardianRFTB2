@@ -80,6 +80,11 @@ public final class GuardianRFTB extends JavaPlugin {
     public GuardianPlaceholders getGuardianPlaceholders() { return guardianPlaceholders; }
 
     @Override
+    public void onDisable() {
+        dataStorage.disableDatabase();
+    }
+
+    @Override
     public void onEnable() {
         instance = this;
         itemsInfo = new ItemsInfo();
