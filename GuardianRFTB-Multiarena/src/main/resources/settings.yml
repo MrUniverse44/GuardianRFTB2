@@ -35,7 +35,7 @@ settings:
   # Plugin Date Format
   dateFormat: 'dd/MM/yyyy'
   # Toggle perWorldTab option
-  perWorldTab: true
+  perWorldTab: false
   # Leave Cancel Time (In Seconds)
   leaveCancelTime: 3
   # Lobby Options
@@ -45,7 +45,7 @@ settings:
     # Plugin Custom Chat
     chat: true
     # Show all players including players in games (only for lobby-players)
-    show-all-players: true
+    show-all-players: false
     # Lobby BossBar
     bossBar: true
     # Toggle Lobby-ActionBar
