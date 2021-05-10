@@ -8,6 +8,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.FloatConverter;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -26,15 +27,15 @@ public class PlayerRunnable extends BukkitRunnable {
         plugin = main;
         floatConverter = new FloatConverter();
         utils = main.getLib().getUtils();
+        bossLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.bossBar");
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
-        bossLb = plugin.getSettings().getSettings().getBoolean("settings.options.lobby-bossBar");
         bossLobby = messages.getString("messages.lobby.bossBar");
-        actionLb = plugin.getSettings().getSettings().getBoolean("settings.options.lobby-actionBar");
+        actionLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.actionBar");
         actionLobby = messages.getString("messages.lobby.actionBar");
-        bossGm = plugin.getSettings().getSettings().getBoolean("settings.ShowBeastDistance.toggle");
-        bossGameRunners = messages.getString("messages.inGame.others.bossBar.toRunners");
-        bossGameBeast = messages.getString("messages.inGame.others.bossBar.toBeasts");
-        String format = plugin.getSettings().getSettings().getString("settings.ShowBeastDistance.Format");
+        bossGm = plugin.getSettings().getSettings().getBoolean("settings.game.beastDistance.toggle");
+        bossGameRunners = messages.getString("messages.game.others.beastDistance.toRunners");
+        bossGameBeast = messages.getString("messages.game.others.beastDistance.toBeasts");
+        String format = plugin.getSettings().getSettings().getString("settings.game.beastDistance.Format");
         if(format == null) format = "BOSSBAR";
         if(format.equalsIgnoreCase("ACTIONBAR") || format.equalsIgnoreCase("ACTION BAR") || format.equalsIgnoreCase("ACTION_BAR")) {
             gameBossFormat = GameBossFormat.ACTIONBAR;
@@ -43,15 +44,15 @@ public class PlayerRunnable extends BukkitRunnable {
         }
     }
     public void update() {
-        bossLb = plugin.getSettings().getSettings().getBoolean("settings.options.lobby-bossBar");
+        bossLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.bossBar");
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         bossLobby = messages.getString("messages.lobby.bossBar");
-        actionLb = plugin.getSettings().getSettings().getBoolean("settings.options.lobby-actionBar");
+        actionLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.actionBar");
         actionLobby = messages.getString("messages.lobby.actionBar");
-        bossGm = plugin.getSettings().getSettings().getBoolean("settings.ShowBeastDistance.toggle");
-        bossGameRunners = messages.getString("messages.inGame.others.bossBar.toRunners");
-        bossGameBeast = messages.getString("messages.inGame.others.bossBar.toBeasts");
-        String format = plugin.getSettings().getSettings().getString("settings.ShowBeastDistance.Format");
+        bossGm = plugin.getSettings().getSettings().getBoolean("settings.game.beastDistance.toggle");
+        bossGameRunners = messages.getString("messages.game.others.beastDistance.toRunners");
+        bossGameBeast = messages.getString("messages.game.others.beastDistance.toBeasts");
+        String format = plugin.getSettings().getSettings().getString("settings.game.beastDistance.Format");
         if(format == null) format = "BOSSBAR";
         if(format.equalsIgnoreCase("ACTIONBAR") || format.equalsIgnoreCase("ACTION BAR") || format.equalsIgnoreCase("ACTION_BAR")) {
             gameBossFormat = GameBossFormat.ACTIONBAR;
@@ -89,7 +90,11 @@ public class PlayerRunnable extends BukkitRunnable {
                         if(gameBossFormat.equals(GameBossFormat.BOSSBAR)) {
                             boolean changeLife = !plugin.getUtils().isBeast(player);
                             Player beast = plugin.getUtils().getRandomBeast(player);
-                            if(Objects.requireNonNull(beast.getLocation().getWorld()).equals(player.getLocation().getWorld())) {
+                            World beastWorld = beast.getLocation().getWorld();
+                            World playerWorld = player.getLocation().getWorld();
+                            if(beastWorld == null) return;
+                            if(playerWorld == null) return;
+                            if(beastWorld.equals(playerWorld)) {
                                 double mainDistance = player.getLocation().distance(beast.getLocation());
                                 float distance = floatConverter.converter(mainDistance);
                                 message = message.replace("%runners%", playerManager.getGame().getRunners().size() + "")
@@ -103,7 +108,11 @@ public class PlayerRunnable extends BukkitRunnable {
                             }
                         } else {
                             Player beast = plugin.getUtils().getRandomBeast(player);
-                            if(Objects.requireNonNull(beast.getLocation().getWorld()).equals(player.getLocation().getWorld())) {
+                            World beastWorld = beast.getLocation().getWorld();
+                            World playerWorld = player.getLocation().getWorld();
+                            if(beastWorld == null) return;
+                            if(playerWorld == null) return;
+                            if(beastWorld.equals(playerWorld)) {
                                 double mainDistance = player.getLocation().distance(beast.getLocation());
                                 float distance = floatConverter.meters(mainDistance);
                                 message = message.replace("%runners%", playerManager.getGame().getRunners().size() + "")
