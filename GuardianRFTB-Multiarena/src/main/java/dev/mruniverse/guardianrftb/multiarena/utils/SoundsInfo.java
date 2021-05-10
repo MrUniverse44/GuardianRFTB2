@@ -1,5 +1,6 @@
 package dev.mruniverse.guardianrftb.multiarena.utils;
 
+import dev.mruniverse.guardianlib.core.utils.ExternalLogger;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianSounds;
@@ -28,22 +29,23 @@ public class SoundsInfo {
                 volume.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath()))));
             }
         } catch (Throwable ignored) {
-            plugin.getLogs().error(" ");
-            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
-            plugin.getLogs().error("To prevent issues");
-            plugin.getLogs().error(" ");
-            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
-            plugin.getLogs().error("To prevent issues");
-            plugin.getLogs().error(" ");
-            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
-            plugin.getLogs().error("To prevent issues");
-            plugin.getLogs().error(" ");
-            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
-            plugin.getLogs().error("To prevent issues");
-            plugin.getLogs().error(" ");
-            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
-            plugin.getLogs().error("To prevent issues");
-            plugin.getLogs().error(" ");
+            ExternalLogger logs = plugin.getLogs();
+            logs.error(" ");
+            logs.error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            logs.error("To prevent issues");
+            logs.error(" ");
+            logs.error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            logs.error("To prevent issues");
+            logs.error(" ");
+            logs.error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            logs.error("To prevent issues");
+            logs.error(" ");
+            logs.error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            logs.error("To prevent issues");
+            logs.error(" ");
+            logs.error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            logs.error("To prevent issues");
+            logs.error(" ");
         }
     }
 
