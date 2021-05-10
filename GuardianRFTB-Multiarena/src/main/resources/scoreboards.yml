@@ -10,21 +10,22 @@ scoreboards:
     toggle: true
     repeatTime: 20
     titles:
-      - '&e&lRFTB'
-      - '&f&lRFTB'
-      - '&e&lRFTB'
-      - '&f&lRFTB'
-      - '&e&lRFTB'
-      - '&f&lRFTB'
-      - '&f&lR&e&lFTB'
-      - '&f&lRF&e&lTB'
-      - '&e&lR&f&lFT&e&lB'
-      - '&e&lRF&f&lTB'
-      - '&e&lRFT&f&lB'
-      - '&e&lRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&f&lG&b&lRFTB'
+      - '&f&lGR&b&lFTB'
+      - '&b&lG&f&lRF&b&lTB'
+      - '&b&lGR&f&lFT&b&lB'
+      - '&b&lGRF&f&lTB'
+      - '&b&lGRFT&f&lB'
+      - '&b&lGRFTB'
   lobby:
     toggle: true
-    title: '&e&lGuardianRFTB'
+    title: '&b&lGuardianRFTB'
     lines:
       - ' '
       - '&fUser: &b<player_name>'
@@ -42,7 +43,7 @@ scoreboards:
   # - <isStarting> = This line only appear when the game is starting.
   # - <BeastAppear> = This line only appear when the beast is waiting to appear in the map.
   waiting:
-    title: '&e&lGuardianRFTB'
+    title: '&b&lGuardianRFTB'
     lines:
       - '&7<arena_mode> | <timeFormat>'
       - ' '
@@ -57,7 +58,7 @@ scoreboards:
       - ' '
       - '&eplay.servername.net'
   playing:
-    title: '&e&lGuardianRFTB'
+    title: '&b&lGuardianRFTB'
     lines:
       - '&7<timeFormat>'
       - ' '
@@ -69,7 +70,7 @@ scoreboards:
       - '&eplay.servername.net'
   beastWin:
     forBeast:
-      title: '&e&lGuardianRFTB'
+      title: '&b&lGuardianRFTB'
       lines:
         - '&7<timeFormat>'
         - ' '
@@ -78,7 +79,7 @@ scoreboards:
         - ' '
         - '&eplay.servername.net'
     forRunners:
-      title: '&e&lGuardianRFTB'
+      title: '&b&lGuardianRFTB'
       lines:
         - '&7<timeFormat>'
         - ' '
@@ -87,7 +88,7 @@ scoreboards:
         - '&eplay.servername.net'
   runnersWin:
     forBeast:
-      title: '&e&lGuardianRFTB'
+      title: '&b&lGuardianRFTB'
       lines:
         - '&7<timeFormat>'
         - ' '
@@ -96,7 +97,7 @@ scoreboards:
         - ' '
         - '&eplay.servername.net'
     forRunners:
-      title: '&e&lGuardianRFTB'
+      title: '&b&lGuardianRFTB'
       lines:
         - '&7<timeFormat>'
         - ' '
