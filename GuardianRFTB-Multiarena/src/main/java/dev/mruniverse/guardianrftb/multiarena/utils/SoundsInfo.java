@@ -20,11 +20,30 @@ public class SoundsInfo {
     public SoundsInfo(GuardianRFTB plugin) {
         this.plugin = plugin;
         FileConfiguration file = plugin.getStorage().getControl(GuardianFiles.SOUNDS);
-        for(GuardianSounds sound : GuardianSounds.values()) {
-            soundStatus.put(sound,file.getBoolean(sound.getStatusPath()));
-            sounds.put(sound,Sound.valueOf(file.getString(sound.getSoundPath())));
-            pitch.put(sound,Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath()))));
-            volume.put(sound,Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath()))));
+        try {
+            for (GuardianSounds sound : GuardianSounds.values()) {
+                soundStatus.put(sound, file.getBoolean(sound.getStatusPath()));
+                sounds.put(sound, Sound.valueOf(file.getString(sound.getSoundPath())));
+                pitch.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath()))));
+                volume.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath()))));
+            }
+        } catch (Throwable ignored) {
+            plugin.getLogs().error(" ");
+            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            plugin.getLogs().error("To prevent issues");
+            plugin.getLogs().error(" ");
+            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            plugin.getLogs().error("To prevent issues");
+            plugin.getLogs().error(" ");
+            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            plugin.getLogs().error("To prevent issues");
+            plugin.getLogs().error(" ");
+            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            plugin.getLogs().error("To prevent issues");
+            plugin.getLogs().error(" ");
+            plugin.getLogs().error("Plugin sounds in sounds.yml aren't correct in your version, please put correct sounds and restart your server");
+            plugin.getLogs().error("To prevent issues");
+            plugin.getLogs().error(" ");
         }
     }
 
