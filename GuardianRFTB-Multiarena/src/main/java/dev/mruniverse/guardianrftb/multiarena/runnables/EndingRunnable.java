@@ -105,7 +105,7 @@ public class EndingRunnable extends BukkitRunnable {
             if(line.contains("<playAgainButton>")) {
                 sendButtons(player,instance.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.playAgainButton.value"));
             } else {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',line));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&',line.replace("[px]", "⚫").replace("[bx]","▄")));
             }
         }
     }
@@ -118,6 +118,7 @@ public class EndingRunnable extends BukkitRunnable {
     private void checkLine(String line,Player player) {
         if(line == null) return;
         String currentButtonVar;
+        line = line.replace("[bx]","▄");
         for(Map.Entry<String,GuardianText> currentEntry : buttons.entrySet()) {
             currentButtonVar = "<button_" + currentEntry.getKey() + ">";
             if(line.contains(currentButtonVar)) {
