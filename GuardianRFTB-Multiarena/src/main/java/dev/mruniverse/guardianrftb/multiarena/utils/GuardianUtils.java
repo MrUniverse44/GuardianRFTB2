@@ -227,6 +227,7 @@ public class GuardianUtils {
         }
 
         text = text.replace("<player_name>",player.getName())
+                .replace("[new line]","\n")
                 .replace("<player_coins>",playerManager.getCoins() + "")
                 .replace("<player_wins>",playerManager.getKits().size() + "")
                 .replace("<player_kills>",playerManager.getKills() + "")
