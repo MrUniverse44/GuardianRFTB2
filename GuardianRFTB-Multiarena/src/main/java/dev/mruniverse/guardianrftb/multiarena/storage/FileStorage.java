@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class FileStorage {
     private final GuardianRFTB plugin;
-    private FileConfiguration settings,messages,mysql,data,menus,items,games,boards,chests,kits,messagesEn,messagesEs,sounds;
+    private FileConfiguration settings,messages,mysql,data,menus,items,games,boards,chests,kits,messagesEn,messagesEs,sounds,holograms;
     private final File rxSettings;
     private final File rxMessagesEn;
     private final File rxMessagesEs;
@@ -28,6 +28,7 @@ public class FileStorage {
     private final File rxGames;
     private final File rxSounds;
     private final File rxBoards;
+    private final File rxHolograms;
     private final File rxChests;
     private final File rxKits;
     public FileStorage(GuardianRFTB plugin) {
@@ -40,6 +41,7 @@ public class FileStorage {
         rxMySQL = new File(dataFolder, "mysql.yml");
         rxData = new File(dataFolder, "data.yml");
         rxMenus = new File(dataFolder, "menus.yml");
+        rxHolograms = new File(dataFolder,"holograms.yml");
         rxItems = new File(dataFolder, "items.yml");
         rxGames = new File(dataFolder, "games.yml");
         rxBoards = new File(dataFolder, "scoreboards.yml");
@@ -48,6 +50,7 @@ public class FileStorage {
         rxSounds = new File(dataFolder,"sounds.yml");
         settings = loadConfig("settings");
         menus = loadConfig("menus");
+        holograms = loadConfig("holograms");
         messages = loadConfig("messages_en");
         messagesEn = loadConfig("messages_en");
         messagesEs = loadConfig("messages_es");
@@ -69,6 +72,8 @@ public class FileStorage {
 
     public File getFile(GuardianFiles fileToGet) {
         switch (fileToGet) {
+            case HOLOGRAMS:
+                return rxHolograms;
             case CHESTS:
                 return rxChests;
             case ITEMS:
@@ -153,6 +158,9 @@ public class FileStorage {
      */
     public void reloadFile(SaveMode Mode) {
         switch (Mode) {
+            case HOLOGRAMS:
+                holograms = YamlConfiguration.loadConfiguration(rxHolograms);
+                break;
             case CHESTS:
                 chests = YamlConfiguration.loadConfiguration(rxChests);
                 break;
@@ -191,6 +199,7 @@ public class FileStorage {
                 messages = YamlConfiguration.loadConfiguration(rxMessages);
                 messagesEs = YamlConfiguration.loadConfiguration(rxMessagesEs);
                 messagesEn = YamlConfiguration.loadConfiguration(rxMessagesEn);
+                holograms = YamlConfiguration.loadConfiguration(rxHolograms);
                 data = YamlConfiguration.loadConfiguration(rxData);
                 items = YamlConfiguration.loadConfiguration(rxItems);
                 chests = YamlConfiguration.loadConfiguration(rxChests);
@@ -213,6 +222,9 @@ public class FileStorage {
     public void save(SaveMode fileToSave) {
         try {
             switch (fileToSave) {
+                case HOLOGRAMS:
+                    getControl(GuardianFiles.HOLOGRAMS).save(rxHolograms);
+                    break;
                 case SOUNDS:
                     getControl(GuardianFiles.SOUNDS).save(rxSounds);
                     break;
@@ -248,6 +260,7 @@ public class FileStorage {
                     break;
                 case ALL:
                 default:
+                    getControl(GuardianFiles.HOLOGRAMS).save(rxHolograms);
                     getControl(GuardianFiles.SETTINGS).save(rxSettings);
                     getControl(GuardianFiles.CHESTS).save(rxChests);
                     getControl(GuardianFiles.DATA).save(rxData);
@@ -323,6 +336,9 @@ public class FileStorage {
      */
     public FileConfiguration getControl(GuardianFiles fileToControl) {
         switch (fileToControl) {
+            case HOLOGRAMS:
+                if(holograms == null) holograms = loadConfig(rxHolograms);
+                return holograms;
             case CHESTS:
                 if(chests == null) items = loadConfig(rxChests);
                 return chests;

@@ -9,6 +9,7 @@ public enum SaveMode {
     SCOREBOARDS,
     MENUS,
     GAMES_FILES,
+    HOLOGRAMS,
     KITS,
     MYSQL,
     SOUNDS,
