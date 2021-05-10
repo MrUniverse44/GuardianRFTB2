@@ -58,13 +58,13 @@ messages:
         - '&b[px] <button_auto>'
         - '&b[px] <button_leave>'
       play:
-        value: '&a¿Want play again? &lClick here&e to play again.'
+        value: '&b¿Want play again? &a&lClick here&e to play again.'
         hover: '&b&lClick to play again'
       auto:
-        value: '&a¿Want toggle auto play-again? &lClick here&e to toggle.'
+        value: '&b¿Want toggle auto play-again? &a&lClick here&e to toggle.'
         hover: '&b&lClick to toggle auto join'
       leave:
-        value: '&a¿Want leave? &lClick here&e to leave.'
+        value: '&b¿Want leave? &a&lClick here&e to leave.'
         hover: '&b&lClick to leave'
       customOptions:
         custom1:

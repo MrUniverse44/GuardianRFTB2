@@ -58,13 +58,13 @@ messages:
         - '&b[px] <button_auto>'
         - '&b[px] <button_leave>'
       play:
-        value: '&a¿Quieres jugar nuevamente? &lClick Aqui&e para jugar nuevamente.'
+        value: '&b¿Quieres jugar nuevamente? &a&lClick Aqui&e para jugar nuevamente.'
         hover: '&b&lClick para jugar nuevamente'
       auto:
-        value: '&a¿Quieres cambiar el auto-jugar? &lClick Aqui&e para cambiar.'
+        value: '&b¿Quieres cambiar el auto-jugar? &a&lClick Aqui&e para cambiar.'
         hover: '&b&lClick para entrar automaticamente a una partida'
       leave:
-        value: '&a¿Quieres salir? &lClick Aqui&e para salir.'
+        value: '&b¿Quieres salir? &a&lClick Aqui&e para salir.'
         hover: '&b&lClick para salir'
       customOptions:
         custom1:
