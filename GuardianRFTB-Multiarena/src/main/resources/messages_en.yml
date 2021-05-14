@@ -122,6 +122,13 @@ messages:
     actionBar: '&bYou are playing &e&lRFTB &bwith &e&lGuardianRFTB'
     bossBar: '&bYou are playing on &e&nServerName Network&b.'
   others:
+    buttons:
+      autoPlay:
+        on: '&aNow you &lENABLED&a the autoPlay option'
+        off: '&cNow you &lDISABLED&c the autoPlay option'
+      playAgain:
+        searching: '&aSearching games..'
+        sending: '&aSending you to game &b%game_name%&a.'
     already: '&cYou are already playing'
     leave:
       confirm: '&a&lTeleporting you to the lobby in <leaveCancelTime> seconds...[new line]&a&lRight-Click again to cancel the teleport!'

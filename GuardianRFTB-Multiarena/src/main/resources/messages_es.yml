@@ -122,6 +122,13 @@ messages:
     actionBar: '&bEstas jugando &e&lRFTB &bcon &e&lGuardianRFTB'
     bossBar: '&bEstas jugando en &e&nServerName Network&b.'
   others:
+    buttons:
+      autoPlay:
+        on: '&aAhora se ha &lACTIVADO&a la opcion de volver a jugar'
+        off: '&cAhora se ha &lDESACTIVADO&c la opcion de volver a jugar'
+      playAgain:
+        searching: '&aBuscando partidas..'
+        sending: '&aEnviandote al juego &b%game_name%&a.'
     already: '&cTu ya estas en una partida.'
     leave:
       confirm: '&a&lTeletransportandote al lobby en <leaveCancelTime> segundos...[new line]&a&lClick-Derecho para cancelar!'

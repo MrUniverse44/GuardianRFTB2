@@ -7,6 +7,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
 import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
@@ -71,6 +72,24 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
                 plugin.getGameManager().joinGame((Player)sender,args[1]);
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("autoPlay")) {
+                if(sender instanceof Player) {
+                    Player player = (Player)sender;
+                    PlayerManager pM = plugin.getPlayerData(player.getUniqueId());
+                    String buttonMessage;
+                    if(pM.toggleAutoplay()) {
+                        buttonMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.buttons.autoPlay.on");
+                        if(buttonMessage == null) buttonMessage = "&aNow you &lENABLED&a the autoPlay option";
+                    } else {
+                        buttonMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.buttons.autoPlay.off");
+                        if(buttonMessage == null) buttonMessage = "&cNow you &lDISABLED&c the autoPlay option";
+                    }
+                    utils.sendMessage(player,buttonMessage);
+                    return true;
+                }
+                utils.sendMessage(sender,"&cThis command only can be used by players.");
                 return true;
             }
             if (args[0].equalsIgnoreCase("leave")) {
