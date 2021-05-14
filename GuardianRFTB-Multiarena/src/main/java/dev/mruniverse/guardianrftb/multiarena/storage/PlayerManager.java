@@ -32,7 +32,7 @@ public class PlayerManager {
     private int wins = 0;
     private int coins = 0;
     private int deaths = 0;
-
+    private boolean autoPlay = false;
     public PlayerManager(GuardianRFTB plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
@@ -61,6 +61,14 @@ public class PlayerManager {
         selectedKit = plugin.getData().getSQL().getSelectedKit(player.getUniqueId());
         kits = plugin.getData().getSQL().getKits(player.getUniqueId());
         coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
+    }
+
+    public boolean getAutoPlayStatus() { return autoPlay; }
+
+
+    public boolean toggleAutoplay() {
+        autoPlay = !autoPlay;
+        return autoPlay;
     }
 
     public KitMenu getKitMenu(KitType kitType) {
