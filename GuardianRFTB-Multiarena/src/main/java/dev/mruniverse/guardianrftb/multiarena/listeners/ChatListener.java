@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -59,7 +59,7 @@ public class ChatListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        GameInfo game = playerManager.getGame();
+        Game game = playerManager.getGame();
         if(game.getSpectators().contains(player)) {
             for(Player spectator : game.getSpectators()) {
                 plugin.getUtils().sendMessage(spectator,spectatorChat.replace("<player_name>",player.getName())

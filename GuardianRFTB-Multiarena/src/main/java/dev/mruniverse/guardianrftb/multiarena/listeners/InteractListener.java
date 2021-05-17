@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -229,7 +229,7 @@ public class InteractListener implements Listener {
     }
     @EventHandler
     public void onChestClick(PlayerInteractEvent e) {
-        GameInfo game = plugin.getPlayerData(e.getPlayer().getUniqueId()).getGame();
+        Game game = plugin.getPlayerData(e.getPlayer().getUniqueId()).getGame();
         if(game == null) return;
         if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.RESTARTING) {
             e.setCancelled(true);
@@ -258,7 +258,7 @@ public class InteractListener implements Listener {
         player.openInventory(plugin.getGameManager().getGameChest(chestName).getInventory());
     }
     private void checkGameChest(Player player, Location location) {
-        GameInfo game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
         if(game == null) return;
         if(game.getChestLocations() == null) return;
         for(String chests : game.getChestTypes()) {
@@ -271,7 +271,7 @@ public class InteractListener implements Listener {
         }
     }
     private boolean isGameChest(Player player,Location location) {
-        GameInfo game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
         if(game == null) return false;
         for(String chests : game.getChestTypes()) {
             if(game.getChestLocations().get(chests).contains(location)) {

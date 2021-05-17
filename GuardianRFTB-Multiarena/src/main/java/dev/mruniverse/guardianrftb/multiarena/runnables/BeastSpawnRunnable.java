@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,14 +13,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class BeastSpawnRunnable extends BukkitRunnable {
-    private final GameInfo currentGame;
+    private final Game currentGame;
     private final GuardianRFTB instance = GuardianRFTB.getInstance();
     private final GuardianUtils guardianUtils = instance.getUtils();
     private String prefix;
     private String spawn;
     private String second;
     private String seconds;
-    public BeastSpawnRunnable(GameInfo game) {
+    public BeastSpawnRunnable(Game game) {
         this.currentGame = game;
         FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = instance.getSettings().getSettings();

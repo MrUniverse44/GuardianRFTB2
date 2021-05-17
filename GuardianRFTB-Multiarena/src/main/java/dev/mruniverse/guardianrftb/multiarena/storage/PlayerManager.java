@@ -4,7 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
 import org.bukkit.Location;
@@ -21,7 +21,7 @@ public class PlayerManager {
     private final Player player;
     private boolean pointStatus;
     private Location lastCheckpoint;
-    private GameInfo currentGame;
+    private Game currentGame;
     private final KitMenu beastMenu;
     private final KitMenu runnerMenu;
     private final KitMenu killerMenu;
@@ -90,7 +90,7 @@ public class PlayerManager {
     public void setBoard(GuardianBoard board) {
         guardianBoard = board;
     }
-    public void setGame(GameInfo game) { currentGame = game; }
+    public void setGame(Game game) { currentGame = game; }
     public GuardianBoard getBoard() {
         return guardianBoard;
     }
@@ -100,7 +100,7 @@ public class PlayerManager {
     public String getName() {
         return player.getName();
     }
-    public GameInfo getGame() { return currentGame; }
+    public Game getGame() { return currentGame; }
     public Player getPlayer() {
         return player;
     }

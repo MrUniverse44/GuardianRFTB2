@@ -6,11 +6,8 @@ import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.TextPart;
 import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.TextPartBuilder;
 import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.action.ActionClick;
 import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.hover.HoverBuilder;
-import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.enums.*;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianText;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -27,14 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 public class EndingRunnable extends BukkitRunnable {
-    private final GameInfo currentGame;
+    private final Game currentGame;
     private final GuardianRFTB instance = GuardianRFTB.getInstance();
     private boolean winnerIsRunner = false;
     private final int rewardTime;
     private final int buttonTime;
     private int time;
     private final HashMap<String, GuardianText> buttons;
-    public EndingRunnable(GameInfo game, GameTeam winnerTeam) {
+    public EndingRunnable(Game game, GameTeam winnerTeam) {
         this.currentGame = game;
         game.setLastTimer(10);
         time = 10;
@@ -74,32 +71,64 @@ public class EndingRunnable extends BukkitRunnable {
             this.time--;
         } else {
             for (Player player : currentGame.getPlayers()) {
-                Location location = instance.getSettings().getLocation();
-                if(location != null) {
-                    player.teleport(location);
-                }
-                player.getInventory().setHelmet(null);
-                player.getInventory().setChestplate(null);
-                player.getInventory().setLeggings(null);
-                player.getInventory().setBoots(null);
                 PlayerManager playerManager = instance.getPlayerData(player.getUniqueId());
-                playerManager.setStatus(PlayerStatus.IN_LOBBY);
-                playerManager.setGame(null);
-                playerManager.setBoard(GuardianBoard.LOBBY);
-                player.getInventory().clear();
-                for (ItemStack item : instance.getItemsInfo().getLobbyItems().keySet()) {
-                    player.getInventory().setItem(instance.getItemsInfo().getSlot(item), item);
+                if(!playerManager.getAutoPlayStatus()) {
+                    back(player);
+                } else {
+                    playerManager.setStatus(PlayerStatus.IN_LOBBY);
+                    playerManager.setGame(null);
+                    if (playerManager.getLeaveDelay() != 0) {
+                        instance.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
+                        playerManager.setLeaveDelay(0);
+                    }
+                    if(!canJoin(player)) {
+                        back(player);
+                        instance.getUtils().sendMessage(player,"&cAll games are in game or full");
+                    }
                 }
-                if (playerManager.getLeaveDelay() != 0) {
-                    instance.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
-                    playerManager.setLeaveDelay(0);
-                }
-                player.updateInventory();
             }
             currentGame.cancelTask();
             currentGame.restart();
         }
     }
+
+    private void back(Player player) {
+        Location location = instance.getSettings().getLocation();
+        PlayerManager playerManager = instance.getPlayerData(player.getUniqueId());
+        if (location != null) {
+            player.teleport(location);
+        }
+        player.getInventory().setHelmet(null);
+        player.getInventory().setChestplate(null);
+        player.getInventory().setLeggings(null);
+        player.getInventory().setBoots(null);
+        playerManager.setStatus(PlayerStatus.IN_LOBBY);
+        playerManager.setGame(null);
+        playerManager.setBoard(GuardianBoard.LOBBY);
+        player.getInventory().clear();
+        for (ItemStack item : instance.getItemsInfo().getLobbyItems().keySet()) {
+            player.getInventory().setItem(instance.getItemsInfo().getSlot(item), item);
+        }
+        if (playerManager.getLeaveDelay() != 0) {
+            instance.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
+            playerManager.setLeaveDelay(0);
+        }
+        player.updateInventory();
+    }
+
+    private boolean canJoin(Player player) {
+        for(Game game : instance.getGameManager().getGames()) {
+            if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
+                if(game.getPlayers().size() < game.getMax()) {
+                    instance.getGameManager().joinGame(player,game.getConfigName());
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public void sendOptions(Player player, List<String> list) {
         for(String line : list) {
             if(line.contains("<playAgainButton>")) {

@@ -6,7 +6,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
@@ -106,7 +106,7 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("randomJoin")) {
-                for(GameInfo game : plugin.getGameManager().getGames()) {
+                for(Game game : plugin.getGameManager().getGames()) {
                     if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
                         if(game.getPlayers().size() < game.getMax()) {
                             plugin.getGameManager().joinGame((Player)sender,game.getConfigName());

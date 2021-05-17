@@ -1,12 +1,12 @@
 package dev.mruniverse.guardianrftb.multiarena.runnables;
 
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayingRunnable extends BukkitRunnable {
-    private final GameInfo currentGame;
+    private final Game currentGame;
 
-    public PlayingRunnable(GameInfo game) {
+    public PlayingRunnable(Game game) {
         this.currentGame = game;
     }
     @Override

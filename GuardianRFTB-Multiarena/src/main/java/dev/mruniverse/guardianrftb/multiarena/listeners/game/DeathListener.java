@@ -3,8 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners.game;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -28,7 +27,7 @@ public class DeathListener implements Listener {
     public void inGameDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
         if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-            GameInfo game = plugin.getPlayerData(player.getUniqueId()).getGame();
+            Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
             event.getDrops().clear();
             event.setDeathMessage(null);
             event.setDroppedExp(0);
@@ -60,7 +59,7 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeathRespawn(PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
-        GameInfo game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
         if(game != null) {
             if(game.getBeasts().contains(player)) {
                 player.teleport(game.getBeastSpawn());

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -136,29 +137,9 @@ public final class GuardianRFTB extends JavaPlugin {
                 if (getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.update-check")) {
                     Updater updater = new Updater(instance, 88817);
                     String updaterResult = updater.getUpdateResult();
-                    String versionResult = updater.getVersionResult();
                     switch (updaterResult.toUpperCase()) {
                         case "UPDATED":
                             getLogs().info("&aYou're using latest version of GuardianRFTB, You're Awesome!");
-                            switch (versionResult.toUpperCase()) {
-                                case "RED_PROBLEM":
-                                    getLogs().info("&aGuardianRFTB can't connect to WiFi to check plugin version.");
-                                    break;
-                                case "PRE_ALPHA_VERSION":
-                                    getLogs().info("&cYou are Running a &aPre Alpha version&c, it is normal to find several errors, please report these errors so that they can be solved. &eWARNING: &cI (MrUniverse) recommend a Stable version, PreAlpha aren't stable versions!");
-                                    break;
-                                case "ALPHA_VERSION":
-                                    getLogs().info("&bYou are Running a &aAlpha version&b, it is normal to find several errors, please report these errors so that they can be solved.");
-                                    break;
-                                case "RELEASE":
-                                    getLogs().info("&aYou are Running a &bRelease Version&a, this is a stable version, awesome!");
-                                    break;
-                                case "PRE_RELEASE":
-                                    getLogs().info("&aYou are Running a &bPreRelease Version&a, this is a stable version but is not the final version or don't have finished all things of the final version, but is a stable version,awesome!");
-                                    break;
-                                default:
-                                    break;
-                            }
                             break;
                         case "NEW_VERSION":
                             getLogs().info("&aA new update is available: &bhttps://www.spigotmc.org/resources/88817/");
@@ -190,110 +171,26 @@ public final class GuardianRFTB extends JavaPlugin {
         ConfigurationSection section;
         try {
             Utils utils = instance.getLib().getUtils();
-            String ItemMaterial, ItemName;
-            List<String> ItemLore;
-            int ItemSlot;
-            ItemStack item;
-            Optional<XMaterial> optionalXMaterial;
-            XMaterial m;
-            ItemMaterial = items.getString("InGame.RunnerKit.item");
-            ItemName = items.getString("InGame.RunnerKit.name");
-            ItemLore = items.getStringList("InGame.RunnerKit.lore");
-            ItemSlot = items.getInt("InGame.RunnerKit.slot");
-            if (ItemMaterial == null) ItemMaterial = "PAPER";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                m = optionalXMaterial.get();
-                if (m.parseMaterial() != null) {
-                    item = utils.getItem(m, ItemName, ItemLore);
-                    if (items.get("InGame.RunnerKit.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("InGame.RunnerKit.enchantments"),"none");
-                    }
-                    itemsInfo.setKitRunner(item);
-                    itemsInfo.setRunnerSlot(ItemSlot);
-                    itemsInfo.getCurrentItem().put(item,ItemFunction.KIT_RUNNERS);
+            for(GameItems currentItem : GameItems.values()) {
+                String path = currentItem.getItemPath();
+                ItemStack currentIStack;
+                if (items.get(path + "enchantments") == null) {
+                    currentIStack = getItemWithData(
+                            items.getString(path + "item"),
+                            items.getString(path + "name"),
+                            items.getStringList(path + "lore")
+                    );
+                } else {
+                    currentIStack = getItemWithData(
+                            items.getString(path + "item"),
+                            items.getString(path + "name"),
+                            items.getStringList(path + "lore"),
+                            items.getStringList(path + "enchantments")
+                    );
                 }
-            } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
-            }
-            ItemMaterial = items.getString("InGame.backCheckpointItem.item");
-            ItemName = items.getString("InGame.backCheckpointItem.name");
-            ItemLore = items.getStringList("InGame.backCheckpointItem.lore");
-            if (ItemMaterial == null) ItemMaterial = "NETHER_STAR";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if(ItemName == null) ItemName = "&b&lCHECKPOINT";
-            if (optionalXMaterial.isPresent()) {
-                m = optionalXMaterial.get();
-                if (m.parseMaterial() != null) {
-                    item = utils.getItem(m, ItemName, ItemLore);
-                    if (items.get("InGame.backCheckpointItem.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("InGame.backCheckpointItem.enchantments"),"none");
-                    }
-                    itemsInfo.setCheckPoint(item);
-                    itemsInfo.getCurrentItem().put(item, ItemFunction.CHECKPOINT);
-                }
-            } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
-            }
-            ItemMaterial = items.getString("InGame.KillerKit.item");
-            ItemName = items.getString("InGame.KillerKit.name");
-            ItemLore = items.getStringList("InGame.KillerKit.lore");
-            ItemSlot = items.getInt("InGame.KillerKit.slot");
-            if (ItemMaterial == null) ItemMaterial = "PAPER";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                m = optionalXMaterial.get();
-                if (m.parseMaterial() != null) {
-                    item = utils.getItem(m, ItemName, ItemLore);
-                    if (items.get("InGame.KillerKit.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("InGame.KillerKit.enchantments"),"none");
-                    }
-                    itemsInfo.setKitBeast(item);
-                    itemsInfo.setBeastSlot(ItemSlot);
-                    itemsInfo.getCurrentItem().put(item, ItemFunction.KIT_KILLERS);
-                }
-            } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
-            }
-            ItemMaterial = items.getString("InGame.BeastKit.item");
-            ItemName = items.getString("InGame.BeastKit.name");
-            ItemLore = items.getStringList("InGame.BeastKit.lore");
-            ItemSlot = items.getInt("InGame.BeastKit.slot");
-            if (ItemMaterial == null) ItemMaterial = "PAPER";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                m = optionalXMaterial.get();
-                if (m.parseMaterial() != null) {
-                    item = utils.getItem(m, ItemName, ItemLore);
-                    if (items.get("InGame.BeastKit.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("InGame.BeastKit.enchantments"),"none");
-                    }
-                    itemsInfo.setKitBeast(item);
-                    itemsInfo.setBeastSlot(ItemSlot);
-                    itemsInfo.getCurrentItem().put(item, ItemFunction.KIT_BEASTS);
-                }
-            } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
-            }
-            ItemMaterial = items.getString("InGame.Exit.item");
-            ItemName = items.getString("InGame.Exit.name");
-            ItemLore = items.getStringList("InGame.Exit.lore");
-            ItemSlot = items.getInt("InGame.Exit.slot");
-            if (ItemMaterial == null) ItemMaterial = "RED_BED";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                m = optionalXMaterial.get();
-                if (m.parseMaterial() != null) {
-                    item = utils.getItem(m, ItemName, ItemLore);
-                    if (items.get("InGame.Exit.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("InGame.Exit.enchantments"),"none");
-                    }
-                    itemsInfo.setExit(item);
-                    itemsInfo.setExitSlot(ItemSlot);
-                    itemsInfo.getCurrentItem().put(item, ItemFunction.EXIT_GAME);
-                }
-            } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
+                itemsInfo.getCurrentItem().put(currentIStack,currentItem.getItemFunction());
+                currentItem.set(this,currentIStack);
+                currentItem.slot(this,items.getInt(path + "slot"));
             }
         } catch (Throwable throwable) {
             getLogs().error("Can't get game items on startup");
@@ -309,27 +206,15 @@ public final class GuardianRFTB extends JavaPlugin {
             section = items.getConfigurationSection("lobby");
             if (section == null) throw new Throwable("Can't found beast inventory section in items.yml");
             for (String lItems : section.getKeys(false)) {
-                if (items.getBoolean("lobby." + lItems + ".toggle")) {
-                    String material = items.getString("lobby." + lItems + ".item");
-                    if (material == null) material = "BED";
-                    Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(material);
-                    XMaterial m;
-                    if (optionalXMaterial.isPresent()) {
-                        m = optionalXMaterial.get();
-                        if (m.parseMaterial() != null) {
-                            String itemName = items.getString("lobby." + lItems + ".name");
-                            Integer slot = items.getInt("lobby." + lItems + ".slot");
-                            List<String> lore = items.getStringList("lobby." + lItems + ".lore");
-                            ItemStack item = utils.getItem(m, itemName, lore);
-                            if (items.get("lobby." + lItems + ".enchantments") != null) {
-                                item = utils.getEnchantmentList(item, items.getStringList("lobby." + lItems + ".enchantments"),"none");
-                            }
-                            itemsInfo.getLobbyItems().put(item, slot);
-                            itemsInfo.getCurrentItem().put(item, getCurrent(lItems));
-                        }
-                    } else {
-                        getLogs().error("Item: " + material + " doesn't exists.");
-                    }
+                String path = "lobby." + lItems + ".";
+                if (items.getBoolean(path + "toggle")) {
+                    ItemStack currentItem = getItemWithData(
+                            items.getString(path + "item"),
+                            items.getString(path + "name"),
+                            items.getStringList(path + "lore")
+                    );
+                    itemsInfo.getLobbyItems().put(currentItem,items.getInt(path + "slot"));
+                    itemsInfo.getCurrentItem().put(currentItem,getCurrent(lItems));
                 }
             }
         } catch (Throwable throwable) {
@@ -341,105 +226,109 @@ public final class GuardianRFTB extends JavaPlugin {
     public void loadBeastKit() {
         try {
             FileConfiguration items = getStorage().getControl(GuardianFiles.ITEMS);
-            ConfigurationSection section;
-            section = items.getConfigurationSection("playing.beast-inventory");
-            String ItemMaterial;
-            String ItemName;
-            int slot;
-            List<String> ItemLore;
-            ItemStack item;
-            XMaterial material;
-            Optional<XMaterial> optionalXMaterial;
-            Utils utils = getLib().getUtils();
-            if (section == null) throw new Throwable("Can't found beast inventory section in items.yml");
-            for (String beastDefaultInv : section.getKeys(false)) {
-                ItemMaterial = items.getString("playing.beast-inventory." + beastDefaultInv + ".item");
-                if (ItemMaterial == null) ItemMaterial = "BED";
-                optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-                if(optionalXMaterial.isPresent()) {
-                    ItemName = items.getString("playing.beast-inventory." + beastDefaultInv + ".name");
-                    slot = items.getInt("playing.beast-inventory." + beastDefaultInv + ".slot");
-                    ItemLore = items.getStringList("playing.beast-inventory." + beastDefaultInv + ".lore");
-                    item = utils.getItem(optionalXMaterial.get(),ItemName,ItemLore);
-                    if(sInfo.getSettings().get("playing.beast-inventory." + beastDefaultInv + ".enchantments") != null) {
-                        item = utils.getEnchantmentList(item,items.getStringList("playing.beast-inventory." + beastDefaultInv + ".enchantments"),"none");
-                    }
-                    itemsInfo.getBeastInventory().put(item,slot);
+            for (String beastDefaultInv : getStorage().getContent(GuardianFiles.ITEMS,"playing.beast-inventory",false)) {
+                String path = "playing.beast-inventory." + beastDefaultInv + ".";
+                if (items.get(path + "enchantments") == null) {
+                    itemsInfo.getBeastInventory().put(getItemWithData(
+                            items.getString(path + "item"),
+                            items.getString(path + "name"),
+                            items.getStringList(path + "lore")
+                    ),items.getInt(path + "slot"));
                 } else {
-                    getLogs().info("Item " + ItemMaterial + " doesn't exists.");
+                    itemsInfo.getBeastInventory().put(getItemWithData(
+                            items.getString(path + "item"),
+                            items.getString(path + "name"),
+                            items.getStringList(path + "lore"),
+                            items.getStringList(path + "enchantments")
+                    ),items.getInt(path + "slot"));
                 }
+
+
             }
-            ItemMaterial = items.getString("playing.beast-armor.Helmet.item");
-            ItemName = items.getString("playing.beast-armor.Helmet.name");
-            ItemLore = items.getStringList("playing.beast-armor.Helmet.lore");
-            if (ItemMaterial == null) ItemMaterial = "DIAMOND_HELMET";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                material = optionalXMaterial.get();
-                if (material.parseMaterial() != null) {
-                    item = utils.getItem(material, ItemName, ItemLore);
-                    if (items.get("playing.beast-armor.Helmet.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("playing.beast-armor.Helmet.enchantments"), "none");
-                    }
-                    itemsInfo.setBeastHelmet(item);
-                }
+            if (items.get("playing.beast-armor.Helmet.enchantments") == null) {
+                itemsInfo.setBeastChestplate(getItemWithData(
+                        items.getString("playing.beast-armor.Helmet.item"),
+                        items.getString("playing.beast-armor.Helmet.name"),
+                        items.getStringList("playing.beast-armor.Helmet.lore")
+                ));
             } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
+                itemsInfo.setBeastChestplate(getItemWithData(
+                        items.getString("playing.beast-armor.Helmet.item"),
+                        items.getString("playing.beast-armor.Helmet.name"),
+                        items.getStringList("playing.beast-armor.Helmet.lore"),
+                        items.getStringList("playing.beast-armor.Helmet.enchantments")
+                ));
             }
-            ItemMaterial = items.getString("playing.beast-armor.Chestplate.item");
-            ItemName = items.getString("playing.beast-armor.Chestplate.name");
-            ItemLore = items.getStringList("playing.beast-armor.Chestplate.lore");
-            if (ItemMaterial == null) ItemMaterial = "DIAMOND_CHESTPLATE";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                material = optionalXMaterial.get();
-                if (material.parseMaterial() != null) {
-                    item = utils.getItem(material, ItemName, ItemLore);
-                    if (items.get("playing.beast-armor.Helmet.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("playing.beast-armor.Chestplate.enchantments"),"none");
-                    }
-                    itemsInfo.setBeastChestplate(item);
-                }
+            if (items.get("playing.beast-armor.Chestplate.enchantments") == null) {
+                itemsInfo.setBeastChestplate(getItemWithData(
+                        items.getString("playing.beast-armor.Chestplate.item"),
+                        items.getString("playing.beast-armor.Chestplate.name"),
+                        items.getStringList("playing.beast-armor.Chestplate.lore")
+                ));
             } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
+                itemsInfo.setBeastChestplate(getItemWithData(
+                        items.getString("playing.beast-armor.Chestplate.item"),
+                        items.getString("playing.beast-armor.Chestplate.name"),
+                        items.getStringList("playing.beast-armor.Chestplate.lore"),
+                        items.getStringList("playing.beast-armor.Chestplate.enchantments")
+                ));
             }
-            ItemMaterial = items.getString("playing.beast-armor.Leggings.item");
-            ItemName = items.getString("playing.beast-armor.Leggings.name");
-            ItemLore = items.getStringList("playing.beast-armor.Leggings.lore");
-            if (ItemMaterial == null) ItemMaterial = "DIAMOND_LEGGINGS";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                material = optionalXMaterial.get();
-                if (material.parseMaterial() != null) {
-                    item = utils.getItem(material, ItemName, ItemLore);
-                    if (items.get("playing.beast-armor.Helmet.enchantments") != null) {
-                        item = utils.getEnchantmentList(item, items.getStringList("playing.beast-armor.Leggings.enchantments"),"none");
-                    }
-                    itemsInfo.setBeastLeggings(item);
-                }
+            if (items.get("playing.beast-armor.Leggings.enchantments") == null) {
+                itemsInfo.setBeastLeggings(getItemWithData(
+                        items.getString("playing.beast-armor.Leggings.item"),
+                        items.getString("playing.beast-armor.Leggings.name"),
+                        items.getStringList("playing.beast-armor.Leggings.lore")
+                ));
             } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
+                itemsInfo.setBeastLeggings(getItemWithData(
+                        items.getString("playing.beast-armor.Leggings.item"),
+                        items.getString("playing.beast-armor.Leggings.name"),
+                        items.getStringList("playing.beast-armor.Leggings.lore"),
+                        items.getStringList("playing.beast-armor.Leggings.enchantments")
+                ));
             }
-            ItemMaterial = items.getString("playing.beast-armor.Boots.item");
-            ItemName = items.getString("playing.beast-armor.Boots.name");
-            ItemLore = items.getStringList("playing.beast-armor.Boots.lore");
-            if (ItemMaterial == null) ItemMaterial = "DIAMOND_BOOTS";
-            optionalXMaterial = XMaterial.matchXMaterial(ItemMaterial);
-            if (optionalXMaterial.isPresent()) {
-                material = optionalXMaterial.get();
-                if (material.parseMaterial() != null) {
-                    item = utils.getItem(material, ItemName, ItemLore);
-                    if (items.get("playing.beast-armor.Helmet.enchantments") != null) {
-                        item = utils.getEnchantmentList(item,items.getStringList("playing.beast-armor.Boots.enchantments"),"none");
-                    }
-                    itemsInfo.setBeastBoots(item);
-                }
+            if (items.get("playing.beast-armor.Boots.enchantments") == null) {
+                itemsInfo.setBeastBoots(getItemWithData(
+                        items.getString("playing.beast-armor.Boots.item"),
+                        items.getString("playing.beast-armor.Boots.name"),
+                        items.getStringList("playing.beast-armor.Boots.lore")
+                ));
             } else {
-                getLogs().error("Item: " + ItemMaterial + " doesn't exists.");
+                itemsInfo.setBeastBoots(getItemWithData(
+                        items.getString("playing.beast-armor.Boots.item"),
+                        items.getString("playing.beast-armor.Boots.name"),
+                        items.getStringList("playing.beast-armor.Boots.lore"),
+                        items.getStringList("playing.beast-armor.Boots.enchantments")
+                ));
             }
         } catch (Throwable throwable) {
             getLogs().error("Can't load beast Default Armor");
         }
+    }
+
+    private ItemStack getItemWithData(@Nullable String material,@Nullable String name, List<String> lore) {
+        Utils utils = getLib().getUtils();
+        if(material == null) material = "BEDROCK";
+        if(name == null) name = "INVALID_NAME";
+        Optional<XMaterial> optional = XMaterial.matchXMaterial(material);
+        if(optional.isPresent()) {
+            return utils.getItem(optional.get(), name, lore);
+        }
+        getLogs().error("Item " + material + " doesn't exists!");
+        return null;
+    }
+
+    private ItemStack getItemWithData(@Nullable String material,@Nullable String name,List<String> lore,List<String> enchantments) {
+        Utils utils = getLib().getUtils();
+        if(material == null) material = "BEDROCK";
+        if(name == null) name = "INVALID_NAME";
+        Optional<XMaterial> optional = XMaterial.matchXMaterial(material);
+        if(optional.isPresent()) {
+            ItemStack currentItem = utils.getItem(optional.get(), name, lore);
+            return utils.getEnchantmentList(currentItem,enchantments,"none");
+        }
+        getLogs().error("Item " + material + " doesn't exists!");
+        return null;
     }
 
     public ItemFunction getCurrent(String path) {

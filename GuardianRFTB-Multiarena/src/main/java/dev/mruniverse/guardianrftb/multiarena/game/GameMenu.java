@@ -5,6 +5,7 @@ import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -57,7 +58,7 @@ public class GameMenu {
         chestInventory.clear();
         int slot = 0;
         int maxSlot = chestInventory.getSize();
-        for(GameInfo game : plugin.getGameManager().getGames()) {
+        for(Game game : plugin.getGameManager().getGames()) {
             if(game.getType() == gameType) {
                 if (slot != maxSlot) {
                     ItemStack gameItem = getGameItem(game);
@@ -69,14 +70,14 @@ public class GameMenu {
     }
     public void setSlots() {
         int slot = 0;
-        for(GameInfo game : plugin.getGameManager().getGames()) {
+        for(Game game : plugin.getGameManager().getGames()) {
             if(game.getType() == gameType) {
                 game.setMenuSlot(slot);
                 slot++;
             }
         }
     }
-    public void updateSlot(int slot,GameInfo game) {
+    public void updateSlot(int slot,Game game) {
         if(slot != -1) {
             ItemStack gameItem = getGameItem(game);
             chestInventory.setItem(slot, gameItem);
@@ -86,7 +87,7 @@ public class GameMenu {
     }
     public HashMap<ItemStack,String> getGameItems() {
         HashMap<ItemStack,String> hash = new HashMap<>();
-        for(GameInfo game : plugin.getGameManager().getGames()) {
+        for(Game game : plugin.getGameManager().getGames()) {
             if(game.getType() == gameType) {
                 ItemStack gameItem = getGameItem(game);
                 hash.put(gameItem, game.getConfigName());
@@ -94,7 +95,7 @@ public class GameMenu {
         }
         return hash;
     }
-    private List<String> getLore(GameInfo game) {
+    private List<String> getLore(Game game) {
         List<String> newLore = new ArrayList<>();
         for(String line : lore) {
             String newLine = "&7" + line.replace("%map_name%", game.getName()).replace("%map_status%", game.getStatus().getStatus()).replace("%map_mode%", game.getType().getType()).replace("%map_on%", game.getPlayers().size() + "").replace("%map_max%", game.getMax() + "");
@@ -102,7 +103,7 @@ public class GameMenu {
         }
         return Utils.recolorLore(newLore);
     }
-    private ItemStack getGameItem(GameInfo game) {
+    private ItemStack getGameItem(Game game) {
         String name = iName.replace("%map_name%", game.getName()
                 .replace("%map_status%", game.getStatus().getStatus()
                         .replace("%map_mode%", game.getType().getType())

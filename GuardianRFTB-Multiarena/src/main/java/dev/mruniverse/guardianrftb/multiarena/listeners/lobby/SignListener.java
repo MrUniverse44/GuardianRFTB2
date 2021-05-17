@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners.lobby;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -33,7 +33,7 @@ public class SignListener implements Listener {
             if (line1.equalsIgnoreCase("[RFTB]") || line1.equalsIgnoreCase("[EDLB]")) {
                 String name = event.getLine(1);
                 if(name == null) name = "null";
-                final GameInfo game = plugin.getGameManager().getGame(name);
+                final Game game = plugin.getGameManager().getGame(name);
                 if (game == null) {
                     String errorMsg = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.admin.arenaError");
                     if(errorMsg == null) errorMsg = "&c%arena_id% don't exists";
@@ -63,7 +63,7 @@ public class SignListener implements Listener {
             Block block = e.getClickedBlock();
             if(block == null) return;
             if (block.getState() instanceof Sign) {
-                for (GameInfo game : plugin.getGameManager().getGames()) {
+                for (Game game : plugin.getGameManager().getGames()) {
                     if (game.getSigns().contains(e.getClickedBlock().getLocation())) {
                         game.join(player);
                         return;

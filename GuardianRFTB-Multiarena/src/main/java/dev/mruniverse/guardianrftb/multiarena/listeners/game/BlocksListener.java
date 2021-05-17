@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners.game;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -54,7 +54,7 @@ public class BlocksListener implements Listener {
 
     @EventHandler
     public void gameDrop(PlayerDropItemEvent event) {
-        GameInfo game = plugin.getPlayerData(event.getPlayer().getUniqueId()).getGame();
+        Game game = plugin.getPlayerData(event.getPlayer().getUniqueId()).getGame();
         if(game != null) {
             event.setCancelled(true);
         }

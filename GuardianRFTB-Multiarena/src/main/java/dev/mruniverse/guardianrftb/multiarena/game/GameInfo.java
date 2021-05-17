@@ -4,6 +4,7 @@ import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.runnables.*;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.*;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings({"unused", "deprecation"})
-public class GameInfo {
+public class GameInfo implements Game {
 
     private final GuardianRFTB plugin;
     private final Utils utils = GuardianLIB.getControl().getUtils();
@@ -79,8 +80,8 @@ public class GameInfo {
         this.path = "games." + configName + ".";
         setup();
     }
-
-    private void setup() {
+    @Override
+    public void setup() {
         try {
             FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
             gameMaxTime = gameFile.getInt(path + "time");
@@ -108,13 +109,13 @@ public class GameInfo {
             plugin.getLogs().error(throwable);
         }
     }
-
-    private void loadStatus() {
+    @Override
+    public void loadStatus() {
         gameStatus = GameStatus.WAITING;
         updateSigns();
     }
-
-    private void loadChests() {
+    @Override
+    public void loadChests() {
         try {
             FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
             if(gameFile.get(path + "chests") != null) {
@@ -128,16 +129,12 @@ public class GameInfo {
             plugin.getLogs().error(throwable);
         }
     }
-
+    @Override
     public void setInvincible(boolean status) {
         invincible = status;
     }
-
+    @Override
     public int getNeedPlayers() {
-        //* if((gameType == GameType.DOUBLE_BEAST || gameType == GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST) && min == 2) {
-        //*     return 3;
-        //* }
-        //* return min;
         int RealMin = min;
         if((gameType == GameType.DOUBLE_BEAST || gameType == GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST) && min == 2) {
             RealMin = 3;
@@ -154,7 +151,7 @@ public class GameInfo {
         }
         return 0;
     }
-
+    @Override
     public void loadChestType(String chestName) {
         try {
             FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
@@ -170,7 +167,7 @@ public class GameInfo {
             plugin.getLogs().error(throwable);
         }
     }
-
+    @Override
     public void loadSigns() {
         signs.clear();
         FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
@@ -189,7 +186,7 @@ public class GameInfo {
      * GAME EVENTS
      *
      */
-
+    @Override
     public void join(Player player) {
         PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
@@ -251,7 +248,7 @@ public class GameInfo {
     }
 
 
-
+    @Override
     public void leave(Player player) {
         this.players.remove(player);
         this.runners.remove(player);
@@ -294,9 +291,8 @@ public class GameInfo {
         updateSigns();
     }
 
-
-    @SuppressWarnings("deprecation")
-    private void checkPlayers() {
+    @Override
+    public void checkPlayers() {
         if (players.size() == min && !gameStatus.equals(GameStatus.STARTING) && !gameStatus.equals(GameStatus.SELECTING) && !doubleCountPrevent) {
             gameStatus = GameStatus.SELECTING;
             lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(this), 0L, 20L);
@@ -308,11 +304,12 @@ public class GameInfo {
         }
     }
 
+    @Override
     public void cancelTask() {
         plugin.getServer().getScheduler().cancelTask(lastListener);
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void startCount() {
         this.gameStatus = GameStatus.STARTING;
         this.lastTimer = 10;
@@ -322,7 +319,7 @@ public class GameInfo {
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(this), 0L, 20L);
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void beastCount() {
         this.gameStatus = GameStatus.PLAYING;
         this.lastTimer = 15;
@@ -335,21 +332,24 @@ public class GameInfo {
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new BeastSpawnRunnable(this), 0L, 20L);
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void playCount() {
         this.gameStatus = GameStatus.IN_GAME;
         this.lastTimer = getGameMaxTime();
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new PlayingRunnable(this), 0L, 20L);
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
+    public void setDoubleCountPrevent(boolean toggle) { doubleCountPrevent = toggle; }
+
+    @Override
     public void setWinner(GameTeam gameTeam) {
         plugin.getServer().getScheduler().cancelTask(lastListener);
         this.gameStatus = GameStatus.RESTARTING;
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(this,gameTeam), 0L, 20L);
     }
 
-
+    @Override
     public void firework(Player player,boolean firework) {
         if(!firework) return;
         Firework fa = player.getWorld().spawn(player.getLocation(), Firework.class);
@@ -407,11 +407,13 @@ public class GameInfo {
         }
         return Color.LIME;
     }
+
+    @Override
     public boolean timing(int i) {
         return i % 3 == 0;
     }
 
-
+    @Override
     public void winRunners() {
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         for(Player player : this.players) {
@@ -432,6 +434,8 @@ public class GameInfo {
         this.gameStatus = GameStatus.RESTARTING;
         setWinner(GameTeam.RUNNERS);
     }
+
+    @Override
     public void winBeasts() {
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         for(Player player : this.players) {
@@ -452,7 +456,7 @@ public class GameInfo {
         setWinner(GameTeam.BEASTS);
     }
 
-
+    @Override
     public void restart() {
         this.players.clear();
         this.spectators.clear();
@@ -464,6 +468,7 @@ public class GameInfo {
         loadStatus();
     }
 
+    @Override
     public void deathBeast(Player beast) {
         beasts.remove(beast);
         spectators.add(beast);
@@ -477,6 +482,13 @@ public class GameInfo {
             winRunners();
         }
     }
+
+    @Override
+    public void deathKiller(Player beast) {
+        // * no killers here
+    }
+
+    @Override
     public void deathRunner(Player runner) {
         runners.remove(runner);
         if(!gameType.equals(GameType.INFECTED)) {
@@ -504,7 +516,7 @@ public class GameInfo {
      * GAME SECOND THINGS
      *
      */
-
+    @Override
     public void updateSigns() {
         String line1,line2,line3,line4;
         line1 = plugin.getSettings().getSettings().getString("settings.signs.line1");
@@ -568,6 +580,7 @@ public class GameInfo {
     private int getSlot(ItemStack item) {
         return plugin.getItemsInfo().getBeastInventory().get(item);
     }
+    @Override
     public void giveBeastInv(Player beast){
         for(ItemStack inventory : plugin.getItemsInfo().getBeastInventory().keySet()) {
             beast.getInventory().setItem(getSlot(inventory),inventory);
@@ -587,43 +600,91 @@ public class GameInfo {
 
 
 
-
+    @Override
     public void setName(String name) { this.name = name;}
+
+    @Override
     public void setGameType(GameType gameType) { this.gameType = gameType; }
+
+    @Override
     public void setGameStatus(GameStatus gameStatus) { this.gameStatus = gameStatus; }
+
+    @Override
     public void setLastTimer(int time) { lastTimer = time; }
+
+    @Override
     public void setMenuSlot(int slot) { menuSlot = slot; }
 
+    @Override
     public String getConfigName() { return configName; }
+
+    @Override
     public String getName() { return name; }
 
+    @Override
     public ArrayList<Player> getPlayers() { return players; }
+
+    @Override
     public ArrayList<Player> getRunners() { return runners; }
+
+    @Override
     public ArrayList<Player> getBeasts() { return beasts; }
+
+    @Override
     public ArrayList<Player> getKillers() { return killers; }
+
+    @Override
     public ArrayList<Player> getSpectators() { return spectators; }
+
+    @Override
     public ArrayList<Location> getSigns() { return signs; }
+
+    @Override
     public ArrayList<String> getChestTypes() { return chestTypes; }
 
+    @Override
     public GameType getType() { return gameType; }
+
+    @Override
     public GameStatus getStatus() { return gameStatus; }
 
+    @Override
     public Location getWaiting() { return waiting; }
+
+    @Override
     public Location getSelecting() { return selecting; }
+
+    @Override
     public Location getBeastSpawn() { return beastSpawn; }
+
+    @Override
     public Location getRunnerSpawn() { return runnerSpawn; }
+
+    @Override
     public Location getKillerSpawn() { return killerSpawn; }
 
+    @Override
     public Random getRandom() { return random; }
 
+    @Override
     public HashMap<String,List<Location>> getChestLocations() { return chestLocations; }
 
+    @Override
     public boolean isInvincible() { return invincible; }
 
+    @Override
     public int getMax() { return max; }
+
+    @Override
     public int getMin() { return min; }
+
+    @Override
     public int getLastTimer() { return lastTimer; }
+
+    @Override
     public int getGameMaxTime() { return gameMaxTime; }
+
+    @Override
     public int getWorldTime() { return worldTime; }
 
 

@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SelectingRunnable extends BukkitRunnable {
-    private final GameInfo currentGame;
+    private final Game currentGame;
     private final GuardianRFTB instance = GuardianRFTB.getInstance();
     private final GuardianUtils guardianUtils = instance.getUtils();
     private String enough;
@@ -19,7 +19,7 @@ public class SelectingRunnable extends BukkitRunnable {
     private String second;
     private String seconds;
     private String chosenBeast;
-    public SelectingRunnable(GameInfo game) {
+    public SelectingRunnable(Game game) {
         this.currentGame = game;
         FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = instance.getSettings().getSettings();
@@ -67,7 +67,7 @@ public class SelectingRunnable extends BukkitRunnable {
                 currentGame.startCount();
             }
         } else {
-            currentGame.doubleCountPrevent = false;
+            currentGame.setDoubleCountPrevent(false);
             currentGame.setGameStatus(GameStatus.WAITING);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);

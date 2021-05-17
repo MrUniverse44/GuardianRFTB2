@@ -4,6 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,8 +17,8 @@ import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class GameManager {
-    private final ArrayList<GameInfo> games = new ArrayList<>();
-    private final HashMap<World,GameInfo> gamesWorlds = new HashMap<>();
+    private final ArrayList<Game> games = new ArrayList<>();
+    private final HashMap<World, Game> gamesWorlds = new HashMap<>();
     public HashMap<String,GameChests> gameChests = new HashMap<>();
     public HashMap<GameType,GameMenu> gameMenu = new HashMap<>();
     private final GameMainMenu gameMainMenu;
@@ -36,10 +37,10 @@ public class GameManager {
     public GameChests getGameChest(String chestName) {
         return gameChests.get(chestName);
     }
-    public GameInfo getGame(String gameName) {
+    public Game getGame(String gameName) {
         if (this.games.size() < 1)
             return null;
-        for (GameInfo game : this.games) {
+        for (Game game : this.games) {
             if (game.getConfigName().equalsIgnoreCase(gameName))
                 return game;
         }
@@ -64,7 +65,7 @@ public class GameManager {
                             mapName = gameName;
                             plugin.getStorage().save(SaveMode.GAMES_FILES);
                         }
-                        GameInfo game = new GameInfo(plugin, gameName, mapName);
+                        Game game = new GameInfo(plugin, gameName, mapName);
                         this.games.add(game);
                         plugin.getLogs().debug("Game " + gameName + " loaded!");
                     } else {
@@ -82,7 +83,7 @@ public class GameManager {
         }
     }
     public void loadGameWorlds() {
-        for(GameInfo game : getGames()) {
+        for(Game game : getGames()) {
             gamesWorlds.put(game.getRunnerSpawn().getWorld(),game);
         }
     }
@@ -112,19 +113,19 @@ public class GameManager {
         }
         plugin.getLogs().debug("Game " + gameName + " unloaded!");
     }
-    public ArrayList<GameInfo> getGames() {
+    public ArrayList<Game> getGames() {
         return games;
     }
-    public HashMap<World,GameInfo> getGameWorlds() { return gamesWorlds; }
+    public HashMap<World,Game> getGameWorlds() { return gamesWorlds; }
 
-    public GameInfo getGame(Player player) {
+    public Game getGame(Player player) {
         return plugin.getPlayerData(player.getUniqueId()).getGame();
     }
 
-    public GameInfo getConfigGame(String name) {
+    public Game getConfigGame(String name) {
         if (this.games.size() < 1)
             return null;
-        for (GameInfo game : this.games) {
+        for (Game game : this.games) {
             if (game.getConfigName().equalsIgnoreCase(name))
                 return game;
         }
@@ -140,7 +141,7 @@ public class GameManager {
             plugin.getLib().getUtils().sendMessage(player, Objects.requireNonNull(plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.admin.arenaError")).replace("%arena_id%",gameName));
             return;
         }
-        GameInfo game = getGame(gameName);
+        Game game = getGame(gameName);
         game.join(player);
     }
     public void createGameFiles(String gameName) {

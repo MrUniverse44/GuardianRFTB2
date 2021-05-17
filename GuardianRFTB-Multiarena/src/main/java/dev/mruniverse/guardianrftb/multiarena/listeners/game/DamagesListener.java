@@ -4,7 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -44,7 +44,7 @@ public class DamagesListener implements Listener {
                 Player attacker = (Player)event.getDamager();
                 PlayerManager mng = plugin.getPlayerData(victim.getUniqueId());
                 if(mng.getGame() != null) {
-                    GameInfo game = mng.getGame();
+                    Game game = mng.getGame();
                     if(game.isInvincible()) event.setCancelled(true);
                     if(game.getRunners().contains(victim) && game.getRunners().contains(attacker)) event.setCancelled(true);
                     if(game.getBeasts().contains(victim) && game.getBeasts().contains(attacker)) event.setCancelled(true);
@@ -59,7 +59,7 @@ public class DamagesListener implements Listener {
         Player player = (Player)event.getEntity();
         if(plugin.getPlayerData(player.getUniqueId()) == null) return;
         if(plugin.getPlayerData(player.getUniqueId()).getGame() == null) return;
-        GameInfo game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
         if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.SELECTING || game.isInvincible()) {
             event.setCancelled(true);
             if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -113,7 +113,7 @@ public class DamagesListener implements Listener {
                 Arrow arrow = (Arrow) event.getDamager();
                 Player shooter = (Player) arrow.getShooter();
                 if (plugin.getPlayerData(victim.getUniqueId()).getGame() == null) return;
-                GameInfo game = plugin.getPlayerData(victim.getUniqueId()).getGame();
+                Game game = plugin.getPlayerData(victim.getUniqueId()).getGame();
                 if (game.getRunners().contains(victim) && game.getRunners().contains(shooter)) {
                     event.setCancelled(true);
                 }

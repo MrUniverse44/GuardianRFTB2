@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.World;
@@ -14,7 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
 
 public class StartRunnable  extends BukkitRunnable {
-    private final GameInfo currentGame;
+    private final Game currentGame;
     private final GuardianRFTB instance = GuardianRFTB.getInstance();
     private final GuardianUtils guardianUtils = instance.getUtils();
     private String enough;
@@ -22,7 +22,7 @@ public class StartRunnable  extends BukkitRunnable {
     private String starting;
     private String second;
     private String seconds;
-    public StartRunnable(GameInfo game) {
+    public StartRunnable(Game game) {
         this.currentGame = game;
         FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = instance.getSettings().getSettings();
@@ -82,7 +82,7 @@ public class StartRunnable  extends BukkitRunnable {
 
             }
         } else {
-            currentGame.doubleCountPrevent = false;
+            currentGame.setDoubleCountPrevent(false);
             currentGame.setGameStatus(GameStatus.WAITING);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);

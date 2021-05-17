@@ -7,7 +7,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Material;
@@ -60,7 +60,7 @@ public class GuardianUtils {
             lT = runnerRole;
         }
         UUID uuid = player.getUniqueId();
-        GameInfo game = plugin.getPlayerData(uuid).getGame();
+        Game game = plugin.getPlayerData(uuid).getGame();
         String gameType = game.getType().getType();
         String gameName = game.getName();
         boolean playerBeast = game.getBeasts().contains(player);
@@ -88,7 +88,7 @@ public class GuardianUtils {
     public void rewardInfo(Player player,List<String> list,boolean winnerTeamIsRunners) {
         if(list == null) list = new ArrayList<>();
         UUID uuid = player.getUniqueId();
-        GameInfo game = plugin.getPlayerData(uuid).getGame();
+        Game game = plugin.getPlayerData(uuid).getGame();
         String gameType = game.getType().getType();
         String gameName = game.getName();
         boolean playerBeast = game.getBeasts().contains(player);
@@ -190,7 +190,7 @@ public class GuardianUtils {
         PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
         if(currentData.getGame() != null) {
             UUID uuid = player.getUniqueId();
-            GameInfo game = currentData.getGame();
+            Game game = currentData.getGame();
             String gameType = game.getType().getType();
             String gameName = game.getName();
             boolean playerBeast = game.getBeasts().contains(player);
@@ -238,7 +238,7 @@ public class GuardianUtils {
                 .replace("<timeFormat>",getDateFormat());
 
         if (playerManager.getGame() != null) {
-            GameInfo currentGame = playerManager.getGame();
+            Game currentGame = playerManager.getGame();
             text = text.replace("<arena_name>",currentGame.getName())
                     .replace("<arena_online>","" + currentGame.getPlayers().size())
                     .replace("<arena_max>","" + currentGame.getMax())
@@ -274,7 +274,7 @@ public class GuardianUtils {
         }
         return false;
     }
-    private String getBeast(GameInfo game) {
+    private String getBeast(Game game) {
         if(game.getType().equals(GameType.DOUBLE_BEAST)) {
             return game.getBeasts().size()+"";
         }

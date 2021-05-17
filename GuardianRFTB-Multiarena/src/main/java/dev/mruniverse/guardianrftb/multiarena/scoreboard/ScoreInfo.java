@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.scoreboard;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.game.GameInfo;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -214,7 +214,7 @@ public class ScoreInfo {
 
         if(plugin.getPlayerData(player.getUniqueId()) != null) {
             if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-                GameInfo playerGame = plugin.getPlayerData(player.getUniqueId()).getGame();
+                Game playerGame = plugin.getPlayerData(player.getUniqueId()).getGame();
                 text = text.replace("<arena_name>",playerGame.getName())
                         .replace("<arena_online>","" + playerGame.getPlayers().size())
                         .replace("<arena_max>","" + playerGame.getMax())
