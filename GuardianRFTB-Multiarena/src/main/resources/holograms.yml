@@ -40,7 +40,7 @@ holograms:
     # This hologram appears for others players (including beast and killers)
     forOthers:
       # Toggle this hologram
-      toggle: true
+      toggle: false
       # Hologram Lines
       value:
         - '&a%player%'s checkpoint'

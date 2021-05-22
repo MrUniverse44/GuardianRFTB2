@@ -1,5 +1,7 @@
 package dev.mruniverse.guardianrftb.multiarena.storage;
 
+import dev.mruniverse.guardianlib.core.GuardianLIB;
+import dev.mruniverse.guardianlib.core.holograms.PersonalHologram;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
@@ -7,18 +9,22 @@ import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class PlayerManager {
     private final GuardianRFTB plugin;
     private PlayerStatus playerStatus;
     private GuardianBoard guardianBoard;
-    private final Player player;
+    private final UUID uuid;
+    private PersonalHologram playerHologram = null;
     private boolean pointStatus;
     private Location lastCheckpoint;
     private Game currentGame;
@@ -35,7 +41,7 @@ public class PlayerManager {
     private boolean autoPlay = false;
     public PlayerManager(GuardianRFTB plugin, Player player) {
         this.plugin = plugin;
-        this.player = player;
+        this.uuid = player.getUniqueId();
         leaveDelay = 0;
         guardianBoard = GuardianBoard.LOBBY;
         playerStatus = PlayerStatus.IN_LOBBY;
@@ -90,19 +96,20 @@ public class PlayerManager {
     public void setBoard(GuardianBoard board) {
         guardianBoard = board;
     }
-    public void setGame(Game game) { currentGame = game; }
+    public void setGame(Game game) {
+        currentGame = game;
+        setLastCheckpoint(null);
+    }
     public GuardianBoard getBoard() {
         return guardianBoard;
     }
     public PlayerStatus getStatus() {
         return playerStatus;
     }
-    public String getName() {
-        return player.getName();
-    }
+    public String getName() { return getPlayer().getName(); }
     public Game getGame() { return currentGame; }
     public Player getPlayer() {
-        return player;
+        return Bukkit.getPlayer(uuid);
     }
     public int getLeaveDelay() { return leaveDelay; }
     public int getWins() {
@@ -131,6 +138,15 @@ public class PlayerManager {
 
     public void setLastCheckpoint(Location location) {
         lastCheckpoint = location;
+        FileConfiguration holograms = plugin.getStorage().getControl(GuardianFiles.HOLOGRAMS);
+        if(holograms.getBoolean("holograms.checkpoint.toggle") && holograms.getBoolean("holograms.checkpoint.forPlayer.toggle")) {
+            if (location != null) {
+                playerHologram = new PersonalHologram(GuardianLIB.getControl(), getPlayer(), location, uuid.toString(), holograms.getStringList("holograms.checkpoint.forPlayer.value"));
+            } else {
+                if(playerHologram == null) return;
+                playerHologram.delete();
+            }
+        }
     }
 
     public int getCoins() {
@@ -141,7 +157,7 @@ public class PlayerManager {
     }
     public void setCoins(int coinCounter) {
         coins = coinCounter;
-        plugin.getData().getData().setCoins(player.getUniqueId(),coinCounter);
+        plugin.getData().getData().setCoins(uuid,coinCounter);
     }
 
     public int getKills() {
@@ -154,7 +170,7 @@ public class PlayerManager {
 
     public void setSelectedKit(String kitID) {
         selectedKit = kitID;
-        plugin.getData().getData().setSelectedKit(player.getUniqueId(),kitID);
+        plugin.getData().getData().setSelectedKit(uuid,kitID);
     }
 
     public String getSelectedKit() {
@@ -164,10 +180,10 @@ public class PlayerManager {
     public void addKit(String kitID) {
         if (plugin.getStorage().getControl(GuardianFiles.MYSQL).getBoolean("mysql.enabled")) {
             if(!kits.equalsIgnoreCase("")) {
-                plugin.getData().getData().setKits(player.getUniqueId(),kits + ",K" + kitID);
+                plugin.getData().getData().setKits(uuid,kits + ",K" + kitID);
                 kits = kits + ",K" + kitID;
             } else {
-                plugin.getData().getData().setKits(player.getUniqueId(),"K" + kitID);
+                plugin.getData().getData().setKits(uuid,"K" + kitID);
                 kits = "K" + kitID;
             }
         }
@@ -211,7 +227,7 @@ public class PlayerManager {
     }
 
     public String getID() {
-        return player.getUniqueId().toString().replace("-","");
+        return uuid.toString().replace("-","");
     }
 
     public void addDeaths() {
@@ -244,6 +260,6 @@ public class PlayerManager {
         }
         selectedKit = "NONE";
         coins = 0;
-        plugin.getData().getData().addPlayer(player.getUniqueId());
+        plugin.getData().getData().addPlayer(uuid);
     }
 }
