@@ -282,6 +282,7 @@ public class GameInfo implements Game {
             plugin.getPlayerData(player.getUniqueId()).setStatus(PlayerStatus.IN_LOBBY);
             plugin.getPlayerData(player.getUniqueId()).setGame(null);
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.LOBBY);
+            plugin.getPlayerData(player.getUniqueId()).setLastCheckpoint(null);
             player.getInventory().clear();
             for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
                 player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
