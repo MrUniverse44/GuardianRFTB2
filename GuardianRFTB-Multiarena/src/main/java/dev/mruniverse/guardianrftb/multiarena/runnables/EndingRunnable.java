@@ -105,6 +105,7 @@ public class EndingRunnable extends BukkitRunnable {
         player.getInventory().setBoots(null);
         playerManager.setStatus(PlayerStatus.IN_LOBBY);
         playerManager.setGame(null);
+        playerManager.setLastCheckpoint(null);
         playerManager.setBoard(GuardianBoard.LOBBY);
         player.getInventory().clear();
         for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {

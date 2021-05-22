@@ -141,7 +141,13 @@ public class PlayerManager {
         FileConfiguration holograms = plugin.getStorage().getControl(GuardianFiles.HOLOGRAMS);
         if(holograms.getBoolean("holograms.checkpoint.toggle") && holograms.getBoolean("holograms.checkpoint.forPlayer.toggle")) {
             if (location != null) {
-                playerHologram = new PersonalHologram(GuardianLIB.getControl(), getPlayer(), location, uuid.toString(), holograms.getStringList("holograms.checkpoint.forPlayer.value"));
+                if(playerHologram == null) {
+                    playerHologram = new PersonalHologram(GuardianLIB.getControl(), getPlayer(), location, uuid.toString(), holograms.getStringList("holograms.checkpoint.forPlayer.value"));
+                } else {
+                    playerHologram.delete();
+                    playerHologram.setLocation(location);
+                }
+                playerHologram.spawn();
             } else {
                 if(playerHologram == null) return;
                 playerHologram.delete();
