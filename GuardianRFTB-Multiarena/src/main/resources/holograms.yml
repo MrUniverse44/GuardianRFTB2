@@ -43,7 +43,7 @@ holograms:
       toggle: false
       # Hologram Lines
       value:
-        - '&a%player%'s checkpoint'
+        - '&a%player%''s checkpoint'
         - '&b&lLocation'
   tops:
     # This is the stats size, default: 10 (Only show 10 first players in the top)
