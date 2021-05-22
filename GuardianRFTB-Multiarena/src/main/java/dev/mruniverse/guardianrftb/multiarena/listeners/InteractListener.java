@@ -4,6 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,6 +26,7 @@ import java.util.Random;
 
 public class InteractListener implements Listener {
     private final GuardianRFTB plugin;
+    private final SoundsInfo sounds;
     private final Random random = new Random();
 
     private String cancelMessage;
@@ -32,6 +34,7 @@ public class InteractListener implements Listener {
 
     public InteractListener(GuardianRFTB plugin) {
         this.plugin = plugin;
+        sounds = plugin.getSoundsInfo();
         cancelMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.leave.cancelled");
         if (cancelMessage == null) cancelMessage = "&c&lTeleport cancelled!";
         confirmMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.leave.confirm");
@@ -110,6 +113,7 @@ public class InteractListener implements Listener {
                             if(pm.getPointStatus() && pm.getLastCheckpoint() != null) {
                                 player.teleport(pm.getLastCheckpoint());
                                 pm.setLastCheckpoint(null);
+                                if(sounds.getStatus(GuardianSounds.CHECKPOINT_USE)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.CHECKPOINT_USE),sounds.getVolume(GuardianSounds.CHECKPOINT_USE),sounds.getPitch(GuardianSounds.CHECKPOINT_USE));
                                 pm.setPointStatus(false);
                                 plugin.getUtils().consumeItem(player,1,plugin.getItemsInfo().getCheckPoint());
                                 plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.others.checkpoint.use"));

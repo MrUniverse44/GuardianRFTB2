@@ -14,16 +14,18 @@ import java.util.List;
 
 public class BeastSpawnRunnable extends BukkitRunnable {
     private final Game currentGame;
-    private final GuardianRFTB instance = GuardianRFTB.getInstance();
-    private final GuardianUtils guardianUtils = instance.getUtils();
+    private final GuardianRFTB plugin;
+    private final GuardianUtils guardianUtils;
     private String prefix;
     private String spawn;
     private String second;
     private String seconds;
-    public BeastSpawnRunnable(Game game) {
+    public BeastSpawnRunnable(GuardianRFTB plugin,Game game) {
         this.currentGame = game;
-        FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
-        FileConfiguration secondConfiguration = instance.getSettings().getSettings();
+        this.plugin = plugin;
+        guardianUtils = plugin.getUtils();
+        FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
         spawn = configuration.getString("messages.game-count.beast");
         prefix = configuration.getString("messages.prefix");
         second = secondConfiguration.getString("settings.timer.second");
@@ -38,7 +40,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
         if(currentGame.getBeasts().size() != 0 && currentGame.getRunners().size() != 0 && currentGame.getStatus().equals(GameStatus.PLAYING)) {
             int time = currentGame.getLastTimer();
             if(time != 0) {
-                SoundsInfo sounds = instance.getSoundsInfo();
+                SoundsInfo sounds = plugin.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
                     for(Player player : currentGame.getPlayers()) {
                         guardianUtils.sendMessage(player,prefix + spawn.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
@@ -53,17 +55,17 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                 }
                 currentGame.setLastTimer(time - 1);
             } else {
-                FileConfiguration messages = instance.getStorage().getControl(GuardianFiles.MESSAGES);
+                FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
                 String title = messages.getString("messages.game.others.titles.beastsGo.toBeasts.title");
                 String subtitle = messages.getString("messages.game.others.titles.beastsGo.toBeasts.subtitle");
                 String rTitle = messages.getString("messages.game.others.titles.beastsGo.toRunners.title");
                 String rSubtitle = messages.getString("messages.game.others.titles.beastsGo.toRunners.subtitle");
                 List<String> startInfo = messages.getStringList("messages.game.gameInfo.startGame");
                 for(Player player : currentGame.getBeasts()) {
-                    instance.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
+                    plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
                     player.teleport(currentGame.getBeastSpawn());
                     player.getInventory().clear();
-                    instance.getItems(GameEquip.BEAST_KIT,player);
+                    plugin.getItems(GameEquip.BEAST_KIT,player);
                     guardianUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);
                 }

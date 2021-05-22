@@ -11,18 +11,20 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SelectingRunnable extends BukkitRunnable {
     private final Game currentGame;
-    private final GuardianRFTB instance = GuardianRFTB.getInstance();
-    private final GuardianUtils guardianUtils = instance.getUtils();
+    private final GuardianRFTB plugin;
+    private final GuardianUtils guardianUtils;
     private String enough;
     private String prefix;
     private String selecting;
     private String second;
     private String seconds;
     private String chosenBeast;
-    public SelectingRunnable(Game game) {
+    public SelectingRunnable(GuardianRFTB plugin, Game game) {
+        this.plugin = plugin;
         this.currentGame = game;
-        FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
-        FileConfiguration secondConfiguration = instance.getSettings().getSettings();
+        guardianUtils = plugin.getUtils();
+        FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
         enough = configuration.getString("messages.game-count.enough-players");
         selecting = configuration.getString("messages.game-count.selecting");
         chosenBeast = configuration.getString("messages.game.chosenBeast");
@@ -42,7 +44,7 @@ public class SelectingRunnable extends BukkitRunnable {
         if(currentGame.getPlayers().size() >= currentGame.getMin()) {
             int time = currentGame.getLastTimer();
             if(time != 0) {
-                SoundsInfo sounds = instance.getSoundsInfo();
+                SoundsInfo sounds = plugin.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
                     for(Player player : currentGame.getPlayers()) {
                         guardianUtils.sendMessage(player,prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
@@ -71,7 +73,7 @@ public class SelectingRunnable extends BukkitRunnable {
             currentGame.setGameStatus(GameStatus.WAITING);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
-                instance.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
+                plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
             currentGame.cancelTask();
         }
@@ -84,8 +86,8 @@ public class SelectingRunnable extends BukkitRunnable {
             guardianUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()));
         }
         player.getInventory().clear();
-        player.getInventory().setItem(instance.getItemsInfo().getBeastSlot(), instance.getItemsInfo().getKitBeast());
-        player.getInventory().setItem(instance.getItemsInfo().getExitSlot(), instance.getItemsInfo().getExit());
+        player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
+        player.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
         player.teleport(currentGame.getSelecting());
     }
 }

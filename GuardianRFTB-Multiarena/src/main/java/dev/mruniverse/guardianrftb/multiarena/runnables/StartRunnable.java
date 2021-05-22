@@ -15,17 +15,19 @@ import java.util.List;
 
 public class StartRunnable  extends BukkitRunnable {
     private final Game currentGame;
-    private final GuardianRFTB instance = GuardianRFTB.getInstance();
-    private final GuardianUtils guardianUtils = instance.getUtils();
+    private final GuardianRFTB plugin;
+    private final GuardianUtils guardianUtils;
     private String enough;
     private String prefix;
     private String starting;
     private String second;
     private String seconds;
-    public StartRunnable(Game game) {
+    public StartRunnable(GuardianRFTB plugin, Game game) {
+        this.plugin = plugin;
         this.currentGame = game;
-        FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
-        FileConfiguration secondConfiguration = instance.getSettings().getSettings();
+        guardianUtils = plugin.getUtils();
+        FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
         enough = configuration.getString("messages.game-count.enough-players");
         starting = configuration.getString("messages.game-count.start");
         prefix = configuration.getString("messages.prefix");
@@ -42,7 +44,7 @@ public class StartRunnable  extends BukkitRunnable {
         if(currentGame.getPlayers().size() >= currentGame.getMin()) {
             int time = currentGame.getLastTimer();
             if(time != 0) {
-                SoundsInfo sounds = instance.getSoundsInfo();
+                SoundsInfo sounds = plugin.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
                     for(Player player : currentGame.getPlayers()) {
                         guardianUtils.sendMessage(player,prefix + starting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
@@ -57,7 +59,7 @@ public class StartRunnable  extends BukkitRunnable {
                 }
                 currentGame.setLastTimer(time - 1);
             } else {
-                FileConfiguration messages = instance.getStorage().getControl(GuardianFiles.MESSAGES);
+                FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
                 String title = messages.getString("messages.game.others.titles.runnersGo.toRunners.title");
                 String subtitle = messages.getString("messages.game.others.titles.runnersGo.toRunners.subtitle");
                 String bTitle = messages.getString("messages.game.others.titles.runnersGo.toBeasts.title");
@@ -67,7 +69,7 @@ public class StartRunnable  extends BukkitRunnable {
                 for(Player player : currentGame.getRunners()) {
                     player.teleport(currentGame.getRunnerSpawn());
                     player.getInventory().clear();
-                    instance.getItems(GameEquip.RUNNER_KIT,player);
+                    plugin.getItems(GameEquip.RUNNER_KIT,player);
                     guardianUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);
 
@@ -86,13 +88,13 @@ public class StartRunnable  extends BukkitRunnable {
             currentGame.setGameStatus(GameStatus.WAITING);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
-                instance.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
+                plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
             for(Player beasts : currentGame.getBeasts()) {
                 currentGame.getRunners().add(beasts);
                 beasts.getInventory().clear();
-                beasts.getInventory().setItem(instance.getItemsInfo().getRunnerSlot(), instance.getItemsInfo().getKitRunner());
-                beasts.getInventory().setItem(instance.getItemsInfo().getExitSlot(), instance.getItemsInfo().getExit());
+                beasts.getInventory().setItem(plugin.getItemsInfo().getRunnerSlot(), plugin.getItemsInfo().getKitRunner());
+                beasts.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
                 beasts.teleport(currentGame.getWaiting());
             }
             currentGame.cancelTask();

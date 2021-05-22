@@ -66,12 +66,12 @@ public class GameInfo implements Game {
     private boolean invincible = true;
     public boolean doubleCountPrevent = false;
 
-    /*
-     *
-     * GAME SETUP
-     *
-     */
 
+    /**
+     * @param plugin main class of the GuardianRFTB
+     * @param configName the configuration name of the game (name in games.yml)
+     * @param gameName the name of the game (this can be used in different games)
+     */
     public GameInfo(GuardianRFTB plugin, String configName, String gameName) {
         this.plugin = plugin;
         this.configName = configName;
@@ -295,7 +295,7 @@ public class GameInfo implements Game {
     public void checkPlayers() {
         if (players.size() == min && !gameStatus.equals(GameStatus.STARTING) && !gameStatus.equals(GameStatus.SELECTING) && !doubleCountPrevent) {
             gameStatus = GameStatus.SELECTING;
-            lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(this), 0L, 20L);
+            lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(plugin,this), 0L, 20L);
             lastTimer = 30;
             doubleCountPrevent = true;
             for(Player player : players) {
@@ -316,7 +316,7 @@ public class GameInfo implements Game {
         for(Player player : players) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
         }
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(this), 0L, 20L);
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(plugin,this), 0L, 20L);
     }
 
     @Override
@@ -329,7 +329,7 @@ public class GameInfo implements Game {
         for(Player player : beasts) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
         }
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new BeastSpawnRunnable(this), 0L, 20L);
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new BeastSpawnRunnable(plugin,this), 0L, 20L);
     }
 
     @Override
@@ -346,7 +346,7 @@ public class GameInfo implements Game {
     public void setWinner(GameTeam gameTeam) {
         plugin.getServer().getScheduler().cancelTask(lastListener);
         this.gameStatus = GameStatus.RESTARTING;
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(this,gameTeam), 0L, 20L);
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(plugin,this,gameTeam), 0L, 20L);
     }
 
     @Override

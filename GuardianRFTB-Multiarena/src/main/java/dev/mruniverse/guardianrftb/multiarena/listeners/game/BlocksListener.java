@@ -2,8 +2,10 @@ package dev.mruniverse.guardianrftb.multiarena.listeners.game;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.enums.GuardianSounds;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -41,6 +43,8 @@ public class BlocksListener implements Listener {
                 if(event.isCancelled()) {
                     data.setLastCheckpoint(event.getBlock().getLocation());
                     data.setPointStatus(true);
+                    SoundsInfo sounds = plugin.getSoundsInfo();
+                    if(sounds.getStatus(GuardianSounds.CHECKPOINT_PLACE)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.CHECKPOINT_PLACE),sounds.getVolume(GuardianSounds.CHECKPOINT_PLACE),sounds.getPitch(GuardianSounds.CHECKPOINT_PLACE));
                     plugin.getUtils().consumeItem(player,1,event.getBlockPlaced().getType());
                     player.getInventory().addItem(plugin.getItemsInfo().getCheckPoint());
                 }

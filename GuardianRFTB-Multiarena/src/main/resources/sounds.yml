@@ -13,6 +13,26 @@
 sounds:
   # Game Sounds
   game:
+    # Checkpoint Use Sound
+    checkpoint-use:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '2.0F'
+      # Sound
+      sound: WITHER_SPAWN
+    # Checkpoint Place Sound
+    checkpoint-place:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: NOTE_PLING
     # Win Sound
     win:
       # Toggle Sound

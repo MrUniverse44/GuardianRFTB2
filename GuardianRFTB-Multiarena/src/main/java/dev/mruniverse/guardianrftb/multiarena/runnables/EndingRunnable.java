@@ -25,18 +25,19 @@ import java.util.Map;
 
 public class EndingRunnable extends BukkitRunnable {
     private final Game currentGame;
-    private final GuardianRFTB instance = GuardianRFTB.getInstance();
+    private final GuardianRFTB plugin;
     private boolean winnerIsRunner = false;
     private final int rewardTime;
     private final int buttonTime;
     private int time;
     private final HashMap<String, GuardianText> buttons;
-    public EndingRunnable(Game game, GameTeam winnerTeam) {
+    public EndingRunnable(GuardianRFTB plugin, Game game, GameTeam winnerTeam) {
         this.currentGame = game;
+        this.plugin = plugin;
         game.setLastTimer(10);
         time = 10;
         buttons = new HashMap<>();
-        if(instance.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
+        if(plugin.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
             loadOptions();
         }
         rewardTime = time - 5;
@@ -49,13 +50,13 @@ public class EndingRunnable extends BukkitRunnable {
         if(time != 0) {
             if(time == rewardTime) {
                 for(Player player : currentGame.getPlayers()) {
-                    instance.getUtils().rewardInfo(player,instance.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.gameInfo.rewardSummary"),winnerIsRunner);
+                    plugin.getUtils().rewardInfo(player,plugin.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.gameInfo.rewardSummary"),winnerIsRunner);
                 }
             }
             if(time == buttonTime) {
-                if(instance.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
+                if(plugin.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
                     for (Player player : currentGame.getPlayers()) {
-                        sendOptions(player, instance.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.gameInfo.playAgain"));
+                        sendOptions(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.gameInfo.playAgain"));
                     }
                 }
             }
@@ -71,19 +72,19 @@ public class EndingRunnable extends BukkitRunnable {
             this.time--;
         } else {
             for (Player player : currentGame.getPlayers()) {
-                PlayerManager playerManager = instance.getPlayerData(player.getUniqueId());
+                PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
                 if(!playerManager.getAutoPlayStatus()) {
                     back(player);
                 } else {
                     playerManager.setStatus(PlayerStatus.IN_LOBBY);
                     playerManager.setGame(null);
                     if (playerManager.getLeaveDelay() != 0) {
-                        instance.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
+                        plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
                         playerManager.setLeaveDelay(0);
                     }
                     if(!canJoin(player)) {
                         back(player);
-                        instance.getUtils().sendMessage(player,"&cAll games are in game or full");
+                        plugin.getUtils().sendMessage(player,"&cAll games are in game or full");
                     }
                 }
             }
@@ -93,8 +94,8 @@ public class EndingRunnable extends BukkitRunnable {
     }
 
     private void back(Player player) {
-        Location location = instance.getSettings().getLocation();
-        PlayerManager playerManager = instance.getPlayerData(player.getUniqueId());
+        Location location = plugin.getSettings().getLocation();
+        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
         if (location != null) {
             player.teleport(location);
         }
@@ -106,21 +107,21 @@ public class EndingRunnable extends BukkitRunnable {
         playerManager.setGame(null);
         playerManager.setBoard(GuardianBoard.LOBBY);
         player.getInventory().clear();
-        for (ItemStack item : instance.getItemsInfo().getLobbyItems().keySet()) {
-            player.getInventory().setItem(instance.getItemsInfo().getSlot(item), item);
+        for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
+            player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
         }
         if (playerManager.getLeaveDelay() != 0) {
-            instance.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
+            plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
             playerManager.setLeaveDelay(0);
         }
         player.updateInventory();
     }
 
     private boolean canJoin(Player player) {
-        for(Game game : instance.getGameManager().getGames()) {
+        for(Game game : plugin.getGameManager().getGames()) {
             if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
                 if(game.getPlayers().size() < game.getMax()) {
-                    instance.getGameManager().joinGame(player,game.getConfigName());
+                    plugin.getGameManager().joinGame(player,game.getConfigName());
                     return true;
                 }
             }
@@ -132,7 +133,7 @@ public class EndingRunnable extends BukkitRunnable {
     public void sendOptions(Player player, List<String> list) {
         for(String line : list) {
             if(line.contains("<playAgainButton>")) {
-                sendButtons(player,instance.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.playAgainButton.value"));
+                sendButtons(player,plugin.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.playAgainButton.value"));
             } else {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&',line.replace("[px]", "⚫").replace("[bx]","▄")));
             }
@@ -166,11 +167,11 @@ public class EndingRunnable extends BukkitRunnable {
     }
 
     public void loadOptions() {
-        if(instance.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
-            FileConfiguration configuration = instance.getStorage().getControl(GuardianFiles.MESSAGES);
+        if(plugin.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
+            FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
             String path;
             GuardianText guardianText;
-            for (String values : instance.getStorage().getContent(GuardianFiles.MESSAGES, "messages.game.playAgainButton.customOptions", false)) {
+            for (String values : plugin.getStorage().getContent(GuardianFiles.MESSAGES, "messages.game.playAgainButton.customOptions", false)) {
                 path = "messages.game.playAgainButton.customOptions." + values + ".";
                 String message = configuration.getString(path + "value");
                 String hover = configuration.getString(path + "hover");
