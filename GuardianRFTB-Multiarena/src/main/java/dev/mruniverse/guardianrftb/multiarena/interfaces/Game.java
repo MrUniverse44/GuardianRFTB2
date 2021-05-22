@@ -29,6 +29,8 @@ public interface Game {
 
     void leave(Player player);
 
+    void leaveWithoutSending(Player player);
+
     void checkPlayers();
 
     void cancelTask();

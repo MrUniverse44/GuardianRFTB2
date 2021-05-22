@@ -247,7 +247,35 @@ public class GameInfo implements Game {
         }
     }
 
-
+    @Override
+    public void leaveWithoutSending(Player player) {
+        this.players.remove(player);
+        this.runners.remove(player);
+        this.beasts.remove(player);
+        this.spectators.remove(player);
+        if(player.isOnline()) {
+            player.getInventory().setHelmet(null);
+            player.getInventory().setChestplate(null);
+            player.getInventory().setLeggings(null);
+            player.getInventory().setBoots(null);
+            plugin.getPlayerData(player.getUniqueId()).setGame(null);
+            plugin.getPlayerData(player.getUniqueId()).setLastCheckpoint(null);
+        }
+        FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        String quitMsg;
+        if(!gameStatus.equals(GameStatus.IN_GAME) && !gameStatus.equals(GameStatus.PLAYING) && !gameStatus.equals(GameStatus.RESTARTING)) {
+            quitMsg = messages.getString("messages.game.leave-game");
+        } else {
+            quitMsg = messages.getString("messages.game.leave-game-in-game");
+        }
+        if(quitMsg == null) quitMsg = "&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!";
+        for(Player pl : this.players) {
+            plugin.getUtils().sendMessage(pl,quitMsg.replace("%player%",player.getName())
+                    .replace("%game_online%",this.players.size()+"")
+                    .replace("%game_max%",this.max+""));
+        }
+        updateSigns();
+    }
     @Override
     public void leave(Player player) {
         this.players.remove(player);

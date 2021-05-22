@@ -106,15 +106,38 @@ public class MainCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("randomJoin")) {
-                for(Game game : plugin.getGameManager().getGames()) {
-                    if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
-                        if(game.getPlayers().size() < game.getMax()) {
-                            plugin.getGameManager().joinGame((Player)sender,game.getConfigName());
-                            return true;
+                if(sender instanceof Player) {
+                    for (Game game : plugin.getGameManager().getGames()) {
+                        if (game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
+                            if (game.getPlayers().size() < game.getMax()) {
+                                plugin.getGameManager().joinGame((Player) sender, game.getConfigName());
+                                return true;
+                            }
                         }
                     }
+                    utils.sendMessage(sender, "&cAll games are in game or full");
+                    return true;
                 }
-                utils.sendMessage(sender,"&cAll games are in game or full");
+                utils.sendMessage(sender, "&cThis command only can be used for players");
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("playAgain")) {
+                if(sender instanceof Player) {
+                    if(plugin.getPlayerData(((Player)sender).getUniqueId()).getGame() == null) return true;
+                    for (Game game : plugin.getGameManager().getGames()) {
+                        if (game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
+                            if (game.getPlayers().size() < game.getMax()) {
+                                plugin.getPlayerData(((Player)sender).getUniqueId()).getGame().leaveWithoutSending((Player)sender);
+                                plugin.getGameManager().joinGame((Player) sender, game.getConfigName());
+                                return true;
+                            }
+                        }
+                    }
+                    utils.sendMessage(sender, "&cAll games are in game or full");
+                    return true;
+                }
+                utils.sendMessage(sender, "&cThis command only can be used for players");
                 return true;
             }
 
