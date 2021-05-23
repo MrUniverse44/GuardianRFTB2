@@ -342,10 +342,10 @@ public class GameInfo implements Game {
     public void startCount() {
         this.gameStatus = GameStatus.STARTING;
         this.lastTimer = 10;
+        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(plugin,this), 0L, 20L);
         for(Player player : players) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
         }
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(plugin,this), 0L, 20L);
     }
 
     @Override
@@ -494,6 +494,7 @@ public class GameInfo implements Game {
         this.beasts.clear();
         this.lastTimer = 30;
         this.gameStatus = GameStatus.WAITING;
+        doubleCountPrevent = false;
         loadStatus();
     }
 
