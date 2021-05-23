@@ -1,6 +1,8 @@
 package dev.mruniverse.guardianrftb.multiarena.listeners.lobby;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,9 +13,10 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
-
+@SuppressWarnings("deprecation")
 public class ExtrasListener implements Listener {
     private final GuardianRFTB plugin;
     public ExtrasListener(GuardianRFTB plugin) {
@@ -114,6 +117,60 @@ public class ExtrasListener implements Listener {
             }
             plugin.getLogs().error("The lobby is not set!");
         }
+    }
+
+    @EventHandler
+    public void onJoinTab(PlayerJoinEvent event) {
+        if(plugin.getSettings().getSettings().getBoolean("settings.perWorldTab")) {
+            checkPlayer(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent e) {
+        if(plugin.getSettings().getSettings().getBoolean("settings.perWorldTab")) {
+            checkPlayer(e.getPlayer());
+        }
+    }
+    private void checkPlayer(Player p) {
+        if(plugin.getSettings().getLocation() == null) {
+            showInWorld(p);
+            for (Player all : Bukkit.getOnlinePlayers()){
+                if (all == p) continue;
+                if (!shouldSee(p, all) && p.canSee(all)) p.hidePlayer(all);
+                if (shouldSee(p, all) && !p.canSee(all)) p.showPlayer(all);
+                if (!shouldSee(all, p) && all.canSee(p)) all.hidePlayer(p);
+                if (shouldSee(all, p) && !all.canSee(p)) all.showPlayer(p);
+            }
+            return;
+        }
+        World world = plugin.getSettings().getLocation().getWorld();
+        if(world != null) {
+            if (world.equals(p.getWorld()) && plugin.getSettings().getSettings().getBoolean("settings.lobby.show-all-players")) {
+                for (Player all : Bukkit.getOnlinePlayers()) {
+                    p.showPlayer(all);
+                }
+                return;
+            }
+        }
+        showInWorld(p);
+    }
+
+    private void showInWorld(Player p) {
+        for (Player all : Bukkit.getOnlinePlayers()){
+            if (all == p) continue;
+            if (!shouldSee(p, all) && p.canSee(all)) p.hidePlayer(all);
+            if (shouldSee(p, all) && !p.canSee(all)) p.showPlayer(all);
+            if (!shouldSee(all, p) && all.canSee(p)) all.hidePlayer(p);
+            if (shouldSee(all, p) && !all.canSee(p)) all.showPlayer(p);
+        }
+    }
+
+    private boolean shouldSee(Player viewer, Player target) {
+        if (target == viewer) return true;
+        String viewerWorld = viewer.getWorld().getName();
+        String targetWorld = target.getWorld().getName();
+        return viewerWorld.equals(targetWorld);
     }
 
 
