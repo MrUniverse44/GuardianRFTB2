@@ -107,12 +107,10 @@ public final class GuardianRFTB extends JavaPlugin {
                 boardController = new BoardController(instance);
                 getListener().loadCommand("rftb");
                 getListener().loadCommand("grftb");
-                String lang = fileStorage.getControl(GuardianFiles.MESSAGES).getString("settings.language");
+                String lang = fileStorage.getControl(GuardianFiles.SETTINGS).getString("settings.language");
                 if(lang == null) lang = "en";
-                if (!lang.equalsIgnoreCase("en") && !lang.equalsIgnoreCase("default")) {
-                    instance.fileStorage.setMessages(lang);
-                    logger.info("Changed language to code: " + lang);
-                }
+                instance.fileStorage.setMessages(lang);
+                logger.info("language (code) loaded: " + lang);
 
                 gameManager = new GameManager(instance);
                 gameManager.loadChests();

@@ -236,6 +236,10 @@ public class MainCommand implements CommandExecutor {
                         plugin.getGameManager().getGameMenu(GameType.INFECTED).reloadMenu();
                         plugin.getGameManager().getGameMenu(GameType.DOUBLE_BEAST).reloadMenu();
                         plugin.getRunnable().update();
+                        String lang = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.language");
+                        if(lang == null) lang = "en";
+                        plugin.getStorage().setMessages(lang);
+                        plugin.getLogs().info("language (code) loaded: " + lang);
                         if(plugin.getTitleRunnable() != null) plugin.getTitleRunnable().update();
                         utils.sendMessage(sender, "&3» &aReload completed!");
                         plugin.getSettings().update();
