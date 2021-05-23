@@ -1,9 +1,6 @@
 package dev.mruniverse.guardianrftb.multiarena.listeners.lobby;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -48,41 +45,6 @@ public class ExtrasListener implements Listener {
                 Player player = (Player) event.getEntity();
                 if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
                     event.setFoodLevel(20);
-                }
-            }
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    @EventHandler
-    public void perWorldTab(PlayerChangedWorldEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        boolean lobbyWorld = false;
-        boolean showInGamePlayers = plugin.getSettings().getSettings().getBoolean("settings.lobby.show-all-players");
-        if(plugin.getSettings().getLocation() == null) {
-            plugin.getLogs().error("The lobby location is not set!");
-            return;
-        }
-        if(world == plugin.getSettings().getLocation().getWorld()) {
-            lobbyWorld = true;
-        }
-        if(plugin.getSettings().getSettings().getBoolean("settings.perWorldTab")) {
-            for (Player players : Bukkit.getServer().getOnlinePlayers()) {
-                if (players.getWorld() == world) {
-                    if(player.getGameMode() != GameMode.SPECTATOR) {
-                        players.showPlayer(player);
-                    }
-                    if(players.getGameMode() != GameMode.SPECTATOR) {
-                        player.showPlayer(players);
-                    }
-                } else {
-                    players.hidePlayer(player);
-                    if(!lobbyWorld && !showInGamePlayers) {
-                        player.hidePlayer(players);
-                    } else {
-                        player.showPlayer(player);
-                    }
                 }
             }
         }
