@@ -17,6 +17,8 @@ public class DamageListener implements Listener {
     @EventHandler
     public void damage(EntityDamageEvent event) {
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
+            Player player = (Player)event.getEntity();
+            if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) return;
             Location lobby = plugin.getSettings().getLocation();
             if (event.getEntity().getWorld().equals(lobby.getWorld())) {
                 event.setCancelled(true);
@@ -26,7 +28,6 @@ public class DamageListener implements Listener {
                     }
                 }
             }
-            Player player = (Player)event.getEntity();
             if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
                 GuardianBoard board = plugin.getPlayerData(player.getUniqueId()).getBoard();
                 if(board.equals(GuardianBoard.WAITING) || board.equals(GuardianBoard.BEAST_SPAWN) || board.equals(GuardianBoard.SELECTING) || board.equals(GuardianBoard.STARTING) || board.equals(GuardianBoard.WIN_BEAST_FOR_BEAST) || board.equals(GuardianBoard.WIN_BEAST_FOR_RUNNERS) || board.equals(GuardianBoard.WIN_RUNNERS_FOR_BEAST) || board.equals(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS)) {
