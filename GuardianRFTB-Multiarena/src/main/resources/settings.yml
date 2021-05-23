@@ -129,6 +129,22 @@ settings:
     line4: '&nClick to join'
   # Status
   status:
+    # Behind Blocks
+    blocks:
+      # Toggle this system
+      toggle: false
+      # Preparing Block
+      preparing: 'STAINED_GLASS:11'
+      # Waiting Block
+      waiting: 'STAINED_GLASS:5'
+      # Starting Block
+      starting: 'STAINED_GLASS:4'
+      # Playing Block
+      playing: 'STAINED_GLASS:14'
+      # InGame Block
+      InGame: 'STAINED_GLASS:14'
+      # Ending Block
+      ending: 'STAINED_GLASS:0'
     # Color Status
     color:
       preparing: '&5Config'

@@ -55,6 +55,8 @@ public interface Game {
 
     void deathKiller(Player player);
 
+    void updateSignsBlocks();
+
     void updateSigns();
 
     void giveBeastInv(Player beast);

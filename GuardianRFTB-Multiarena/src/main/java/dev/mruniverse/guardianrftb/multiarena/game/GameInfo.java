@@ -2,12 +2,14 @@ package dev.mruniverse.guardianrftb.multiarena.game;
 
 import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianlib.core.utils.Utils;
+import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.runnables.*;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Firework;
@@ -16,10 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings({"unused", "deprecation"})
 public class GameInfo implements Game {
@@ -103,6 +102,7 @@ public class GameInfo implements Game {
             loadSigns();
             loadChests();
             loadStatus();
+            updateSignsBlocks();
         }catch (Throwable throwable) {
             plugin.getLogs().error("Unexpected issue when the game was loading");
             plugin.getLogs().error("Game of the issue: " + configName);
@@ -141,6 +141,7 @@ public class GameInfo implements Game {
         }
         if((RealMin - players.size()) <= 0 && gameStatus.equals(GameStatus.WAITING)) {
             gameStatus = GameStatus.STARTING;
+            updateSignsBlocks();
             for(Player player : players) {
                 PlayerManager playerData = plugin.getPlayerData(player.getUniqueId());
                 playerData.setBoard(GuardianBoard.STARTING);
@@ -324,6 +325,7 @@ public class GameInfo implements Game {
     public void checkPlayers() {
         if (players.size() == min && !gameStatus.equals(GameStatus.STARTING) && !gameStatus.equals(GameStatus.SELECTING) && !doubleCountPrevent) {
             gameStatus = GameStatus.SELECTING;
+            updateSignsBlocks();
             lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(plugin,this), 0L, 20L);
             lastTimer = 30;
             doubleCountPrevent = true;
@@ -341,6 +343,7 @@ public class GameInfo implements Game {
     @Override
     public void startCount() {
         this.gameStatus = GameStatus.STARTING;
+        updateSignsBlocks();
         this.lastTimer = 10;
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(plugin,this), 0L, 20L);
         for(Player player : players) {
@@ -351,6 +354,7 @@ public class GameInfo implements Game {
     @Override
     public void beastCount() {
         this.gameStatus = GameStatus.PLAYING;
+        updateSignsBlocks();
         this.lastTimer = 15;
         for(Player player : runners) {
             plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
@@ -364,6 +368,7 @@ public class GameInfo implements Game {
     @Override
     public void playCount() {
         this.gameStatus = GameStatus.IN_GAME;
+        updateSignsBlocks();
         this.lastTimer = getGameMaxTime();
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new PlayingRunnable(this), 0L, 20L);
     }
@@ -375,6 +380,7 @@ public class GameInfo implements Game {
     public void setWinner(GameTeam gameTeam) {
         plugin.getServer().getScheduler().cancelTask(lastListener);
         this.gameStatus = GameStatus.RESTARTING;
+        updateSignsBlocks();
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(plugin,this,gameTeam), 0L, 20L);
     }
 
@@ -461,6 +467,7 @@ public class GameInfo implements Game {
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
+        updateSignsBlocks();
         setWinner(GameTeam.RUNNERS);
     }
 
@@ -482,6 +489,7 @@ public class GameInfo implements Game {
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
+        updateSignsBlocks();
         setWinner(GameTeam.BEASTS);
     }
 
@@ -495,6 +503,7 @@ public class GameInfo implements Game {
         this.lastTimer = 30;
         this.gameStatus = GameStatus.WAITING;
         doubleCountPrevent = false;
+        updateSignsBlocks();
         loadStatus();
     }
 
@@ -546,6 +555,30 @@ public class GameInfo implements Game {
      * GAME SECOND THINGS
      *
      */
+    @Override
+    public void updateSignsBlocks() {
+        Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(gameStatus.getBlock());
+        if(optionalXMaterial.isPresent()) {
+            XMaterial material = optionalXMaterial.get();
+            for (Location signLocation : this.signs) {
+                boolean worldLoaded = true;
+                World signWorld = signLocation.getWorld();
+                if (signWorld != null) {
+                    if (Bukkit.getWorld(signWorld.getName()) == null) worldLoaded = false;
+                    if (!worldLoaded || !signWorld.getChunkAt(signLocation).isLoaded()) {
+                        signWorld.loadChunk(signWorld.getChunkAt(signLocation));
+                    }
+                    if (signLocation.getBlock().getState() instanceof Sign) {
+                        Block signBlock = signLocation.getBlock();
+                        Sign currentSign = (Sign) signBlock.getState();
+                        org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) signBlock.getState().getData();
+                        Block block = signBlock.getRelative(signMaterial.getAttachedFace());
+                        block.setType(material.parseMaterial());
+                    }
+                }
+            }
+        }
+    }
     @Override
     public void updateSigns() {
         String line1,line2,line3,line4;

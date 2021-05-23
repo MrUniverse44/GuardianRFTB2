@@ -71,6 +71,7 @@ public class SelectingRunnable extends BukkitRunnable {
         } else {
             currentGame.setDoubleCountPrevent(false);
             currentGame.setGameStatus(GameStatus.WAITING);
+            currentGame.updateSignsBlocks();
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
                 plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
