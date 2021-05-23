@@ -64,9 +64,11 @@ public class SQL {
         if(plugin.getSettings().getSettings().getBoolean("settings.default-kits.toggle")) {
 
             kits.put(player.getUniqueId().toString().replace("-",""),"K" + defaultRunner + ",K" + defaultBeast + ",K" + defaultKiller);
+            selectedKits.put(player.getUniqueId().toString().replace("-",""),defaultRunner);
         } else{
             kits.put(player.getUniqueId().toString().replace("-",""),"NONE");
+            selectedKits.put(player.getUniqueId().toString().replace("-",""),"NONE");
         }
-        selectedKits.put(player.getUniqueId().toString().replace("-",""),"NONE");
+
     }
 }
