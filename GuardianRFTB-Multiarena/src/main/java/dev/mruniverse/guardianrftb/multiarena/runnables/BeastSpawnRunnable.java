@@ -26,7 +26,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
         guardianUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
-        spawn = configuration.getString("messages.game-count.beast");
+        spawn = configuration.getString("messages.game.game-count.beast");
         prefix = configuration.getString("messages.prefix");
         second = secondConfiguration.getString("settings.timer.second");
         seconds = secondConfiguration.getString("settings.timer.seconds");

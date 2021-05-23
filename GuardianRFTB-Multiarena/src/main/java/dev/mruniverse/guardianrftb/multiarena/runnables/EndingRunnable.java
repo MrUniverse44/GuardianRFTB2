@@ -34,8 +34,8 @@ public class EndingRunnable extends BukkitRunnable {
     public EndingRunnable(GuardianRFTB plugin, Game game, GameTeam winnerTeam) {
         this.currentGame = game;
         this.plugin = plugin;
-        game.setLastTimer(10);
-        time = 10;
+        game.setLastTimer(15);
+        time = 15;
         buttons = new HashMap<>();
         if(plugin.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
             loadOptions();

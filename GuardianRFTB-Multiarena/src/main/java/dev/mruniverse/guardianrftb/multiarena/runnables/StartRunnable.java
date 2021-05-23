@@ -28,8 +28,8 @@ public class StartRunnable  extends BukkitRunnable {
         guardianUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
-        enough = configuration.getString("messages.game-count.enough-players");
-        starting = configuration.getString("messages.game-count.start");
+        enough = configuration.getString("messages.game.game-count.enough-players");
+        starting = configuration.getString("messages.game.game-count.start");
         prefix = configuration.getString("messages.prefix");
         second = secondConfiguration.getString("settings.timer.second");
         seconds = secondConfiguration.getString("settings.timer.seconds");

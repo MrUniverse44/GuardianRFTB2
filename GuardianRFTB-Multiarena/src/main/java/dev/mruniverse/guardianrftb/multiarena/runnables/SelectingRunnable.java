@@ -25,8 +25,8 @@ public class SelectingRunnable extends BukkitRunnable {
         guardianUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
-        enough = configuration.getString("messages.game-count.enough-players");
-        selecting = configuration.getString("messages.game-count.selecting");
+        enough = configuration.getString("messages.game.game-count.enough-players");
+        selecting = configuration.getString("messages.game.game-count.selecting");
         chosenBeast = configuration.getString("messages.game.chosenBeast");
         prefix = configuration.getString("messages.prefix");
         second = secondConfiguration.getString("settings.timer.second");
