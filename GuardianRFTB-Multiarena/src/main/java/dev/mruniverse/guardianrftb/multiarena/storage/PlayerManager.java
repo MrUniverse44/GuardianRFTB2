@@ -10,6 +10,7 @@ import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -142,7 +143,11 @@ public class PlayerManager {
         if(holograms.getBoolean("holograms.checkpoint.toggle") && holograms.getBoolean("holograms.checkpoint.forPlayer.toggle")) {
             if (location != null) {
                 if(playerHologram == null) {
-                    playerHologram = new PersonalHologram(GuardianLIB.getControl(), getPlayer(), location, uuid.toString(), holograms.getStringList("holograms.checkpoint.forPlayer.value"));
+                    List<String> list = new ArrayList<>();
+                    for(String line : holograms.getStringList("holograms.checkpoint.forPlayer.value")) {
+                        list.add(ChatColor.translateAlternateColorCodes('&',line));
+                    }
+                    playerHologram = new PersonalHologram(GuardianLIB.getControl(), getPlayer(), location, uuid.toString(), list);
                 } else {
                     playerHologram.delete();
                     playerHologram.setLocation(location);
