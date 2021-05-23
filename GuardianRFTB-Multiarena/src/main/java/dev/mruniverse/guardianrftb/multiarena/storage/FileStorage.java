@@ -66,6 +66,16 @@ public class FileStorage {
     }
 
     public void setMessages(String code) {
+        if(code.equalsIgnoreCase("en")) {
+            rxMessages = rxMessagesEn;
+            messages = messagesEn;
+            return;
+        }
+        if(code.equalsIgnoreCase("es")) {
+            rxMessages = rxMessagesEs;
+            messages = messagesEs;
+            return;
+        }
         rxMessages = new File(plugin.getDataFolder(),"messages_" + code + ".yml");
         messages = loadConfig("messages_" + code);
     }
