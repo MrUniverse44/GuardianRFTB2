@@ -171,8 +171,9 @@ public class ExtrasListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void command(PlayerCommandPreprocessEvent e) {
+        if(e.isCancelled()) return;
         if(plugin.getSettings().getSettings().getBoolean("settings.game.commands.toggle")) {
             Player p = e.getPlayer();
             if (plugin.getPlayerData(p.getUniqueId()).getGame() != null) {
@@ -194,6 +195,20 @@ public class ExtrasListener implements Listener {
                         e.setCancelled(true);
                         return;
                     }
+                }
+            }
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void leaveCommand(PlayerCommandPreprocessEvent e) {
+        Player p = e.getPlayer();
+        if (plugin.getPlayerData(p.getUniqueId()).getGame() != null) {
+            String[] args = e.getMessage().split(" ");
+            List<String> commands = plugin.getSettings().getSettings().getStringList("settings.leaveCMDs");
+            for (String list : commands) {
+                if (args[0].equalsIgnoreCase(list)) {
+                    e.setCancelled(true);
+                    plugin.getPlayerData(p.getUniqueId()).getGame().leave(p);
                 }
             }
         }
