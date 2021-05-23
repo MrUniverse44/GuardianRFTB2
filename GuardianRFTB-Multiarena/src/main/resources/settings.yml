@@ -157,6 +157,21 @@ settings:
       # - ACTIONBAR (ACTION_BAR,ACTION BAR)
       # - BOSSBAR (BOSS BAR,BOSS_BAR)
       Format: BOSSBAR
+    # Command System
+    commands:
+      # Toggle this system
+      toggle: true
+      # type of system
+      type: WHITELIST
+      # list of all commands
+      list:
+        - 'leave'
+        - 'salir'
+        - 'rftb'
+        - 'grftb'
+        - 'lobby'
+        - 'hub'
+        - 'exit'
     # Game Roles
     roles:
       beast: Beast

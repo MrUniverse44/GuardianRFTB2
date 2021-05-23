@@ -6,16 +6,21 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
+
 @SuppressWarnings("deprecation")
 public class ExtrasListener implements Listener {
     private final GuardianRFTB plugin;
@@ -163,6 +168,34 @@ public class ExtrasListener implements Listener {
             if (shouldSee(p, all) && !p.canSee(all)) p.showPlayer(all);
             if (!shouldSee(all, p) && all.canSee(p)) all.hidePlayer(p);
             if (shouldSee(all, p) && !all.canSee(p)) all.showPlayer(p);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void command(PlayerCommandPreprocessEvent e) {
+        if(plugin.getSettings().getSettings().getBoolean("settings.game.commands.toggle")) {
+            Player p = e.getPlayer();
+            if (plugin.getPlayerData(p.getUniqueId()).getGame() != null) {
+                String[] args = e.getMessage().split(" ");
+                String type = plugin.getSettings().getSettings().getString("settings.game.commands.type");
+                if (type == null) type = "WHITELIST";
+                List<String> commands = plugin.getSettings().getSettings().getStringList("settings.game.commands.list");
+                if (type.equalsIgnoreCase("WHITELIST") || type.equalsIgnoreCase("WHITE_LIST")) {
+                    for (String list : commands) {
+                        if (args[0].equalsIgnoreCase("/" + list)) {
+                            return;
+                        }
+                        e.setCancelled(true);
+                    }
+                    return;
+                }
+                for (String list : commands) {
+                    if (args[0].equalsIgnoreCase("/" + list)) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                }
+            }
         }
     }
 
