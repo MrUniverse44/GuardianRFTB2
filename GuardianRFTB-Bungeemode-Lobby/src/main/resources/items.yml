@@ -1,0 +1,68 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+# If you want add Enchantments or change the item amount of your item, you can do it! Adding the Path: 'enchantments' or 'amount', Example:
+#
+#  lobby:
+#    gameSelector:
+#      toggle: true
+#      item: PAPER
+#      name: '&aGame Selector'
+#      lore:
+#        - '&7Here your lore'
+#        - '&eplay.servername.net'
+#      slot: 0
+#      amount: 32
+#      enchantments:
+#        - UNBREAKING, 3
+#
+lobby:
+  gameSelector:
+    toggle: true
+    item: PAPER
+    name: '&aGame Selector'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 0
+  Shop:
+    toggle: true
+    item: EMERALD
+    name: '&aRFTB Shop'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 4
+  PlayerSettings:
+    toggle: true
+    item: FIREWORK
+    name: '&aYour settings'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 1
+  LobbySelector:
+    toggle: true
+    item: BEACON
+    name: '&aLobby Selector'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 7
+  Exit:
+    toggle: true
+    item: RED_BED
+    name: '&aGo to the hub'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 8

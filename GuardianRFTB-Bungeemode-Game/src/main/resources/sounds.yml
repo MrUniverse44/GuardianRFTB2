@@ -1,0 +1,97 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+sounds:
+  # Game Sounds
+  game:
+    # Checkpoint Use Sound
+    checkpoint-use:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '2.0F'
+      # Sound
+      sound: WITHER_SPAWN
+    # Checkpoint Place Sound
+    checkpoint-place:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: NOTE_PLING
+    # Win Sound
+    win:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: WITHER_SPAWN
+    # Kill Sound
+    kill:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: WITHER_DEATH
+    # Death Sound
+    death:
+      # Toggle Sound
+      toggle: true
+      # Volume (Float)
+      volume: '1.0F'
+      # Pitch (Float)
+      pitch: '0.5F'
+      # Sound
+      sound: WITHER_DEATH
+    # Count List
+    count:
+      # Starting Sound
+      starting:
+        # Toggle Sound
+        toggle: true
+        # Volume (Float)
+        volume: '1.0F'
+        # Pitch (Float)
+        pitch: '0.5F'
+        # Sound
+        sound: NOTE_STICKS
+      # Beast Appear Sound
+      beast-appear:
+        # Toggle Sound
+        toggle: true
+        # Volume (Float)
+        volume: '0.5F'
+        # Pitch (Float)
+        pitch: '0.5F'
+        # Sound
+        sound: ENDERDRAGON_GROWL
+      # Selecting Sound
+      selecting:
+        # Toggle Sound
+        toggle: true
+        # Volume (Float)
+        volume: '1.0F'
+        # Pitch (Float)
+        pitch: '0.5F'
+        # Sound
+        sound: ORB_PICKUP

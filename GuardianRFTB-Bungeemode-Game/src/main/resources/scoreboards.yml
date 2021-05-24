@@ -1,0 +1,93 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+scoreboards:
+  animatedTitle:
+    toggle: true
+    repeatTime: 20
+    titles:
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&f&lG&b&lRFTB'
+      - '&f&lGR&b&lFTB'
+      - '&b&lG&f&lRF&b&lTB'
+      - '&b&lGR&f&lFT&b&lB'
+      - '&b&lGRF&f&lTB'
+      - '&b&lGRFT&f&lB'
+      - '&b&lGRFTB'
+  # Variables:
+  # - <isWaiting> = This line only appear if the game is Waiting.
+  # - <isSelecting> = This line only appear when the game is selecting a beast.
+  # - <isStarting> = This line only appear when the game is starting.
+  # - <BeastAppear> = This line only appear when the beast is waiting to appear in the map.
+  waiting:
+    title: '&b&lGuardianRFTB'
+    lines:
+      - '&7<arena_mode> | <timeFormat>'
+      - ' '
+      - '&fMap: &a<arena_name>'
+      - '&fPlayers: &a<arena_online>/<arena_max>'
+      - ' '
+      - '&f<isWaiting>Waiting for'
+      - '&a<isWaiting><arena_need> &fplayers to start'
+      - '&f<isSelecting>Selecting beast in &a<arena_time_number>'
+      - '&f<isStarting>Starting in &a<arena_time_number> &f<arena_time_text>.'
+      - '&f<BeastAppear>You will spawn in &a<arena_time_number>&f!'
+      - ' '
+      - '&eplay.servername.net'
+  playing:
+    title: '&b&lGuardianRFTB'
+    lines:
+      - '&7<timeFormat>'
+      - ' '
+      - '&fRunners Left: &a<arena_runners>'
+      - '&fTime Left: &a<arena_timeLeft>'
+      - ' '
+      - '&fMap: &a<arena_name>'
+      - ' '
+      - '&eplay.servername.net'
+  beastWin:
+    forBeast:
+      title: '&b&lGuardianRFTB'
+      lines:
+        - '&7<timeFormat>'
+        - ' '
+        - '&fYou are the best beast'
+        - '&aWell played&f!'
+        - ' '
+        - '&eplay.servername.net'
+    forRunners:
+      title: '&b&lGuardianRFTB'
+      lines:
+        - '&7<timeFormat>'
+        - ' '
+        - '&fWell.. you tried'
+        - ' '
+        - '&eplay.servername.net'
+  runnersWin:
+    forBeast:
+      title: '&b&lGuardianRFTB'
+      lines:
+        - '&7<timeFormat>'
+        - ' '
+        - '&fBad played!'
+        - '&cGood luck for next game&f!'
+        - ' '
+        - '&eplay.servername.net'
+    forRunners:
+      title: '&b&lGuardianRFTB'
+      lines:
+        - '&7<timeFormat>'
+        - ' '
+        - '&fRunners Win!'
+        - '&aWell played!'
+        - ' '
+        - '&eplay.servername.net'

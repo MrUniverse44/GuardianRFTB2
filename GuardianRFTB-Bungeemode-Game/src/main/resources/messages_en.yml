@@ -1,0 +1,148 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+messages:
+  prefix: '&3&lG&b&lRFTB &8| '
+  game:
+    join-game: '&b%player% &7has joined the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
+    leave-game: '&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
+    leave-game-in-game: '&b%player% &7has left the game!'
+    chosenBeast: '&eThe player &b%player% &enow is a beast!'
+    game-count:
+      selecting: '&eThe beast will be chosen in &c%current_time% &e%current_time_letter%'
+      start: '&eThe game starts in &c%current_time% &e%current_time_letter%!'
+      beast: '&eThe beast spawns in &c%current_time% &e%current_time_letter%!'
+      enough-players: '&cThis game can''t start, not enough players'
+    gameInfo:
+      startGame:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - '<center>&e&lMode: %gameType% - %map_name%'
+        - ' '
+        - '<isBeast>&e&lKill all runners!'
+        - '<isRunner>&e&lSurvive and Kill the beast!'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      endInfo:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - '<center>&e&l%gameType% - %map_name%'
+        - ' '
+        - '<center>&a%winner_team% &e&lWINNER &c%looser_team%'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      playAgain:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - ' '
+        - ' &a<playAgainButton>'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      rewardSummary:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - '<center>&e&l%gameType% - %map_name%'
+        - ' '
+        - ' &7You earned:'
+        - '  &f[px] &3%game% Game Experience'
+        - '  &f[px] &a%coins% Coins'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+    playAgainButton:
+      value:
+        - '&b[px] <button_play>'
+        - '&b[px] <button_auto>'
+        - '&b[px] <button_leave>'
+      play:
+        value: '&b¿Want play again? &a&lClick here&e to play again.'
+        hover: '&b&lClick to play again'
+      auto:
+        value: '&b¿Want toggle auto play-again? &a&lClick here&e to toggle.'
+        hover: '&b&lClick to toggle auto join'
+      leave:
+        value: '&b¿Want leave? &a&lClick here&e to leave.'
+        hover: '&b&lClick to leave'
+      customOptions:
+        custom1:
+          value: '&aThis is a custom message'
+          hover: '&bThis is a custom hover'
+          customAction: 'URL'
+          customResult: 'https://spigotmc.org'
+    deathMessages:
+      pvp: '&7%victim% was killed by %attacker%'
+      void: '&7%victim% was searching a diamond.'
+      lava: '&7%victim% was on fire!'
+      bow: '&7%attacker% is the best with the bow vs %victim%'
+      otherCause: '&7%victim% died'
+    kits:
+      enought: '&eYou need &6%price% &eto buy this kit.'
+      purchase: '&aNow you have the kit &b%kit_name% &a(&3-%price%&a)'
+      select: '&aNow you selected kit &b%kit_name%'
+      reset: '&aNow you don''t have kit selected.'
+    others:
+      winCoins: '&6+%winCoins% coins (Win)!'
+      playAgainWin: '&a&lYOU WON! &e&lWant to play again? <clickText>'
+      playAgainLoose: '&c&lYOU LOOSE! &e&lWant to play again? <clickText>'
+      playAgainClickText: '&6&lCLICK HERE'
+      titles:
+        gameStart:
+          title: '&a'
+          subtitle: '&aGame Started!'
+        runnersGo:
+          toRunners:
+            title: '&a'
+            subtitle: '&aYou has been released, GO!'
+          toBeasts:
+            title: '&a'
+            subtitle: '&aThe runners has been released!'
+        beastsGo:
+          toRunners:
+            title: '&a'
+            subtitle: '&cThe beasts has been released!'
+          toBeasts:
+            title: '&a'
+            subtitle: '&aYou has been released, GO!'
+        Winner:
+          title: '&6&lVICTORY!'
+          subtitle: '&b%winner_name%&f won the game!'
+        Looser:
+          title: '&c&lGAME OVER!'
+          subtitle: '&8%attacker_name%&f kill you!'
+      beastDistance:
+        toRunners: '&bDistance between you and &e&lBEAST &f%beastName%'
+        toBeasts: '&bRunners with life: &e&l%runners%'
+      checkpoint:
+        use: '&aYou has been teleported to your last checkpoint.'
+        already: '&7You already has an checkpoint in use.'
+  others:
+    buttons:
+      autoPlay:
+        on: '&aNow you &lENABLED&a the autoPlay option'
+        off: '&cNow you &lDISABLED&c the autoPlay option'
+      playAgain:
+        searching: '&aSearching games..'
+        sending: '&aSending you to game &b%game_name%&a.'
+    already: '&cYou are already playing'
+    leave:
+      confirm: '&a&lTeleporting you to the lobby in <leaveCancelTime> seconds...[new line]&a&lRight-Click again to cancel the teleport!'
+      cancelled: '&c&lTeleport cancelled!'
+    no-perms: '&cYou need permission &7%permission% &cfor this action.'
+    full: '&cThis game is full!'
+    gamePlaying: '&cThis arena is in game.'
+    restarting: '&cThis game is in restarting mode!'
+    playerError: '&7%player% &cis not online.'
+    customChat:
+      inGame: '&a[%player_role%&a] &7<player_name>&8: &f%message%'
+      spectator: '&8[SPECTATOR] &7<player_name>&8: &f%message%'
+  admin:
+    setWaiting: '&aWaiting Lobby now is in &b%location%'
+    setSpawn: '&aSpawn-%spawnType% now is in &b%location%'
+    setCenter: '&aArena center now is in &b%location%'
+    setChestArea: '&aArena Chest Area now is in &b%location%'
+    setMode: '&aArena Mode now is &b%arena_mode%'
+    setCreator: '&aArena creator now is &b%arena_creator%'
+    setName: '&aArena ID: &b%arena_id% &anow has the name: &b%arena_name%'

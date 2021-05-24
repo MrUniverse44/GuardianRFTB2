@@ -1,0 +1,33 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+holograms:
+  #Checkpoint Holograms configuration
+  checkpoint:
+    # Toggle this hologram
+    toggle: true
+    # This hologram appear only for the player that placed the checkpoint:
+    forPlayer:
+      # Toggle this hologram
+      toggle: true
+      # Hologram Lines
+      value:
+        - '&aYour Checkpoint is here!'
+        - '&b&lRight-Click to back.'
+    # This hologram appears for others players (including beast and killers)
+    forOthers:
+      # Toggle this hologram
+      toggle: false
+      # Hologram Lines
+      value:
+        - '&a%player%''s checkpoint'
+        - '&b&lLocation'

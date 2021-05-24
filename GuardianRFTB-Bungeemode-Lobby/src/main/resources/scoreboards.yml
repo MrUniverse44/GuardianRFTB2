@@ -1,0 +1,39 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+scoreboards:
+  animatedTitle:
+    toggle: true
+    repeatTime: 20
+    titles:
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&b&lGRFTB'
+      - '&f&lGRFTB'
+      - '&f&lG&b&lRFTB'
+      - '&f&lGR&b&lFTB'
+      - '&b&lG&f&lRF&b&lTB'
+      - '&b&lGR&f&lFT&b&lB'
+      - '&b&lGRF&f&lTB'
+      - '&b&lGRFT&f&lB'
+      - '&b&lGRFTB'
+  lobby:
+    toggle: true
+    title: '&b&lGuardianRFTB'
+    lines:
+      - ' '
+      - '&fUser: &b<player_name>'
+      - '&fCoins: &b<player_coins>'
+      - '&fWins: &b<player_wins>'
+      - ' '
+      - '&fKits: &b<player_kits>/3'
+      - ' '
+      - '&fOnline: &b<server_online>'
+      - ' '
+      - '&eplay.servername.net'

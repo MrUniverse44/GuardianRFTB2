@@ -1,0 +1,106 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+# If you want add Enchantments or change the amount of your item, you can do it! Adding the Path: 'enchantments' or 'amount', Example:
+#
+#      boots:
+#        name: '&aDiamond Boots'
+#        slot: 31
+#        lore:
+#        - '&8GuardianRFTB'
+#        item: DIAMOND_BOOTS
+#        amount: 1
+#        enchantments:
+#        - UNBREAKING, 3
+#        - PROTECTION, 1
+#
+chests:
+  armor:
+    inventoryName: '&8Armor Items'
+    inventoryRows: 6
+    inventorySounds:
+      - ORB_PICKUP
+    items:
+      helmet:
+        name: '&aDiamond Helmet'
+        slot: 21
+        lore:
+          - '&8GuardianRFTB'
+        item: DIAMOND_HELMET
+        enchantments:
+          - UNBREAKING, 10
+          - PROTECTION, 5
+      chestplate:
+        name: '&aDiamond Chestplate'
+        slot: 22
+        lore:
+          - '&8GuardianRFTB'
+        item: DIAMOND_CHESTPLATE
+        enchantments:
+          - UNBREAKING, 2
+          - PROTECTION, 4
+      leggings:
+        name: '&aDiamond Leggings'
+        slot: 23
+        lore:
+          - '&8GuardianRFTB'
+        item: DIAMOND_LEGGINGS
+        enchantments:
+          - UNBREAKING, 3
+          - PROTECTION, 2
+      boots:
+        name: '&aDiamond Boots'
+        slot: 31
+        lore:
+          - '&8GuardianRFTB'
+        item: DIAMOND_BOOTS
+        enchantments:
+          - UNBREAKING, 3
+          - PROTECTION, 1
+  attack:
+    inventoryName: '&8Attack Items'
+    inventoryRows: 6
+    inventorySounds:
+      - ORB_PICKUP
+    items:
+      sword:
+        name: '&aDiamond Sword'
+        slot: 21
+        lore:
+          - '&7GuardianRFTB'
+        item: DIAMOND_SWORD
+        enchantments:
+          - FIRE_ASPECT, 2
+          - SHARPNESS, 3
+      bow:
+        name: '&aHardcore Bow'
+        slot: 22
+        lore:
+          - '&7GuardianRFTB'
+        item: BOW
+        enchantments:
+          - FLAME, 1
+          - INFINITY, 1
+      arrow:
+        name: '&aHardcore Arrow'
+        slot: 23
+        lore:
+          - '&7GuardianRFTB'
+        item: ARROW
+        enchantments:
+          - KB, 1
+      potion:
+        name: '&aHardcore Potion'
+        slot: 31
+        lore:
+          - '&7GuardianRFTB'
+        item: POTION

@@ -1,0 +1,113 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+menus:
+  shop:
+    inventoryName: '&8Shop Menu'
+    inventoryRows: 6
+    inventorySounds:
+      - ORB_PICKUP
+    items:
+      KitRunner:
+        name: '&aKits: Runner'
+        slot: 21
+        lore:
+          - '&8GuardianRFTB'
+          - '&eClick to open kit runners menu'
+        item: MAP
+        toggle: true
+      KitKiller:
+        name: '&aKits: Killer'
+        slot: 22
+        lore:
+          - '&8GuardianRFTB'
+          - '&eClick to open kit killer menu'
+        item: IRON_SWORD
+        toggle: true
+      KitBeast:
+        name: '&aKits: Beast'
+        slot: 23
+        lore:
+          - '&8GuardianRFTB'
+          - '&eClick to open kit beasts menu'
+        item: FIREWORK
+        toggle: true
+      Boost:
+        name: '&aGame Booster'
+        slot: 31
+        lore:
+          - '&8GuardianRFTB'
+          - '&eClick to open boost menu'
+        item: EXPERIENCE_BOTTLE
+        toggle: true
+  kits:
+    inventoryName: '&8Kit Menu'
+    inventoryRows: 3
+    inventorySounds:
+      - ORB_PICKUP
+    blocked-item:
+      toggle: true
+      item: STAINED_GLASS_PANE:14
+      name: '&c&nKit: %kit_name%'
+      lore:
+        - ' '
+        - '&7Price: &6%price%'
+        - ' '
+        - '&eplay.servername.net'
+fill-inventory:
+  shop:
+    fillOne:
+      item: STAINED_GLASS_PANE:5
+      name: '&aRFTB Shop'
+      lore:
+        - '&8GuardianRFTB &7F-1'
+        - '&eplay.servername.net'
+      list:
+        type: ONLY
+        values:
+          - 0
+          - 1
+          - 7
+          - 8
+          - 9
+          - 17
+          - 36
+          - 44
+          - 45
+          - 46
+          - 52
+          - 53
+    fillTwo:
+      item: STAINED_GLASS_PANE:15
+      name: '&aRFTB Shop'
+      lore:
+        - '&8GuardianRFTB &7F-2'
+        - '&eplay.servername.net'
+      list:
+        type: IGNORE
+        values:
+          - 0
+          - 1
+          - 7
+          - 8
+          - 9
+          - 17
+          - 36
+          - 44
+          - 45
+          - 46
+          - 52
+          - 53
+          - 21
+          - 22
+          - 23
+          - 31

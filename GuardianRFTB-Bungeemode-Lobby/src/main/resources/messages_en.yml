@@ -1,0 +1,30 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+messages:
+  prefix: '&3&lG&b&lRFTB &8| '
+  lobby:
+    actionBar: '&bYou are playing &e&lRFTB &bwith &e&lGuardianRFTB'
+    bossBar: '&bYou are playing on &e&nServerName Network&b.'
+    kits:
+      enought: '&eYou need &6%price% &eto buy this kit.'
+      purchase: '&aNow you have the kit &b%kit_name% &a(&3-%price%&a)'
+      select: '&aNow you selected kit &b%kit_name%'
+      reset: '&aNow you don''t have kit selected.'
+    others:
+      no-perms: '&cYou need permission &7%permission% &cfor this action.'
+      full: '&cThis game is full!'
+      gamePlaying: '&cThis arena is in game.'
+      restarting: '&cThis game is in restarting mode!'
+      playerError: '&7%player% &cis not online.'
+      customChat:
+        lobby: '&7<player_name>&8: &f%message%'
+

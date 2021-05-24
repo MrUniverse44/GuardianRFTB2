@@ -1,0 +1,95 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817/
+#
+# If you want add Enchantments or change the item amount of your item, you can do it! Adding the Path: 'enchantments' or 'amount', Example:
+#
+#  InGame:
+#    RunnerKit:
+#      item: PAPER
+#      name: '&aKit Selector (&lRunners&a)'
+#      lore:
+#        - '&7Here your lore'
+#        - '&eplay.servername.net'
+#      slot: 0
+#      amount: 32
+#      enchantments:
+#        - UNBREAKING, 3
+#
+InGame:
+  RunnerKit:
+    item: PAPER
+    name: '&aKit Selector (&lRunners&a)'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 0
+  BeastKit:
+    item: PAPER
+    name: '&aKit Selector (&lBeast&a)'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 0
+  KillerKit:
+    item: PAPER
+    name: '&aKit Selector (&lKiller&a)'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 0
+  Exit:
+    item: RED_BED
+    name: '&aLeave'
+    lore:
+      - '&7Here your lore'
+      - '&eplay.servername.net'
+    slot: 8
+  backCheckpointItem:
+    item: NETHER_STAR
+    name: '&b&lCheckpoint Back'
+    lore:
+      - '&8GuardianRFTB'
+      - '&eClick to back'
+playing:
+  beast-inventory:
+    Sword:
+      item: DIAMOND_SWORD
+      name: '&eBeast Sword'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+      slot: 0
+  beast-armor:
+    Helmet:
+      item: DIAMOND_HELMET
+      name: '&eBeast Helmet'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+    Chestplate:
+      item: DIAMOND_CHESTPLATE
+      name: '&eBeast Helmet'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+    Leggings:
+      item: DIAMOND_LEGGINGS
+      name: '&eBeast Leggings'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+    Boots:
+      item: DIAMOND_BOOTS
+      name: '&eBeast Boots'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
