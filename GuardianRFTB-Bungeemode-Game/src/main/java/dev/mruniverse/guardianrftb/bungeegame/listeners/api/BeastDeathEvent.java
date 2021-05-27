@@ -1,4 +1,4 @@
-package dev.mruniverse.guardianrftb.bungeegame.api;
+package dev.mruniverse.guardianrftb.bungeegame.listeners.api;
 
 import dev.mruniverse.guardianrftb.bungeegame.interfaces.Game;
 import org.bukkit.entity.Player;

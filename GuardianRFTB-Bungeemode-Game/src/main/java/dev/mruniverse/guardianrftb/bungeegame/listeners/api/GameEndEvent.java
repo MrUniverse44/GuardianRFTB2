@@ -1,15 +1,15 @@
-package dev.mruniverse.guardianrftb.bungeegame.api;
+package dev.mruniverse.guardianrftb.bungeegame.listeners.api;
 
 import dev.mruniverse.guardianrftb.bungeegame.interfaces.Game;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class GameRestartEvent extends Event {
+public class GameEndEvent extends Event {
     private final Game game;
     private static final HandlerList handlerList = new HandlerList();
 
-    public GameRestartEvent(Game currentGame) {
+    public GameEndEvent(Game currentGame) {
         game = currentGame;
     }
 
