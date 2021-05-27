@@ -66,6 +66,7 @@ scoreboards:
       - '&fTime Left: &a<arena_timeLeft>'
       - ' '
       - '&fMap: &a<arena_name>'
+      - '&fRole: &a<player_role>'
       - ' '
       - '&eplay.servername.net'
   beastWin:
