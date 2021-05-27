@@ -124,6 +124,43 @@ settings:
         - 'lobby'
         - 'hub'
         - 'exit'
+    # Game actions
+    game-actions:
+      # These actions will be executed at the end of the game
+      win-actions:
+        # Toggle this option
+        toggle: false
+        # Actions
+        values:
+          - '<console>eco give <player_name> 100'
+      # These actions will be executed at the end of the game
+      end-actions:
+        # Toggle this option
+        toggle: false
+        # Actions
+        values:
+          - '<actionbar>&aWell played!'
+      # These actions will be executed at the end of the game
+      restart-actions:
+        # Toggle this option
+        toggle: false
+        # Actions
+        values:
+          - '<actionbar>&bGood Luck for your next game!'
+      # These actions will be executed at the start of the game
+      start-actions:
+        # Toggle this option
+        toggle: false
+        # Actions
+        values:
+          - '<msg>&a&lGood Luck!'
+      # These actions will be executed at the beast-selection of the game
+      selected-beast-actions:
+        # Toggle this option
+        toggle: false
+        # Actions
+        values:
+          - '<actionbar>&c<arena_beast> was selected!'
     # Game Roles
     roles:
       beast: Beast
