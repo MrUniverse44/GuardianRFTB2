@@ -49,13 +49,9 @@ public class GameManager {
 
     public void loadGames() {
         try {
-            gameMenu.put(GameType.CLASSIC,new GameMenu(plugin,GameType.CLASSIC));
-            gameMenu.put(GameType.DOUBLE_BEAST,new GameMenu(plugin,GameType.DOUBLE_BEAST));
-            gameMenu.put(GameType.INFECTED,new GameMenu(plugin,GameType.INFECTED));
-            gameMenu.put(GameType.KILLER,new GameMenu(plugin,GameType.KILLER));
-            gameMenu.put(GameType.ISLAND_OF_THE_BEAST,new GameMenu(plugin,GameType.ISLAND_OF_THE_BEAST));
-            gameMenu.put(GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST,new GameMenu(plugin,GameType.ISLAND_OF_THE_BEAST_DOUBLE_BEAST));
-            gameMenu.put(GameType.ISLAND_OF_THE_BEAST_KILLER,new GameMenu(plugin,GameType.ISLAND_OF_THE_BEAST_KILLER));
+            for(GameType currentGameType : GameType.values()) {
+                gameMenu.put(currentGameType,new GameMenu(plugin,currentGameType));
+            }
             if(plugin.getStorage().getControl(GuardianFiles.GAMES).contains("games")) {
                 for (String gameName : Objects.requireNonNull(plugin.getStorage().getControl(GuardianFiles.GAMES).getConfigurationSection("games")).getKeys(false)) {
                     if(plugin.getStorage().getControl(GuardianFiles.GAMES).getBoolean("games." + gameName + ".enabled")) {

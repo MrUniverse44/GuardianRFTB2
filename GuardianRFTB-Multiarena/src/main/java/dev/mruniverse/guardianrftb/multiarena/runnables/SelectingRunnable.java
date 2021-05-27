@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -90,5 +91,7 @@ public class SelectingRunnable extends BukkitRunnable {
         player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
         player.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
         player.teleport(currentGame.getSelecting());
+        PlayerManager currentPlayer = plugin.getPlayerData(player.getUniqueId());
+        currentPlayer.setCurrentRole(GameTeam.BEASTS);
     }
 }

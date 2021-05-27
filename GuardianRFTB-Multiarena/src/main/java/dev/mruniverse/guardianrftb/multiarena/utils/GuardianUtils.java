@@ -248,7 +248,7 @@ public class GuardianUtils {
                     .replace("<arena_mode>",currentGame.getType().getType())
                     .replace("<arena_timeLeft>",currentGame.getLastTimer() + "")
                     .replace("<arena_status>",currentGame.getStatus().getStatus())
-                    .replace("<player_role>","")
+                    .replace("<player_role>",playerManager.getCurrentRole())
                     .replace("<arena_time_number>", currentGame.getLastTimer() + "");
         }
         if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }

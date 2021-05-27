@@ -222,6 +222,7 @@ public class GameInfo implements Game {
         runners.add(player);
         currentData.setGame(this);
         currentData.setStatus(PlayerStatus.IN_GAME);
+        currentData.setCurrentRole(GameTeam.RUNNERS);
         if (gameStatus.equals(GameStatus.WAITING)) checkPlayers();
         player.setGameMode(GameMode.ADVENTURE);
         player.setFlying(false);
@@ -259,8 +260,10 @@ public class GameInfo implements Game {
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
-            plugin.getPlayerData(player.getUniqueId()).setGame(null);
-            plugin.getPlayerData(player.getUniqueId()).setLastCheckpoint(null);
+            PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+            currentData.setGame(null);
+            currentData.setLastCheckpoint(null);
+            currentData.setCurrentRole(GameTeam.RUNNERS);
         }
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String quitMsg;
@@ -308,10 +311,12 @@ public class GameInfo implements Game {
                     .replace("%game_max%",this.max+""));
         }
         if(player.isOnline()) {
-            plugin.getPlayerData(player.getUniqueId()).setStatus(PlayerStatus.IN_LOBBY);
-            plugin.getPlayerData(player.getUniqueId()).setGame(null);
-            plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.LOBBY);
-            plugin.getPlayerData(player.getUniqueId()).setLastCheckpoint(null);
+            PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+            currentData.setStatus(PlayerStatus.IN_LOBBY);
+            currentData.setGame(null);
+            currentData.setBoard(GuardianBoard.LOBBY);
+            currentData.setLastCheckpoint(null);
+            currentData.setCurrentRole(GameTeam.RUNNERS);
             player.getInventory().clear();
             for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
                 player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);

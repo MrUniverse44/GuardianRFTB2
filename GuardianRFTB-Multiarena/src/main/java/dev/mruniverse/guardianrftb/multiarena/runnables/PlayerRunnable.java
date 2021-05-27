@@ -13,16 +13,20 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Objects;
 import java.util.UUID;
 @SuppressWarnings("unused")
 public class PlayerRunnable extends BukkitRunnable {
     private final GuardianRFTB plugin;
-    private boolean bossLb,bossGm,actionLb;
-    private String bossLobby,actionLobby,bossGameBeast,bossGameRunners;
-    private GameBossFormat gameBossFormat;
+
     private final FloatConverter floatConverter;
     private final Utils utils;
+
+    private boolean bossLb,bossGm,actionLb;
+
+    private String bossLobby,actionLobby,bossGameBeast,bossGameRunners;
+
+    private GameBossFormat gameBossFormat;
+
     public PlayerRunnable(GuardianRFTB main) {
         plugin = main;
         floatConverter = new FloatConverter();

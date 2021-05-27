@@ -3,12 +3,9 @@ package dev.mruniverse.guardianrftb.multiarena.storage;
 import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianlib.core.holograms.PersonalHologram;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
+import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
-import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -22,24 +19,37 @@ import java.util.UUID;
 
 public class PlayerManager {
     private final GuardianRFTB plugin;
-    private PlayerStatus playerStatus;
-    private GuardianBoard guardianBoard;
-    private final UUID uuid;
-    private PersonalHologram playerHologram = null;
-    private boolean pointStatus;
-    private Location lastCheckpoint;
-    private Game currentGame;
+
     private final KitMenu beastMenu;
     private final KitMenu runnerMenu;
     private final KitMenu killerMenu;
-    private String selectedKit;
-    private String kits;
+
+    private final UUID uuid;
+
     private int leaveDelay;
     private int kills = 0;
     private int wins = 0;
     private int coins = 0;
     private int deaths = 0;
+
+    private boolean pointStatus;
     private boolean autoPlay = false;
+
+    private GameTeam currentRole = GameTeam.RUNNERS;
+
+    private PlayerStatus playerStatus;
+
+    private GuardianBoard guardianBoard;
+
+    private PersonalHologram playerHologram = null;
+
+    private Location lastCheckpoint;
+
+    private Game currentGame;
+
+    private String selectedKit;
+    private String kits;
+
     public PlayerManager(GuardianRFTB plugin, Player player) {
         this.plugin = plugin;
         this.uuid = player.getUniqueId();
@@ -68,6 +78,12 @@ public class PlayerManager {
         selectedKit = plugin.getData().getSQL().getSelectedKit(player.getUniqueId());
         kits = plugin.getData().getSQL().getKits(player.getUniqueId());
         coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
+    }
+
+    public void setCurrentRole(GameTeam currentRole) { this.currentRole = currentRole; }
+
+    public String getCurrentRole() {
+        return plugin.getSettings().getRole(currentRole);
     }
 
     public boolean getAutoPlayStatus() { return autoPlay; }

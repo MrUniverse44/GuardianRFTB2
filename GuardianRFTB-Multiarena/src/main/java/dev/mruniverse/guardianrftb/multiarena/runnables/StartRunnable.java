@@ -96,6 +96,7 @@ public class StartRunnable  extends BukkitRunnable {
                 beasts.getInventory().clear();
                 beasts.getInventory().setItem(plugin.getItemsInfo().getRunnerSlot(), plugin.getItemsInfo().getKitRunner());
                 beasts.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
+                plugin.getPlayerData(beasts.getUniqueId()).setCurrentRole(GameTeam.RUNNERS);
                 beasts.teleport(currentGame.getWaiting());
             }
             currentGame.cancelTask();
