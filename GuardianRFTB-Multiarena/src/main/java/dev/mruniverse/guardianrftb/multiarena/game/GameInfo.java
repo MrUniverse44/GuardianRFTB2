@@ -6,6 +6,7 @@ import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.*;
 import dev.mruniverse.guardianrftb.multiarena.runnables.*;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.*;
@@ -227,6 +228,8 @@ public class GameInfo implements Game {
         player.setGameMode(GameMode.ADVENTURE);
         player.setFlying(false);
         player.setAllowFlight(false);
+        GameJoinEvent event = new GameJoinEvent(this,player);
+        Bukkit.getPluginManager().callEvent(event);
         player.setHealth(20.0D);
         player.setFireTicks(0);
         player.getInventory().setHelmet(null);
@@ -265,6 +268,8 @@ public class GameInfo implements Game {
             currentData.setLastCheckpoint(null);
             currentData.setCurrentRole(GameTeam.RUNNERS);
         }
+        GameQuitEvent event = new GameQuitEvent(this,player);
+        Bukkit.getPluginManager().callEvent(event);
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String quitMsg;
         if(!gameStatus.equals(GameStatus.IN_GAME) && !gameStatus.equals(GameStatus.PLAYING) && !gameStatus.equals(GameStatus.RESTARTING)) {
@@ -297,6 +302,8 @@ public class GameInfo implements Game {
                 player.setGameMode(GameMode.ADVENTURE);
             }
         }
+        GameQuitEvent event = new GameQuitEvent(this,player);
+        Bukkit.getPluginManager().callEvent(event);
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String quitMsg;
         if(!gameStatus.equals(GameStatus.IN_GAME) && !gameStatus.equals(GameStatus.PLAYING) && !gameStatus.equals(GameStatus.RESTARTING)) {
@@ -375,6 +382,8 @@ public class GameInfo implements Game {
         this.gameStatus = GameStatus.IN_GAME;
         updateSignsBlocks();
         this.lastTimer = getGameMaxTime();
+        GameStartEvent event = new GameStartEvent(this);
+        Bukkit.getPluginManager().callEvent(event);
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new PlayingRunnable(this), 0L, 20L);
     }
 
@@ -386,6 +395,8 @@ public class GameInfo implements Game {
         plugin.getServer().getScheduler().cancelTask(lastListener);
         this.gameStatus = GameStatus.RESTARTING;
         updateSignsBlocks();
+        GameEndEvent event = new GameEndEvent(this);
+        Bukkit.getPluginManager().callEvent(event);
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(plugin,this,gameTeam), 0L, 20L);
     }
 
@@ -517,6 +528,8 @@ public class GameInfo implements Game {
         beasts.remove(beast);
         spectators.add(beast);
         plugin.getPlayerData(beast.getUniqueId()).addDeaths();
+        BeastDeathEvent event = new BeastDeathEvent(this,beast);
+        Bukkit.getPluginManager().callEvent(event);
         beast.setGameMode(GameMode.SPECTATOR);
         for(Player player : players) {
             player.hidePlayer(beast);
@@ -528,13 +541,16 @@ public class GameInfo implements Game {
     }
 
     @Override
-    public void deathKiller(Player beast) {
-        // * no killers here
+    public void deathKiller(Player killer) {
+        KillerDeathEvent event = new KillerDeathEvent(this,killer);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void deathRunner(Player runner) {
         runners.remove(runner);
+        RunnerDeathEvent event = new RunnerDeathEvent(this,runner);
+        Bukkit.getPluginManager().callEvent(event);
         if(!gameType.equals(GameType.INFECTED)) {
             spectators.add(runner);
             for(Player player : players) {

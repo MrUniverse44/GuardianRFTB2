@@ -67,16 +67,9 @@ public class ChatListener implements Listener {
             }
             return;
         }
-        String playerRole;
-        if(game.getBeasts().contains(player)) {
-            playerRole = plugin.getSettings().getSettings().getString("roles.beast");
-        } else {
-            playerRole = plugin.getSettings().getSettings().getString("roles.runner");
-        }
-        if(playerRole == null) playerRole = "Runner";
         for(Player spectator : game.getPlayers()) {
             plugin.getUtils().sendMessage(spectator,gameChat.replace("<player_name>",player.getName())
-                    .replace("%message%",event.getMessage()).replace("%player_role%",playerRole));
+                    .replace("%message%",event.getMessage()).replace("%player_role%",playerManager.getCurrentRole()));
         }
     }
 

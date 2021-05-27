@@ -4,8 +4,10 @@ import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -87,6 +89,8 @@ public class StartRunnable  extends BukkitRunnable {
             currentGame.setDoubleCountPrevent(false);
             currentGame.setGameStatus(GameStatus.WAITING);
             currentGame.updateSignsBlocks();
+            GameResetCountEvent event = new GameResetCountEvent(currentGame);
+            Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
                 plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);

@@ -8,10 +8,12 @@ import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.action.ActionClic
 import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.hover.HoverBuilder;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameRestartEvent;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianText;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -71,6 +73,8 @@ public class EndingRunnable extends BukkitRunnable {
             }
             this.time--;
         } else {
+            GameRestartEvent event = new GameRestartEvent(currentGame);
+            Bukkit.getPluginManager().callEvent(event);
             for (Player player : currentGame.getPlayers()) {
                 PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
                 if(!playerManager.getAutoPlayStatus()) {

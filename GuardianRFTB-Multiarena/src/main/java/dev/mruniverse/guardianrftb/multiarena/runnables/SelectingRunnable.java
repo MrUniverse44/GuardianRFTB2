@@ -3,9 +3,12 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameSelectedBeastEvent;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -73,6 +76,8 @@ public class SelectingRunnable extends BukkitRunnable {
             currentGame.setDoubleCountPrevent(false);
             currentGame.setGameStatus(GameStatus.WAITING);
             currentGame.updateSignsBlocks();
+            GameResetCountEvent event = new GameResetCountEvent(currentGame);
+            Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
                 plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
@@ -84,6 +89,8 @@ public class SelectingRunnable extends BukkitRunnable {
     private void setBeast(Player player) {
         currentGame.getBeasts().add(player);
         currentGame.getRunners().remove(player);
+        GameSelectedBeastEvent event = new GameSelectedBeastEvent(currentGame,player);
+        Bukkit.getPluginManager().callEvent(event);
         for(Player game : currentGame.getPlayers()) {
             guardianUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()));
         }
