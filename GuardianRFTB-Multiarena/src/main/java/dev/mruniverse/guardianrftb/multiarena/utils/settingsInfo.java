@@ -36,6 +36,16 @@ public class settingsInfo {
         role = settingsConfiguration.getString("settings.game.roles.runner");
         if(role == null) role = "Runner";
         roles.put(GameTeam.RUNNERS,role);
+
+        role = settingsConfiguration.getString("settings.game.roles.beasts");
+        if(role == null) role = "Beasts";
+        roles.put(GameTeam.BEASTS2,role);
+        role = settingsConfiguration.getString("settings.game.roles.runners");
+        if(role == null) role = "Runners";
+        roles.put(GameTeam.RUNNERS2,role);
+        role = settingsConfiguration.getString("settings.game.roles.killers");
+        if(role == null) role = "Killers";
+        roles.put(GameTeam.KILLERS2,role);
     }
 
     public void update() {
@@ -53,6 +63,16 @@ public class settingsInfo {
         role = settingsConfiguration.getString("settings.game.roles.runner");
         if(role == null) role = "Runner";
         roles.put(GameTeam.RUNNERS,role);
+
+        role = settingsConfiguration.getString("settings.game.roles.beasts");
+        if(role == null) role = "Beasts";
+        roles.put(GameTeam.BEASTS2,role);
+        role = settingsConfiguration.getString("settings.game.roles.runners");
+        if(role == null) role = "Runners";
+        roles.put(GameTeam.RUNNERS2,role);
+        role = settingsConfiguration.getString("settings.game.roles.killers");
+        if(role == null) role = "Killers";
+        roles.put(GameTeam.KILLERS2,role);
     }
 
     public String getRole(GameTeam currentTeam) {

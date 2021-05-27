@@ -6,7 +6,6 @@ import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -26,6 +25,9 @@ public class GuardianUtils {
     private final Utils utils = GuardianLIB.getControl().getUtils();
     private final ShopMenu currentShop;
 
+    /**
+     * @param plugin main plugin
+     */
     public GuardianUtils(GuardianRFTB plugin) {
         this.plugin = plugin;
         currentShop = new ShopMenu(plugin);
@@ -35,32 +37,46 @@ public class GuardianUtils {
         return currentShop;
     }
 
+    /**
+     * @param player player to send
+     * @param message current message
+     */
     public void sendMessage(Player player,String message) {
         utils.sendMessage(player,replaceVariables(message,player));
     }
+    /**
+     * @param player player to send
+     * @param message current message
+     */
     public void sendActionbar(Player player,String message) {
         utils.sendActionbar(player,replaceVariables(message,player));
     }
+    /**
+     * @param player player to send
+     * @param message current message
+     */
     public void sendBossbar(Player player,String message) {
         utils.sendBossBar(player,replaceVariables(message,player));
     }
 
+    /**
+     * @param player player to send
+     * @param list list of the message
+     * @param winnerTeam winner team of the game
+     */
     public void sendGameList(Player player, List<String> list, GameTeam winnerTeam) {
         if(list == null) list = new ArrayList<>();
-        String runnerRole = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("roles.runners");
-        String beastRole = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("roles.beasts");
+        String runnerRole = plugin.getSettings().getRole(GameTeam.RUNNERS2);
+        String beastRole = plugin.getSettings().getRole(GameTeam.BEASTS2);
         String wT,lT;
-        if(runnerRole == null) runnerRole = "Runners";
-        if(beastRole == null) beastRole = "Beasts";
-        if(winnerTeam.equals(GameTeam.RUNNERS)) {
+        if(winnerTeam.equals(GameTeam.RUNNERS) || winnerTeam.equals(GameTeam.KILLER)) {
             wT = runnerRole;
             lT = beastRole;
         } else {
             wT = beastRole;
             lT = runnerRole;
         }
-        UUID uuid = player.getUniqueId();
-        Game game = plugin.getPlayerData(uuid).getGame();
+        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
         String gameType = game.getType().getType();
         String gameName = game.getName();
         boolean playerBeast = game.getBeasts().contains(player);
