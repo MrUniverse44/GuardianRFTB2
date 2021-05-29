@@ -89,7 +89,7 @@ public class KitMenu {
                     if(optionalXMaterial.isPresent()) {
                         item = plugin.getLib().getUtils().getItem(optionalXMaterial.get(), getKitName(blockedName, kitData.getValue()), getLore(blockedLore, kitData.getValue()));
                     } else {
-                        item = plugin.getLib().getUtils().getItem(XMaterial.BEDROCK,"&cInvalid Blocked Block",new ArrayList<>());
+                        item = plugin.getLib().getUtils().getItem(XMaterial.BEDROCK,"&cInvalid Item - " + blockedName,new ArrayList<>());
                     }
                     if (item != null) {
                         chestInventory.setItem(kitData.getValue().getKitSlot(), item);
