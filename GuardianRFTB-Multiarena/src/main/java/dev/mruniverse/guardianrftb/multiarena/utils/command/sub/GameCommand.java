@@ -379,9 +379,10 @@ public class GameCommand {
                     return;
                 }
                 argumentsIssue(sender);
+                return;
             }
         }
-
+        argumentsIssue(sender);
     }
 
     private boolean falseChest(Material evalMaterial) {

@@ -206,7 +206,7 @@ public class MainCommand implements CommandExecutor {
                         utils.sendMessage(sender,"&6Admin - Coins Commands:");
                         utils.sendMessage(sender,cmdPrefix + " admin coins set (player) (coins) &e- &fSet coins of a player");
                         utils.sendMessage(sender,cmdPrefix + " admin coins add (player) (coins) &e- &fAdd coins to a player");
-                        utils.sendMessage(sender,cmdPrefix + " admin coins del (player) (coins) &e- &fDel coins of a player");
+                        utils.sendMessage(sender,cmdPrefix + " admin coins remove (player) (coins) &e- &fRemove coins of a player");
                         utils.sendMessage(sender,"&b------------ &a(Page 4&l/4&a) &b------------");
                     }
                     return true;

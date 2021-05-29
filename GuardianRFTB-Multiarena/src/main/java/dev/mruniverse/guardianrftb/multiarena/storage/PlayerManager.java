@@ -141,6 +141,14 @@ public class PlayerManager {
         setWins(getWins() + 1);
     }
 
+    public void addCoins(int coins) {
+        setCoins(getCoins() + coins);
+    }
+
+    public void removeCoins(int coins) {
+        setCoins(getCoins() - coins);
+    }
+
     public boolean getPointStatus() {
         return pointStatus;
     }
