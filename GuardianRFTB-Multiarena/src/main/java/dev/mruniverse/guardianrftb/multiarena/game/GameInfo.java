@@ -17,6 +17,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
@@ -331,6 +332,7 @@ public class GameInfo implements Game {
             player.updateInventory();
         }
         updateSigns();
+        updateSignsBlocks();
     }
 
     @Override
@@ -595,6 +597,11 @@ public class GameInfo implements Game {
                         org.bukkit.material.Sign signMaterial = (org.bukkit.material.Sign) signBlock.getState().getData();
                         Block block = signBlock.getRelative(signMaterial.getAttachedFace());
                         block.setType(material.parseMaterial());
+                        if(plugin.isOldVersion()) {
+                            MaterialData data = material.parseItem().getData();
+                            if(data != null) plugin.getLib().getNMS().setBlockData(block,data.getData());
+                            block.getState().update(true);
+                        }
                     }
                 }
             }

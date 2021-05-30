@@ -39,6 +39,8 @@ public final class GuardianRFTB extends JavaPlugin {
 
     private boolean hasPAPI = false;
 
+    private String serverVersion;
+
     private FileStorage fileStorage;
     private ExternalLogger logger;
     private ItemsInfo itemsInfo;
@@ -52,6 +54,7 @@ public final class GuardianRFTB extends JavaPlugin {
     private GuardianPlaceholders guardianPlaceholders;
     private DataStorage dataStorage;
 
+    public String getServerVersion() { return serverVersion; }
     public ExternalLogger getLogs() { return logger; }
     public ListenerController getListener() { return listenerController; }
     public ItemsInfo getItemsInfo() { return itemsInfo; }
@@ -66,6 +69,8 @@ public final class GuardianRFTB extends JavaPlugin {
     public SoundsInfo getSoundsInfo() { return soundsInfo; }
     public DataStorage getData() { return dataStorage; }
     public boolean hasPAPI() { return hasPAPI; }
+    public boolean isOldVersion() { return (serverVersion.contains("v1_8") || serverVersion.contains("v1_9") || serverVersion.contains("v1_10") || serverVersion.contains("v1_11") || serverVersion.contains("v1_12")); }
+
 
 
     public void addPlayer(Player player){
@@ -96,6 +101,9 @@ public final class GuardianRFTB extends JavaPlugin {
                 logger = new ExternalLogger(instance,"GuardianRFTB","dev.mruniverse.guardianrftb.multiarena");
 
                 getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
+
+                String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+                serverVersion = version.substring(0, version.lastIndexOf("_"));
 
                 fileStorage = new FileStorage(instance);
                 fileStorage.save(SaveMode.ALL);
