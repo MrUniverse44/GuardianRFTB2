@@ -1,8 +1,7 @@
-package dev.mruniverse.guardianrftb.multiarena.cloudlytext;
+package dev.mruniverse.guardianrftb.bungeegame.cloudlytext;
 
-
-import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.TextPart;
-import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.TextPartBuilder;
+import dev.mruniverse.guardianrftb.bungeegame.cloudlytext.part.TextPart;
+import dev.mruniverse.guardianrftb.bungeegame.cloudlytext.part.TextPartBuilder;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.util.ArrayList;

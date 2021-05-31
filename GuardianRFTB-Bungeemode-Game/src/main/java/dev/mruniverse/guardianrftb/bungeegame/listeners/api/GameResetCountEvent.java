@@ -1,6 +1,6 @@
 package dev.mruniverse.guardianrftb.bungeegame.listeners.api;
 
-import dev.mruniverse.guardianrftb.bungeegame.interfaces.Game;
+import dev.mruniverse.guardianrftb.bungeegame.game.Game;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;

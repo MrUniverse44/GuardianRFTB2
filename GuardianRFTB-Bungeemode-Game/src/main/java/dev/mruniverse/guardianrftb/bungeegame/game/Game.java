@@ -1,4 +1,4 @@
-package dev.mruniverse.guardianrftb.bungeegame.interfaces;
+package dev.mruniverse.guardianrftb.bungeegame.game;
 
 import dev.mruniverse.guardianrftb.bungeegame.enums.GameStatus;
 import dev.mruniverse.guardianrftb.bungeegame.enums.GameTeam;
