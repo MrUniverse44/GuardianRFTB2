@@ -19,10 +19,10 @@
 # - %bot%
 #
 # * Example:
-# - '&b&LAll-Time wins'
-# - '&7All Modes'
-# - '&e1. MrUniverse44 &7- &e1'
-# - '&a&lClick to update'
+# - "&b&LAll-Time wins"
+# - "&7All Modes"
+# - "&e1. MrUniverse44 &7- &e1"
+# - "&a&lClick to update"
 #
 holograms:
   #Checkpoint Holograms configuration
@@ -35,40 +35,40 @@ holograms:
       toggle: true
       # Hologram Lines
       value:
-        - '&aYour Checkpoint is here!'
-        - '&b&lRight-Click to back.'
+        - "&aYour Checkpoint is here!"
+        - "&b&lRight-Click to back."
     # This hologram appears for others players (including beast and killers)
     forOthers:
       # Toggle this hologram
       toggle: false
       # Hologram Lines
       value:
-        - '&a%player%''s checkpoint'
-        - '&b&lLocation'
+        - "&a%player%'s checkpoint"
+        - "&b&lLocation"
   tops:
     # This is the stats size, default: 10 (Only show 10 first players in the top)
     topSize: 10
     # Top Wins
     wins:
       top:
-        - '&b&lAll-Time Wins'
-        - '&7%currentMode%'
-      format: '&e%position%. &7%player% &7- &e%grftb_wins%'
+        - "&b&lAll-Time Wins"
+        - "&7%currentMode%"
+      format: "&e%position%. &7%player% &7- &e%grftb_wins%"
       bot:
-        - '&a&lClick to update'
+        - "&a&lClick to update"
     # Top Deaths
     deaths:
       top:
-        - '&b&lAll-Time Deaths'
-        - '&7%currentMode%'
-      format: '&e%position%. &7%player% &7- &e%grftb_deaths%'
+        - "&b&lAll-Time Deaths"
+        - "&7%currentMode%"
+      format: "&e%position%. &7%player% &7- &e%grftb_deaths%"
       bot:
-        - '&a&lClick to update'
+        - "&a&lClick to update"
     # Top Kills
     kills:
       top:
-        - '&b&lAll-Time Kills'
-        - '&7%currentMode%'
-      format: '&e%position%. &7%player% &7- &e%grftb_kills%'
+        - "&b&lAll-Time Kills"
+        - "&7%currentMode%"
+      format: "&e%position%. &7%player% &7- &e%grftb_kills%"
       bot:
-        - '&a&lClick to update'
+        - "&a&lClick to update"
