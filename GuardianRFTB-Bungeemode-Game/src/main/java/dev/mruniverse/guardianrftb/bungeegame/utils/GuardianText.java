@@ -86,7 +86,7 @@ public class GuardianText {
 
     public String getClickValue() { return clickValue; }
 
-    public void add(dev.mruniverse.guardianrftb.multiarena.utils.GuardianText text){
+    public void add(GuardianText text){
         baseComponent.addExtra(" " + text.getTextConverted());
     }
 }
