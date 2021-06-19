@@ -358,9 +358,9 @@ public final class GuardianRFTB extends JavaPlugin {
         runnable = new PlayerRunnable(this);
         if (getStorage().getControl(GuardianFiles.SCOREBOARD).getBoolean("scoreboards.animatedTitle.toggle")) {
             titleRunnable = new TitleRunnable(instance);
-            getServer().getScheduler().runTaskTimerAsynchronously(instance, instance.titleRunnable, 0L, getStorage().getControl(GuardianFiles.SCOREBOARD).getLong("scoreboards.animatedTitle.repeatTime"));
+            getServer().getScheduler().runTaskTimer(instance, instance.titleRunnable, 0L, getStorage().getControl(GuardianFiles.SCOREBOARD).getLong("scoreboards.animatedTitle.repeatTime"));
         }
-        getServer().getScheduler().runTaskTimerAsynchronously(instance, instance.runnable, 0L, 20L);
+        getServer().getScheduler().runTaskTimer(instance, instance.runnable, 0L, 20L);
     }
 
 
