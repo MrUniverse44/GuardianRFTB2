@@ -533,9 +533,6 @@ public class GameInfo implements Game {
         BeastDeathEvent event = new BeastDeathEvent(this,beast);
         Bukkit.getPluginManager().callEvent(event);
         beast.setGameMode(GameMode.SPECTATOR);
-        for(Player player : players) {
-            player.hidePlayer(beast);
-        }
         if(beasts.size() == 0) {
             plugin.getPlayerData(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
             winRunners();
@@ -555,9 +552,6 @@ public class GameInfo implements Game {
         Bukkit.getPluginManager().callEvent(event);
         if(!gameType.equals(GameType.INFECTED)) {
             spectators.add(runner);
-            for(Player player : players) {
-                player.hidePlayer(runner);
-            }
             runner.setGameMode(GameMode.SPECTATOR);
         } else {
             beasts.add(runner);

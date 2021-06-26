@@ -12,6 +12,7 @@ import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.NPCCommand;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

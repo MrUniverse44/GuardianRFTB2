@@ -15,6 +15,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -107,6 +108,7 @@ public class EndingRunnable extends BukkitRunnable {
         player.getInventory().setChestplate(null);
         player.getInventory().setLeggings(null);
         player.getInventory().setBoots(null);
+        player.setGameMode(plugin.getSettings().getGameMode());
         playerManager.setStatus(PlayerStatus.IN_LOBBY);
         playerManager.setGame(null);
         playerManager.setLastCheckpoint(null);

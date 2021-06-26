@@ -29,11 +29,11 @@ settings:
     killer: 0
   # Leave Commands
   leaveCMDs:
-    - /leave
-    - /quit
-    - /salir
+    - "/leave"
+    - "/quit"
+    - "/salir"
   # Plugin Date Format
-  dateFormat: 'dd/MM/yyyy'
+  dateFormat: "dd/MM/yyyy"
   # Toggle perWorldTab option
   perWorldTab: false
   # Leave Cancel Time (In Seconds)
@@ -76,7 +76,7 @@ settings:
       autoHeal: true
       # Clear Inventory
       clearInventory: true
-      # Gamemode
+      # Gamemode when you join to the lobby and when you join to the server
       gamemode: ADVENTURE
       # Hide default minecraft join message
       message: false
@@ -87,8 +87,8 @@ settings:
       statics: false
     # Hub servers
     Hub-servers:
-      - Hub1
-      - Hub2
+      - "Hub1"
+      - "Hub2"
   # Point System
   pointSystem:
     # Runner Points
@@ -112,21 +112,21 @@ settings:
     # Runners
     runners:
       toggle: true
-      tag: '&b&lRUNNER'
+      tag: "&b&lRUNNER"
     # Beasts
     beasts:
       toggle: true
-      tag: '&e&lBEAST'
+      tag: "&e&lBEAST"
     # Killers
     killer:
       toggle: true
-      tag: '&a&lKILLER'
+      tag: "&a&lKILLER"
   # Signs
   signs:
-    line1: '&l%arena%'
-    line2: '%gameStatus%'
-    line3: '%on%/%max%'
-    line4: '&nClick to join'
+    line1: "&l%arena%"
+    line2: "%gameStatus%"
+    line3: "%on%/%max%"
+    line4: "&nClick to join"
   # Status
   status:
     # Behind Blocks
@@ -134,25 +134,25 @@ settings:
       # Toggle this system
       toggle: false
       # Preparing Block
-      preparing: 'STAINED_GLASS:11'
+      preparing: "STAINED_GLASS:11"
       # Waiting Block
-      waiting: 'STAINED_GLASS:5'
+      waiting: "STAINED_GLASS:5"
       # Starting Block
-      starting: 'STAINED_GLASS:4'
+      starting: "STAINED_GLASS:4"
       # Playing Block
-      playing: 'STAINED_GLASS:14'
+      playing: "STAINED_GLASS:14"
       # InGame Block
-      InGame: 'STAINED_GLASS:14'
+      InGame: "STAINED_GLASS:14"
       # Ending Block
-      ending: 'STAINED_GLASS:0'
+      ending: "STAINED_GLASS:0"
     # Color Status
     color:
-      preparing: '&5Config'
-      waiting: '&aWaiting'
-      starting: '&eStarting'
-      playing: '&cPlaying'
-      InGame: '&4InGame'
-      ending: '&9Restarting'
+      preparing: "&5Config"
+      waiting: "&aWaiting"
+      starting: "&eStarting"
+      playing: "&cPlaying"
+      InGame: "&4InGame"
+      ending: "&9Restarting"
     # Names
     names:
       preparing: Preparing
@@ -181,13 +181,13 @@ settings:
       type: WHITELIST
       # list of all commands
       list:
-        - 'leave'
-        - 'salir'
-        - 'rftb'
-        - 'grftb'
-        - 'lobby'
-        - 'hub'
-        - 'exit'
+        - "leave"
+        - "salir"
+        - "rftb"
+        - "grftb"
+        - "lobby"
+        - "hub"
+        - "exit"
     # Game actions
     game-actions:
       # These actions will be executed at the end of the game
@@ -196,35 +196,35 @@ settings:
         toggle: false
         # Actions
         values:
-        - '<console>eco give <player_name> 100'
+        - "<console>eco give <player_name> 100"
       # These actions will be executed at the end of the game
       end-actions:
         # Toggle this option
         toggle: false
         # Actions
         values:
-          - '<actionbar>&aWell played!'
+          - "<actionbar>&aWell played!"
       # These actions will be executed at the end of the game
       restart-actions:
         # Toggle this option
         toggle: false
         # Actions
         values:
-          - '<actionbar>&bGood Luck for your next game!'
+          - "<actionbar>&bGood Luck for your next game!"
       # These actions will be executed at the start of the game
       start-actions:
         # Toggle this option
         toggle: false
         # Actions
         values:
-          - '<msg>&a&lGood Luck!'
+          - "<msg>&a&lGood Luck!"
       # These actions will be executed at the beast-selection of the game
       selected-beast-actions:
         # Toggle this option
         toggle: false
         # Actions
         values:
-          - '<actionbar>&c<arena_beast> was selected!'
+          - "<actionbar>&c<arena_beast> was selected!"
     # Game Roles
     roles:
       beast: Beast
