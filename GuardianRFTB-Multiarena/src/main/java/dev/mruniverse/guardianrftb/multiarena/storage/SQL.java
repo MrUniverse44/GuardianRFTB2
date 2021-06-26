@@ -54,21 +54,29 @@ public class SQL {
     public int getCoins(UUID uuid) { return coins.get(uuid.toString().replace("-","")); }
     public String getKits(UUID uuid) { return kits.get(uuid.toString().replace("-","")); }
     public String getSelectedKit(UUID uuid) { return selectedKits.get(uuid.toString().replace("-","")); }
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean exist(UUID uuid) { return kits.containsKey(uuid.toString().replace("-","")); }
 
     public void createPlayer(Player player) {
-        coins.put(player.getUniqueId().toString().replace("-",""), 0);
-        String defaultRunner = plugin.getSettings().getSettings().getString("settings.default-kits.runner");
-        String defaultBeast = plugin.getSettings().getSettings().getString("settings.default-kits.beast");
-        String defaultKiller = plugin.getSettings().getSettings().getString("settings.default-kits.killer");
-        if(plugin.getSettings().getSettings().getBoolean("settings.default-kits.toggle")) {
+        if(!exist(player.getUniqueId())) {
+            coins.put(player.getUniqueId().toString().replace("-", ""), 0);
+            String defaultRunner = plugin.getSettings().getSettings().getString("settings.default-kits.runner");
+            String defaultBeast = plugin.getSettings().getSettings().getString("settings.default-kits.beast");
+            String defaultKiller = plugin.getSettings().getSettings().getString("settings.default-kits.killer");
+            if (plugin.getSettings().getSettings().getBoolean("settings.default-kits.toggle")) {
 
-            kits.put(player.getUniqueId().toString().replace("-",""),"K" + defaultRunner + ",K" + defaultBeast + ",K" + defaultKiller);
-            selectedKits.put(player.getUniqueId().toString().replace("-",""),defaultRunner);
-        } else{
-            kits.put(player.getUniqueId().toString().replace("-",""),"NONE");
-            selectedKits.put(player.getUniqueId().toString().replace("-",""),"NONE");
+                kits.put(player.getUniqueId().toString().replace("-", ""), "K" + defaultRunner + ",K" + defaultBeast + ",K" + defaultKiller);
+                selectedKits.put(player.getUniqueId().toString().replace("-", ""), defaultRunner);
+            } else {
+                kits.put(player.getUniqueId().toString().replace("-", ""), "NONE");
+                selectedKits.put(player.getUniqueId().toString().replace("-", ""), "NONE");
+            }
+        } else {
+            String id = player.getUniqueId().toString().replace("-","");
+            PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+            playerManager.setCoins(coins.get(id));
+            playerManager.setSelectedKit(selectedKits.get(id));
+            playerManager.setKits(kits.get(id));
         }
-
     }
 }

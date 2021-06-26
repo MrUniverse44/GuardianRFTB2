@@ -72,6 +72,7 @@ public class DataStorage {
         return integer;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isRegistered(String tableName, String where, String what) {
         what = what.replace("-","");
         try (ResultSet rs = mySQL.Query("SELECT id FROM " + tableName + " WHERE " + where + "= '" + what + "';")) {

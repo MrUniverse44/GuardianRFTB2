@@ -208,6 +208,10 @@ public class PlayerManager {
         plugin.getData().getData().setSelectedKit(uuid,kitID);
     }
 
+    public void setKits(String kits) {
+        this.kits = kits;
+    }
+
     public String getSelectedKit() {
         return selectedKit;
     }
