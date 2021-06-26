@@ -223,6 +223,12 @@ public class GameInfo implements Game {
         players.add(player);
         runners.add(player);
         currentData.setGame(this);
+        currentData.setPointStatus(false);
+        currentData.setLastCheckpoint(null);
+        if (currentData.getLeaveDelay() != 0) {
+            plugin.getServer().getScheduler().cancelTask(currentData.getLeaveDelay());
+            currentData.setLeaveDelay(0);
+        }
         currentData.setStatus(PlayerStatus.IN_GAME);
         currentData.setCurrentRole(GameTeam.RUNNERS);
         if (gameStatus.equals(GameStatus.WAITING)) checkPlayers();

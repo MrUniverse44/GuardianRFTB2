@@ -40,18 +40,14 @@ public class BlocksListener implements Listener {
         if(data.getGame() == null) return;
         if(event.getBlockPlaced().getType() == Material.BEACON) {
             if(!data.getPointStatus()) {
-                if(event.isCancelled()) {
-                    data.setLastCheckpoint(event.getBlock().getLocation());
-                    data.setPointStatus(true);
-                    SoundsInfo sounds = plugin.getSoundsInfo();
-                    if(sounds.getStatus(GuardianSounds.CHECKPOINT_PLACE)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.CHECKPOINT_PLACE),sounds.getVolume(GuardianSounds.CHECKPOINT_PLACE),sounds.getPitch(GuardianSounds.CHECKPOINT_PLACE));
-                    plugin.getUtils().consumeItem(player,1,event.getBlockPlaced().getType());
-                    player.getInventory().addItem(plugin.getItemsInfo().getCheckPoint());
-                }
+                data.setLastCheckpoint(event.getBlock().getLocation());
+                data.setPointStatus(true);
+                SoundsInfo sounds = plugin.getSoundsInfo();
+                if(sounds.getStatus(GuardianSounds.CHECKPOINT_PLACE)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.CHECKPOINT_PLACE),sounds.getVolume(GuardianSounds.CHECKPOINT_PLACE),sounds.getPitch(GuardianSounds.CHECKPOINT_PLACE));
+                plugin.getUtils().consumeItem(player,1,event.getBlockPlaced().getType());
+                player.getInventory().addItem(plugin.getItemsInfo().getCheckPoint());
             } else {
-                if (event.isCancelled()) {
-                    plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.checkpoint.already"));
-                }
+                plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.checkpoint.already"));
             }
         }
     }

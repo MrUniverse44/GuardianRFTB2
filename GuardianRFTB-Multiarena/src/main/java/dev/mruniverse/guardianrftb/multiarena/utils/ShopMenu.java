@@ -114,7 +114,7 @@ public class ShopMenu {
                 List<String> lore = menu.getStringList(shopAction.getPath() + ".lore");
                 int slot = menu.getInt(shopAction.getPath() + ".slot");
                 if(material == null) material = "BEDROCK";
-                Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(material);;
+                Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(material);
                 if(optionalXMaterial.isPresent()) {
                     ItemStack item = utils.getItem(optionalXMaterial.get(), name, lore);
                     shopItems.put(item, slot);

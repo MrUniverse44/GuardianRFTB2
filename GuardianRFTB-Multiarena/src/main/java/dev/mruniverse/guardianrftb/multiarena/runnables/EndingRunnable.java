@@ -110,6 +110,7 @@ public class EndingRunnable extends BukkitRunnable {
         player.setGameMode(plugin.getSettings().getGameMode());
         playerManager.setStatus(PlayerStatus.IN_LOBBY);
         playerManager.setGame(null);
+        playerManager.setPointStatus(false);
         playerManager.setLastCheckpoint(null);
         playerManager.setBoard(GuardianBoard.LOBBY);
         player.getInventory().clear();
