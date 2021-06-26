@@ -5,6 +5,11 @@
 # | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
 #  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
 #
+# Variables (This variable only work in Waiting Scoreboard):
+# - <isWaiting> = This line only appear if the game is Waiting.
+# - <isSelecting> = This line only appear when the game is selecting a beast.
+# - <isStarting> = This line only appear when the game is starting.
+# - <BeastAppear> = This line only appear when the beast is waiting to appear in the map.
 scoreboards:
   animatedTitle:
     toggle: true
@@ -37,11 +42,6 @@ scoreboards:
       - '&fOnline: &b<server_online>'
       - ' '
       - '&eplay.servername.net'
-  # Variables:
-  # - <isWaiting> = This line only appear if the game is Waiting.
-  # - <isSelecting> = This line only appear when the game is selecting a beast.
-  # - <isStarting> = This line only appear when the game is starting.
-  # - <BeastAppear> = This line only appear when the beast is waiting to appear in the map.
   waiting:
     title: '&b&lGuardianRFTB'
     lines:

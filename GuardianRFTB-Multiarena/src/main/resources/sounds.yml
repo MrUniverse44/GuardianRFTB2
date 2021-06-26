@@ -18,9 +18,9 @@ sounds:
       # Toggle Sound
       toggle: true
       # Volume (Float)
-      volume: '1.0F'
+      volume: "1.0F"
       # Pitch (Float)
-      pitch: '2.0F'
+      pitch: "2.0F"
       # Sound
       sound: WITHER_SPAWN
     # Checkpoint Place Sound
@@ -28,9 +28,9 @@ sounds:
       # Toggle Sound
       toggle: true
       # Volume (Float)
-      volume: '1.0F'
+      volume: "1.0F"
       # Pitch (Float)
-      pitch: '0.5F'
+      pitch: "0.5F"
       # Sound
       sound: NOTE_PLING
     # Win Sound
@@ -38,9 +38,9 @@ sounds:
       # Toggle Sound
       toggle: true
       # Volume (Float)
-      volume: '1.0F'
+      volume: "1.0F"
       # Pitch (Float)
-      pitch: '0.5F'
+      pitch: "0.5F"
       # Sound
       sound: WITHER_SPAWN
     # Kill Sound
@@ -48,9 +48,9 @@ sounds:
       # Toggle Sound
       toggle: true
       # Volume (Float)
-      volume: '1.0F'
+      volume: "1.0F"
       # Pitch (Float)
-      pitch: '0.5F'
+      pitch: "0.5F"
       # Sound
       sound: WITHER_DEATH
     # Death Sound
@@ -58,9 +58,9 @@ sounds:
       # Toggle Sound
       toggle: true
       # Volume (Float)
-      volume: '1.0F'
+      volume: "1.0F"
       # Pitch (Float)
-      pitch: '0.5F'
+      pitch: "0.5F"
       # Sound
       sound: WITHER_DEATH
     # Count List
@@ -70,9 +70,9 @@ sounds:
         # Toggle Sound
         toggle: true
         # Volume (Float)
-        volume: '1.0F'
+        volume: "1.0F"
         # Pitch (Float)
-        pitch: '0.5F'
+        pitch: "0.5F"
         # Sound
         sound: NOTE_STICKS
       # Beast Appear Sound
@@ -80,9 +80,9 @@ sounds:
         # Toggle Sound
         toggle: true
         # Volume (Float)
-        volume: '0.5F'
+        volume: "0.5F"
         # Pitch (Float)
-        pitch: '0.5F'
+        pitch: "0.5F"
         # Sound
         sound: ENDERDRAGON_GROWL
       # Selecting Sound
@@ -90,8 +90,8 @@ sounds:
         # Toggle Sound
         toggle: true
         # Volume (Float)
-        volume: '1.0F'
+        volume: "1.0F"
         # Pitch (Float)
-        pitch: '0.5F'
+        pitch: "0.5F"
         # Sound
         sound: ORB_PICKUP
