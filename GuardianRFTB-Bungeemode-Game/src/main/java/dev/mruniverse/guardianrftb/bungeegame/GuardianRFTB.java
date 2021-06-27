@@ -7,6 +7,7 @@ import dev.mruniverse.guardianrftb.bungeegame.enums.GuardianArmor;
 import dev.mruniverse.guardianrftb.bungeegame.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.bungeegame.enums.KitType;
 import dev.mruniverse.guardianrftb.bungeegame.game.Game;
+import dev.mruniverse.guardianrftb.bungeegame.game.GameInfo;
 import dev.mruniverse.guardianrftb.bungeegame.kits.KitInfo;
 import dev.mruniverse.guardianrftb.bungeegame.kits.KitLoader;
 import dev.mruniverse.guardianrftb.bungeegame.storage.DataStorage;
@@ -47,7 +48,22 @@ public final class GuardianRFTB extends JavaPlugin {
         logger = new ExternalLogger(this,"GuardianRFTB","dev.mruniverse.guardianrftb.bungeegame");
         hasPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
 
+        guardianUtils = new GuardianUtils(this);
+
         storage = new FileStorage(this);
+
+        settingsInfo = new SettingsInfo(this);
+
+        soundsInfo = new SoundsInfo(this);
+
+        itemsInfo = new ItemsInfo();
+
+        String configName = settingsInfo.getSettings().getString("settings.gameConfigName","<notSet>");
+        if(!configName.equalsIgnoreCase("<notSet>")) {
+            String gameName = settingsInfo.getSettings().getString("settings.gameName","Game1");
+            currentGame = new GameInfo(this,configName,gameName);
+        }
+
     }
 
     @Override

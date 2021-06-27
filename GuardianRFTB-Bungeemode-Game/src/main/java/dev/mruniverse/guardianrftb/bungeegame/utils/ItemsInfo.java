@@ -21,6 +21,7 @@ public class ItemsInfo {
     private Integer beastSlot;
     private Integer killerSlot;
 
+    private final HashMap<ItemStack, Integer> lobbyItems = new HashMap<>();
     private final HashMap<ItemStack, Integer> beastInventory = new HashMap<>();
     private final HashMap<ItemStack, ItemFunction> currentItem = new HashMap<>();
 
@@ -54,6 +55,9 @@ public class ItemsInfo {
     public int getKillerSlot() { return killerSlot; }
     public int getRunnerSlot() { return runnerSlot; }
     public int getBeastSlot() { return beastSlot; }
+    public int getSlot(ItemStack itemStack) { return lobbyItems.get(itemStack); }
+
+    public HashMap<ItemStack,Integer> getLobbyItems() { return lobbyItems; }
     public HashMap<ItemStack,Integer> getBeastInventory() { return beastInventory; }
     public HashMap<ItemStack,ItemFunction> getCurrentItem() { return currentItem; }
 

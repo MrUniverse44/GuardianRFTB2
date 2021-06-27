@@ -13,6 +13,8 @@
 settings:
   # This is the gameName of this server
   gameName: 'Game1'
+  # This is the game for the server
+  gameConfigName: '<notSet>'
   # Enable Check update when the plugin load
   update-check: true
   # Plugin language file, if you want add your custom lang file you need put the name ("messages_<code>.yml") and in the language you put the code, example:
