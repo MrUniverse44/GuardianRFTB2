@@ -8,6 +8,7 @@ import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -70,6 +71,7 @@ public class StartRunnable  extends BukkitRunnable {
                 currentGame.setInvincible(false);
                 for(Player player : currentGame.getRunners()) {
                     player.teleport(currentGame.getRunnerSpawn());
+                    player.setGameMode(GameMode.SURVIVAL);
                     player.getInventory().clear();
                     plugin.getItems(GameEquip.RUNNER_KIT,player);
                     guardianUtils.sendList(player,startInfo);
@@ -93,6 +95,7 @@ public class StartRunnable  extends BukkitRunnable {
             Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
+                player.setGameMode(GameMode.ADVENTURE);
                 plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
             for(Player beasts : currentGame.getBeasts()) {

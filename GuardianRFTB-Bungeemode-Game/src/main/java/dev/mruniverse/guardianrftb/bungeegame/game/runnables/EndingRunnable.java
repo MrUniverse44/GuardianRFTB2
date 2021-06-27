@@ -88,6 +88,7 @@ public class EndingRunnable extends BukkitRunnable {
         player.getInventory().setLeggings(null);
         player.getInventory().setBoots(null);
         playerManager.setLastCheckpoint(null);
+        player.setGameMode(plugin.getSettings().getGameMode());
         player.getInventory().clear();
         if (playerManager.getLeaveDelay() != 0) {
             plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());

@@ -7,6 +7,7 @@ import dev.mruniverse.guardianrftb.bungeegame.enums.*;
 import dev.mruniverse.guardianrftb.bungeegame.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.bungeegame.utils.SoundsInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -63,6 +64,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                 for(Player player : plugin.getGame().getBeasts()) {
                     player.teleport(plugin.getGame().getBeastSpawn());
                     player.getInventory().clear();
+                    player.setGameMode(GameMode.SURVIVAL);
                     plugin.getItems(GameEquip.BEAST_KIT,player);
                     guardianUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);

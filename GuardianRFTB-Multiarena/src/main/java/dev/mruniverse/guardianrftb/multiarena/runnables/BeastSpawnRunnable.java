@@ -6,6 +6,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
+import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -65,6 +66,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                     plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
                     player.teleport(currentGame.getBeastSpawn());
                     player.getInventory().clear();
+                    player.setGameMode(GameMode.SURVIVAL);
                     plugin.getItems(GameEquip.BEAST_KIT,player);
                     guardianUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);

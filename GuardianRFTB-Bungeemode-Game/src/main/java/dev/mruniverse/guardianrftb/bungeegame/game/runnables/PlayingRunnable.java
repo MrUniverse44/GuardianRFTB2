@@ -13,11 +13,15 @@ public class PlayingRunnable extends BukkitRunnable {
     @Override
     public void run() {
         int time = main.getGame().getLastTimer();
-        if(time != 0) {
+        if(time != 0 && main.getGame().getRunners().size() >= 1 && main.getGame().getBeasts().size() >= 1) {
             main.getGame().setLastTimer(time - 1);
         } else {
             main.getGame().cancelTask();
-            main.getGame().winRunners();
+            if(main.getGame().getRunners().size() >= 1) {
+                main.getGame().winRunners();
+            } else {
+                main.getGame().winBeasts();
+            }
         }
     }
 }

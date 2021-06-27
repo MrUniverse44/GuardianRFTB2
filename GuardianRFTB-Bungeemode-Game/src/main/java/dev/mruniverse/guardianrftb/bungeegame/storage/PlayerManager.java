@@ -81,6 +81,9 @@ public class PlayerManager {
 
     public boolean getAutoPlayStatus() { return autoPlay; }
 
+    public void setKits(String kits) {
+        this.kits = kits;
+    }
 
     public boolean toggleAutoplay() {
         autoPlay = !autoPlay;

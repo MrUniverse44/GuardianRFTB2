@@ -6,6 +6,7 @@ import dev.mruniverse.guardianrftb.bungeegame.enums.*;
 import dev.mruniverse.guardianrftb.bungeegame.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.bungeegame.utils.SoundsInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -67,6 +68,7 @@ public class StartRunnable  extends BukkitRunnable {
                 for(Player player : plugin.getGame().getRunners()) {
                     player.teleport(plugin.getGame().getRunnerSpawn());
                     player.getInventory().clear();
+                    player.setGameMode(GameMode.SURVIVAL);
                     plugin.getItems(GameEquip.RUNNER_KIT,player);
                     guardianUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);
@@ -86,6 +88,7 @@ public class StartRunnable  extends BukkitRunnable {
             plugin.getGame().setGameStatus(GameStatus.WAITING);
             plugin.getGame().updateSignsBlocks();
             for(Player player : Bukkit.getOnlinePlayers()) {
+                player.setGameMode(GameMode.ADVENTURE);
                 guardianUtils.sendMessage(player,prefix + enough);
             }
             plugin.setCurrentBoard(GuardianBoard.WAITING);

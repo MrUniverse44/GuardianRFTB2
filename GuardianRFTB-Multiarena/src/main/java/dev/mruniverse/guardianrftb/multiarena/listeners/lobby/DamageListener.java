@@ -1,6 +1,7 @@
 package dev.mruniverse.guardianrftb.multiarena.listeners.lobby;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
+import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -17,7 +18,9 @@ public class DamageListener implements Listener {
     public void damage(EntityDamageEvent event) {
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
             Player player = (Player)event.getEntity();
-            if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) return;
+            PlayerManager data = plugin.getPlayerData(player.getUniqueId());
+            if(data == null) return;
+            if(data.getGame() != null) return;
             Location lobby = plugin.getSettings().getLocation();
             if (event.getEntity().getWorld().equals(lobby.getWorld())) {
                 event.setCancelled(true);

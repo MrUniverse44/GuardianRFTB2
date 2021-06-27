@@ -26,6 +26,8 @@ public class DataInfo {
     public void setKits(UUID uuid,String value) { kits.put(uuid.toString().replace("-",""), value); }
     public void setSelectedKit(UUID uuid,String value) { selectedKits.put(uuid.toString().replace("-",""), value); }
 
+    public boolean exists(UUID uuid) { return coins.containsKey(uuid.toString().replace("-","")); }
+
     public void savePlayer(UUID uuid) {
         String table = plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.table");
         String id = uuid.toString().replace("-","");
@@ -38,6 +40,7 @@ public class DataInfo {
     }
 
     public void addPlayer(UUID uuid) {
+        if(exists(uuid)) return;
         String table = plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.table");
         String id = uuid.toString().replace("-","");
         DataStorage storage = plugin.getData();
