@@ -10,6 +10,17 @@
 # - <isSelecting> = This line only appear when the game is selecting a beast.
 # - <isStarting> = This line only appear when the game is starting.
 # - <BeastAppear> = This line only appear when the beast is waiting to appear in the map.
+# Variables In Game:
+# - <arena_online> = online players
+# - <arena_max> = max players of the map
+# - <arena_need> = need players to start
+# - <arena_time_text> = time-left-timer for text example: "seconds" or "second"
+# - <arena_beast> = beast of the game
+# - <arena_runners> = Runners size
+# - <arena_mode> = Arena Mode
+# - <arena_timeLeft> | <arena_time_number> = time-left (you can use this variable with <arena_time_text> to do this: "60 seconds" or "1 second"
+# - <arena_status>  = Arena Status
+#
 scoreboards:
   animatedTitle:
     toggle: true
@@ -62,11 +73,14 @@ scoreboards:
     lines:
       - '&7<timeFormat>'
       - ' '
-      - '&fRunners Left: &a<arena_runners>'
-      - '&fTime Left: &a<arena_timeLeft>'
+      - '&fRunners Left: &3<arena_runners>'
+      - '&fTime Left: &b<arena_timeLeft>'
       - ' '
       - '&fMap: &a<arena_name>'
       - '&fRole: &a<player_role>'
+      - ' '
+      - '&fBeast: &a<arena_beast>'
+      - '&fMode: &c<arena_mode>'
       - ' '
       - '&eplay.servername.net'
   beastWin:
