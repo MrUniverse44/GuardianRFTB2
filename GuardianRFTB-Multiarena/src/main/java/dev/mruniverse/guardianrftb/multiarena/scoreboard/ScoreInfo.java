@@ -4,6 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -212,20 +213,27 @@ public class ScoreInfo {
                 .replace("<server_online>",plugin.getServer().getOnlinePlayers().size() + "")
                 .replace("<timeFormat>",getDateFormat());
 
-        if(plugin.getPlayerData(player.getUniqueId()) != null) {
-            if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-                Game playerGame = plugin.getPlayerData(player.getUniqueId()).getGame();
+        PlayerManager manager = plugin.getPlayerData(player.getUniqueId());
+        if(manager != null) {
+            if (manager.getGame() != null) {
+                String arenaTimeText;
+                Game playerGame = manager.getGame();
+                if(playerGame.getLastTimer() >= 2) {
+                    arenaTimeText = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");
+                } else {
+                    arenaTimeText = plugin.getSettings().getSettings().getString("settings.timer.second","second");
+                }
                 text = text.replace("<arena_name>",playerGame.getName())
                         .replace("<arena_online>","" + playerGame.getPlayers().size())
                         .replace("<arena_max>","" + playerGame.getMax())
                         .replace("<arena_need>","" + playerGame.getNeedPlayers())
-                        .replace("<arena_time_text>","...")
-                        .replace("<arena_beast>","...")
+                        .replace("<arena_time_text>",arenaTimeText)
+                        .replace("<arena_beast>",plugin.getUtils().getRandomBeast(player).getDisplayName())
                         .replace("<arena_runners>","" + playerGame.getRunners().size())
                         .replace("<arena_mode>",playerGame.getType().getType())
                         .replace("<arena_timeLeft>",playerGame.getLastTimer() + "")
                         .replace("<arena_status>",playerGame.getStatus().getStatus())
-                        .replace("<player_role>","...")
+                        .replace("<player_role>",manager.getCurrentRole())
                         .replace("<arena_time_number>", playerGame.getLastTimer() + "");
 
             }
