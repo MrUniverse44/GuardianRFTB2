@@ -43,6 +43,7 @@ public class DamagesListener implements Listener {
                 Player victim = (Player)event.getEntity();
                 Player attacker = (Player)event.getDamager();
                 PlayerManager mng = plugin.getPlayerData(victim.getUniqueId());
+                if(mng == null) return;
                 if(mng.getGame() != null) {
                     Game game = mng.getGame();
                     if(game.isInvincible()) event.setCancelled(true);
