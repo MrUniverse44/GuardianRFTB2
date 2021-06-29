@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.game;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.GameIsland;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -12,47 +12,86 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-public class GameIslands implements Game {
+@SuppressWarnings("unused")
+public class GameIslands implements GameIsland {
+
+    /**
+     * Setup the game
+     */
     @Override
     public void setup() {
 
     }
 
+    /**
+     * Load game status
+     */
     @Override
     public void loadStatus() {
 
     }
 
+    /**
+     * Load game-chests
+     */
     @Override
     public void loadChests() {
 
     }
 
+    /**
+     * Load game-chests types
+     *
+     * @param chestName - Example: armor
+     */
     @Override
     public void loadChestType(String chestName) {
 
     }
 
+    /**
+     * Load game-signs
+     */
     @Override
     public void loadSigns() {
 
     }
 
+    /**
+     * Set invincible damage in game
+     *
+     * @param status Boolean
+     */
     @Override
     public void setInvincible(boolean status) {
 
     }
 
+    /**
+     * Add a player to the game
+     *
+     * @param player - Player to add
+     */
     @Override
     public void join(Player player) {
 
     }
 
+    /**
+     * Remove a player from the game
+     *
+     * @param player - Player to leave
+     */
     @Override
     public void leave(Player player) {
 
     }
 
+    /**
+     * Leave without sending to the lobby (this is for the playerAgain Button)
+     *
+     * @param player - Player to leave
+     */
     @Override
     public void leaveWithoutSending(Player player) {
 
@@ -64,7 +103,37 @@ public class GameIslands implements Game {
     }
 
     @Override
+    public void spawnBeastBridge() {
+
+    }
+
+    @Override
+    public void spawnRunnerBridge() {
+
+    }
+
+    @Override
+    public void changeDetective() {
+
+    }
+
+    @Override
+    public boolean isDetective(Player player) {
+        return false;
+    }
+
+    @Override
     public void cancelTask() {
+
+    }
+
+    @Override
+    public void spawnBeastBridgeCount() {
+
+    }
+
+    @Override
+    public void spawnRunnerBridgeCount() {
 
     }
 
