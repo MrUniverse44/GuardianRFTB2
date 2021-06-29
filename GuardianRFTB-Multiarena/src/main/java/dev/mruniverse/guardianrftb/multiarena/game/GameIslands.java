@@ -32,6 +32,14 @@ public class GameIslands implements GameIsland {
     }
 
     /**
+     * Unload the game
+     */
+    @Override
+    public void unload() {
+
+    }
+
+    /**
      * Load game-chests
      */
     @Override

@@ -61,4 +61,10 @@ public class ItemsInfo {
     public HashMap<ItemStack,Integer> getBeastInventory() { return beastInventory; }
     public HashMap<ItemStack,ItemFunction> getCurrentItem() { return currentItem; }
 
+    public void unload() {
+        lobbyItems.clear();
+        beastInventory.clear();
+        currentItem.clear();
+    }
+
 }

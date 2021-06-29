@@ -39,6 +39,8 @@ public interface Game {
 
     void beastCount();
 
+    void unload();
+
     void playCount();
 
     void setWinner(GameTeam gameTeam);

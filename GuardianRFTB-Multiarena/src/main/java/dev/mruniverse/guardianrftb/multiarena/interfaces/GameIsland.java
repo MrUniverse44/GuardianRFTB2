@@ -94,6 +94,8 @@ public interface GameIsland {
 
     void restart();
 
+    void unload();
+
     void deathBeast(Player beast);
 
     void deathRunner(Player player);

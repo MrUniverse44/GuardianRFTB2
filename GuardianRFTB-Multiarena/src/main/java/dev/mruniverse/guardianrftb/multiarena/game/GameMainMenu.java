@@ -37,6 +37,12 @@ public class GameMainMenu {
         createInv();
         loadItems();
     }
+
+    public void unload() {
+        gameItems.clear();
+        gameAction.clear();
+        fills.clear();
+    }
     @SuppressWarnings("unused")
     public void updateInv(){
         gameItems = new HashMap<>();

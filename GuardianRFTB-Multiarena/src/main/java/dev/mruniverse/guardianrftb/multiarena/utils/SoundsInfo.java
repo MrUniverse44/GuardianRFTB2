@@ -49,6 +49,13 @@ public class SoundsInfo {
         }
     }
 
+    public void unload() {
+        soundStatus.clear();
+        sounds.clear();
+        pitch.clear();
+        volume.clear();
+    }
+
     public Sound getSound(GuardianSounds sound) {
         if(sounds.get(sound) == null) updateSound(sound);
         return sounds.get(sound);

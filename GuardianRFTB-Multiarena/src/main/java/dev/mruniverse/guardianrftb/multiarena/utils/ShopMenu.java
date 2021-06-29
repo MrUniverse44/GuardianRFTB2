@@ -36,6 +36,11 @@ public class ShopMenu {
         createInv();
         loadItems();
     }
+    public void unload() {
+        shopItems.clear();
+        shopAction.clear();
+        fills.clear();
+    }
     private void createInv() {
         String invName = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.shop.inventoryName");
 

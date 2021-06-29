@@ -25,6 +25,9 @@ public class GameChests {
         createInv();
         loadItems();
     }
+    public void unload() {
+        chestItems.clear();
+    }
     private void createInv() {
         String invName = plugin.getStorage().getControl(GuardianFiles.CHESTS).getString("chests." + chestID + ".inventoryName");
 

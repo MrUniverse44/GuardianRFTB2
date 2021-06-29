@@ -6,6 +6,7 @@ import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.game.GameManager;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitInfo;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitLoader;
 import dev.mruniverse.guardianrftb.multiarena.listeners.ListenerController;
@@ -95,6 +96,15 @@ public final class GuardianRFTB extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        for(Game game : getGameManager().getGames() ) {
+            game.unload();
+        }
+        getSettings().unload();
+        getSoundsInfo().unload();
+        getItemsInfo().unload();
+        getKitLoader().unload();
+        getUtils().getCurrentShop().unload();
+        getGameManager().unload();
         if(dataStorage == null) return;
         dataStorage.disableDatabase();
     }

@@ -124,6 +124,18 @@ public class GameInfo implements Game {
         gameStatus = GameStatus.WAITING;
         updateSigns();
     }
+
+    @Override
+    public void unload() {
+        players.clear();
+        beasts.clear();
+        runners.clear();
+        spectators.clear();
+        killers.clear();
+        chestLocations.clear();
+        this.gameStatus = GameStatus.PREPARING;
+    }
+
     @Override
     public void loadChests() {
         try {

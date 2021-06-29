@@ -46,6 +46,10 @@ public class settingsInfo {
         roles.put(GameTeam.KILLERS2,getString(settingsConfiguration.getString("settings.game.roles.killers"),"Killers"));
     }
 
+    public void unload() {
+        roles.clear();
+    }
+
     private String getString(String value,String result) {
         if(value == null) value = result;
         return value;

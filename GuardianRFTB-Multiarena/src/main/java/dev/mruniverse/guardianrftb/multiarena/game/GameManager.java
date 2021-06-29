@@ -34,6 +34,15 @@ public class GameManager {
             gameChests.put(chest,new GameChests(plugin,chest));
         }
     }
+    public void unload() {
+        for(GameChests chests : gameChests.values()) {
+            chests.unload();
+        }
+        gamesWorlds.clear();
+        gameChests.clear();
+        gameMenu.clear();
+        games.clear();
+    }
     public GameChests getGameChest(String chestName) {
         return gameChests.get(chestName);
     }
