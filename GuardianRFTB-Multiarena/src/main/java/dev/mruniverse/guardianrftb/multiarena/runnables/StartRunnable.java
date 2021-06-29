@@ -8,6 +8,7 @@ import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -82,7 +83,7 @@ public class StartRunnable  extends BukkitRunnable {
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, bTitle, bSubtitle);
                 }
                 World world = currentGame.getRunnerSpawn().getWorld();
-                if(world != null) world.setTime(currentGame.getWorldTime());
+                if(world != null) setupWorld(world);
                 currentGame.cancelTask();
                 currentGame.beastCount();
 
@@ -109,5 +110,11 @@ public class StartRunnable  extends BukkitRunnable {
             currentGame.cancelTask();
             currentGame.getBeasts().clear();
         }
+    }
+
+    private void setupWorld(World world) {
+        world.setTime(currentGame.getWorldTime());
+        world.setDifficulty(Difficulty.NORMAL);
+        world.setSpawnFlags(false,false);
     }
 }

@@ -105,6 +105,14 @@ public class GameInfo implements Game {
             loadChests();
             loadStatus();
             updateSignsBlocks();
+            if(runnerSpawn != null) {
+                World gameWorld = runnerSpawn.getWorld();
+                if(gameWorld != null) {
+                    gameWorld.setTime(worldTime);
+                    gameWorld.setDifficulty(Difficulty.NORMAL);
+                    gameWorld.setSpawnFlags(false, false);
+                }
+            }
         }catch (Throwable throwable) {
             plugin.getLogs().error("Unexpected issue when the game was loading");
             plugin.getLogs().error("Game of the issue: " + configName);
