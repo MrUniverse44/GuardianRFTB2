@@ -113,10 +113,15 @@ public class InteractListener implements Listener {
                             if(pm.getPointStatus() && pm.getLastCheckpoint() != null) {
                                 player.teleport(pm.getLastCheckpoint());
                                 pm.setLastCheckpoint(null);
-                                if(sounds.getStatus(GuardianSounds.CHECKPOINT_USE)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.CHECKPOINT_USE),sounds.getVolume(GuardianSounds.CHECKPOINT_USE),sounds.getPitch(GuardianSounds.CHECKPOINT_USE));
                                 pm.setPointStatus(false);
                                 plugin.getUtils().consumeItem(player,1,plugin.getItemsInfo().getCheckPoint());
                                 plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.others.checkpoint.use"));
+                                try {
+                                    if (sounds.getStatus(GuardianSounds.CHECKPOINT_USE))
+                                        player.playSound(player.getLocation(), sounds.getSound(GuardianSounds.CHECKPOINT_USE), sounds.getVolume(GuardianSounds.CHECKPOINT_USE), sounds.getPitch(GuardianSounds.CHECKPOINT_USE));
+                                }catch (Throwable ignored) {
+                                    plugin.getLogs().error("Checkpoint sound is not set in your sounds.yml");
+                                }
                             }
                             return;
                         case GAME_SELECTOR:

@@ -23,10 +23,10 @@ public class SoundsInfo {
         FileConfiguration file = plugin.getStorage().getControl(GuardianFiles.SOUNDS);
         try {
             for (GuardianSounds sound : GuardianSounds.values()) {
-                soundStatus.put(sound, file.getBoolean(sound.getStatusPath()));
-                sounds.put(sound, Sound.valueOf(file.getString(sound.getSoundPath())));
-                pitch.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath()))));
-                volume.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath()))));
+                soundStatus.put(sound, file.getBoolean(sound.getStatusPath(),true));
+                sounds.put(sound, Sound.valueOf(file.getString(sound.getSoundPath(),"NOTE_PLING")));
+                pitch.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath(),"1.0F"))));
+                volume.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath(),"2.0F"))));
             }
         } catch (Throwable ignored) {
             ExternalLogger logs = plugin.getLogs();
@@ -49,13 +49,33 @@ public class SoundsInfo {
         }
     }
 
-    public Sound getSound(GuardianSounds sound) { return sounds.get(sound); }
+    public Sound getSound(GuardianSounds sound) {
+        if(sounds.get(sound) == null) updateSound(sound);
+        return sounds.get(sound);
+    }
 
-    public Float getPitch(GuardianSounds sound) { return pitch.get(sound); }
+    public Float getPitch(GuardianSounds sound) {
+        if(pitch.get(sound) == null) updateSound(sound);
+        return pitch.get(sound);
+    }
 
-    public Float getVolume(GuardianSounds sound) { return volume.get(sound); }
+    public Float getVolume(GuardianSounds sound) {
+        if(volume.get(sound) == null) updateSound(sound);
+        return volume.get(sound);
+    }
 
-    public boolean getStatus(GuardianSounds sound) { return soundStatus.get(sound); }
+    public boolean getStatus(GuardianSounds sound) {
+        if(soundStatus.get(sound) == null) updateSound(sound);
+        return soundStatus.get(sound);
+    }
+
+    public void updateSound(GuardianSounds sound) {
+        FileConfiguration file = plugin.getStorage().getControl(GuardianFiles.SOUNDS);
+        soundStatus.put(sound,file.getBoolean(sound.getStatusPath(),true));
+        sounds.put(sound, Sound.valueOf(file.getString(sound.getSoundPath(),"NOTE_PLING")));
+        pitch.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath(),"1.0F"))));
+        volume.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath(),"2.0F"))));
+    }
 
     public void update() {
         soundStatus.clear();
@@ -64,10 +84,10 @@ public class SoundsInfo {
         volume.clear();
         FileConfiguration file = plugin.getStorage().getControl(GuardianFiles.SOUNDS);
         for(GuardianSounds sound : GuardianSounds.values()) {
-            soundStatus.put(sound,file.getBoolean(sound.getStatusPath()));
-            sounds.put(sound,Sound.valueOf(file.getString(sound.getSoundPath())));
-            pitch.put(sound,Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath()))));
-            volume.put(sound,Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath()))));
+            soundStatus.put(sound,file.getBoolean(sound.getStatusPath(),true));
+            sounds.put(sound, Sound.valueOf(file.getString(sound.getSoundPath(),"NOTE_PLING")));
+            pitch.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getPitchPath(),"1.0F"))));
+            volume.put(sound, Float.valueOf(Objects.requireNonNull(file.getString(sound.getVolumePath(),"2.0F"))));
         }
     }
 }

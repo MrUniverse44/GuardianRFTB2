@@ -108,6 +108,10 @@ public class GuardianPlaceholders extends PlaceholderExpansion {
         }
         PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
 
+        if(identifier.equals("coins")) {
+            return currentData.getCoins() + "";
+        }
+
         if(identifier.equals("wins")){
             return currentData.getWins() + "";
         }
