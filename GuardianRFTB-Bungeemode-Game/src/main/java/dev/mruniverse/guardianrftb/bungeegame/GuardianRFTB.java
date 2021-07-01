@@ -90,7 +90,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public Game getGame() { return currentGame; }
     public GuardianUtils getUtils() { return guardianUtils; }
     public HashMap<UUID, PlayerManager> getRigoxPlayers() { return guardianPlayers; }
-    public PlayerManager getPlayerData(UUID uuid) { return guardianPlayers.get(uuid); }
+    public PlayerManager getUser(UUID uuid) { return guardianPlayers.get(uuid); }
     public KitLoader getKits() { return kitLoader; }
     public GuardianPlaceholders getGuardianPlaceholders() { return guardianPlaceholders; }
 
@@ -103,7 +103,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public void getItems(GameEquip gameEquipment, Player player) {
         switch (gameEquipment) {
             case BEAST_KIT:
-                String kitID = getPlayerData(player.getUniqueId()).getSelectedKit();
+                String kitID = getUser(player.getUniqueId()).getSelectedKit();
                 if(kitID.equalsIgnoreCase("NONE")) {
                     for(Map.Entry<ItemStack,Integer> data : itemsInfo.getBeastInventory().entrySet()) {
                         player.getInventory().setItem(data.getValue(),data.getKey());
@@ -134,7 +134,7 @@ public final class GuardianRFTB extends JavaPlugin {
                 if(kitInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(kitInfo.getArmor(GuardianArmor.BOOTS));
                 return;
             case KILLER_KIT:
-                String killerID = getPlayerData(player.getUniqueId()).getSelectedKit();
+                String killerID = getUser(player.getUniqueId()).getSelectedKit();
                 if(killerID.equalsIgnoreCase("NONE")) return;
                 KitInfo killerInfo = getKits().getKitsUsingID(KitType.KILLER).get(killerID);
                 if(killerInfo == null) return;
@@ -148,7 +148,7 @@ public final class GuardianRFTB extends JavaPlugin {
                 return;
             case RUNNER_KIT:
             default:
-                String runnerID = getPlayerData(player.getUniqueId()).getSelectedKit();
+                String runnerID = getUser(player.getUniqueId()).getSelectedKit();
                 if(runnerID.equalsIgnoreCase("NONE")) return;
                 KitInfo runnerInfo = getKits().getKitsUsingID(KitType.RUNNER).get(runnerID);
                 if(runnerInfo == null) return;

@@ -116,7 +116,7 @@ public class GuardianUtils {
                 winOrLoss = plugin.getSettings().getSettings().getInt("settings.pointSystem.runners.death");
             }
         }
-        plugin.getPlayerData(uuid).updateCoins(winOrLoss);
+        plugin.getUser(uuid).updateCoins(winOrLoss);
         String coins;
         if(winOrLoss >= 0) {
             coins = "+" + winOrLoss;
@@ -197,7 +197,7 @@ public class GuardianUtils {
 
     public void sendList(Player player,List<String> list) {
         if(list == null) list = new ArrayList<>();
-        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
         if(player.getLocation().getChunk().getEntities() != null) {
             UUID uuid = player.getUniqueId();
             Game game = plugin.getGame();
@@ -230,10 +230,10 @@ public class GuardianUtils {
     }
 
     public String replaceVariables(String text,Player player) {
-        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
         if(playerManager == null) {
             plugin.addPlayer(player);
-            playerManager = plugin.getPlayerData(player.getUniqueId());
+            playerManager = plugin.getUser(player.getUniqueId());
         }
 
         text = text.replace("<player_name>",player.getName())
@@ -266,7 +266,7 @@ public class GuardianUtils {
     }
 
     public Player getRandomBeast(Player player) {
-        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
         if(plugin.getGame() != null) {
             if(plugin.getGame().getBeasts().size() != 0) {
                 return plugin.getGame().getBeasts().get(0);
@@ -277,7 +277,7 @@ public class GuardianUtils {
     }
 
     public boolean isBeast(Player player) {
-        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
         if(currentData == null) return false;
         if(plugin.getGame() != null) {
             return plugin.getGame().getBeasts().contains(player);
@@ -312,7 +312,7 @@ public class GuardianUtils {
     }
 
     public void sendLeaveCountdown(final Player player, final int delay) {
-        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
         int delayValue = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             int countdown = delay;
             public void run() {
@@ -327,7 +327,7 @@ public class GuardianUtils {
                 }
             }
         }, 0L, 20L);
-        plugin.getPlayerData(player.getUniqueId()).setLeaveDelay(delayValue);
+        plugin.getUser(player.getUniqueId()).setLeaveDelay(delayValue);
     }
 
 

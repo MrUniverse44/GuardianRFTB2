@@ -74,13 +74,13 @@ public class ShopMenu {
     public void execute(Player player,ShopAction action) {
         switch (action) {
             case KIT_BEASTS:
-                player.openInventory(plugin.getPlayerData(player.getUniqueId()).getKitMenu(KitType.BEAST).getInventory());
+                player.openInventory(plugin.getUser(player.getUniqueId()).getKitMenu(KitType.BEAST).getInventory());
                 return;
             case KIT_RUNNERS:
-                player.openInventory(plugin.getPlayerData(player.getUniqueId()).getKitMenu(KitType.RUNNER).getInventory());
+                player.openInventory(plugin.getUser(player.getUniqueId()).getKitMenu(KitType.RUNNER).getInventory());
                 return;
             case KIT_KILLERS:
-                player.openInventory(plugin.getPlayerData(player.getUniqueId()).getKitMenu(KitType.KILLER).getInventory());
+                player.openInventory(plugin.getUser(player.getUniqueId()).getKitMenu(KitType.KILLER).getInventory());
                 return;
             default:
                 plugin.getUtils().sendMessage(player,"&cSoon..");

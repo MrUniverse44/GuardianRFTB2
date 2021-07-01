@@ -124,7 +124,7 @@ public class GameManager {
     public HashMap<World,Game> getGameWorlds() { return gamesWorlds; }
 
     public Game getGame(Player player) {
-        return plugin.getPlayerData(player.getUniqueId()).getGame();
+        return plugin.getUser(player.getUniqueId()).getGame();
     }
 
     public Game getConfigGame(String name) {

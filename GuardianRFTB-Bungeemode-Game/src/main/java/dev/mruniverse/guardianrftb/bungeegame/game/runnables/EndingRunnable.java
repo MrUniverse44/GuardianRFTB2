@@ -79,7 +79,7 @@ public class EndingRunnable extends BukkitRunnable {
 
     private void back(Player player) {
         Location location = plugin.getSettings().getLocation();
-        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
         if (location != null) {
             player.teleport(location);
         }

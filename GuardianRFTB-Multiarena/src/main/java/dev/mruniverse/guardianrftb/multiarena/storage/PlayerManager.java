@@ -80,6 +80,10 @@ public class PlayerManager {
         coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
     }
 
+    public boolean hasSelectedKit() {
+        return (!selectedKit.equalsIgnoreCase("NONE"));
+    }
+
     public void setCurrentRole(GameTeam currentRole) { this.currentRole = currentRole; }
 
     public String getCurrentRole() {

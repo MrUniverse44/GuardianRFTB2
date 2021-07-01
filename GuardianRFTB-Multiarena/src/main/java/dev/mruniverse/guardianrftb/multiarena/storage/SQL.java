@@ -73,7 +73,7 @@ public class SQL {
             }
         } else {
             String id = player.getUniqueId().toString().replace("-","");
-            PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+            PlayerManager playerManager = plugin.getUser(player.getUniqueId());
             playerManager.setCoins(coins.get(id));
             playerManager.setSelectedKit(selectedKits.get(id));
             playerManager.setKits(kits.get(id));

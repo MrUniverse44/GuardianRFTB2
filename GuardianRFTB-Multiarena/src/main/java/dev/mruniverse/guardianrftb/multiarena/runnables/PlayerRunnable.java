@@ -67,7 +67,7 @@ public class PlayerRunnable extends BukkitRunnable {
     @Override
     public void run() {
         for (UUID uuid : plugin.getRigoxPlayers().keySet()) {
-            PlayerManager playerManager = plugin.getPlayerData(uuid);
+            PlayerManager playerManager = plugin.getUser(uuid);
             PlayerStatus playerStatus = playerManager.getStatus();
             Player player = playerManager.getPlayer();
             plugin.getScoreboards().setScoreboard(playerManager.getBoard(),playerManager.getPlayer());

@@ -21,7 +21,7 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getPlayerData(player.getUniqueId());
+                    PlayerManager manager = main.getUser(player.getUniqueId());
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
                         manager.setCoins(number);
@@ -42,7 +42,7 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getPlayerData(player.getUniqueId());
+                    PlayerManager manager = main.getUser(player.getUniqueId());
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
                         manager.addCoins(number);
@@ -63,7 +63,7 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getPlayerData(player.getUniqueId());
+                    PlayerManager manager = main.getUser(player.getUniqueId());
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
                         manager.removeCoins(number);

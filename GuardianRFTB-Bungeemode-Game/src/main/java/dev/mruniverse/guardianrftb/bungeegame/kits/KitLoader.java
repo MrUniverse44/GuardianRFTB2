@@ -51,7 +51,7 @@ public class KitLoader {
         }
     }
     public void getToSelect(KitType kitType, Player player,String kitName) {
-        PlayerManager data = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager data = plugin.getUser(player.getUniqueId());
         KitInfo kitInfo = getKits(kitType).get(kitName);
         if(kitInfo == null) return;
         String kitID = kitInfo.getID();
@@ -86,7 +86,7 @@ public class KitLoader {
                                 .replace("%kit_price%",kitInfo.getPrice() + "");
                         plugin.getUtils().sendMessage(player,buyKit);
                         plugin.getUtils().sendMessage(player,selected);
-                        if(player.getInventory() == plugin.getPlayerData(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
+                        if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                     } else {
                         String cantBuy = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.enought");
                         if(cantBuy == null) cantBuy = "&eYou need &6%price% &eto buy this kit.";
@@ -108,7 +108,7 @@ public class KitLoader {
                             .replace("%price%",kitInfo.getPrice() + "")
                             .replace("%kit_price%",kitInfo.getPrice() + "");
                     plugin.getUtils().sendMessage(player,selected);
-                    if(player.getInventory() == plugin.getPlayerData(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
+                    if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                 } else {
                     if(data.getCoins() >= kitInfo.getPrice()) {
                         int coins = data.getCoins() - kitInfo.getPrice();
@@ -129,7 +129,7 @@ public class KitLoader {
                                 .replace("%kit_price%",kitInfo.getPrice() + "");
                         plugin.getUtils().sendMessage(player,buyKit);
                         plugin.getUtils().sendMessage(player,selected);
-                        if(player.getInventory() == plugin.getPlayerData(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
+                        if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                     } else {
                         String cantBuy = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.enought");
                         if(cantBuy == null) cantBuy = "&eYou need &6%price% &eto buy this kit.";
@@ -153,7 +153,7 @@ public class KitLoader {
                             .replace("%price%",kitInfo.getPrice() + "")
                             .replace("%kit_price%",kitInfo.getPrice() + "");
                     plugin.getUtils().sendMessage(player,selected);
-                    if(player.getInventory() == plugin.getPlayerData(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
+                    if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                 } else {
                     if(data.getCoins() >= kitInfo.getPrice()) {
                         int coins = data.getCoins() - kitInfo.getPrice();
@@ -174,7 +174,7 @@ public class KitLoader {
                                 .replace("%kit_price%",kitInfo.getPrice() + "");
                         plugin.getUtils().sendMessage(player,buyKit);
                         plugin.getUtils().sendMessage(player,selected);
-                        if(player.getInventory() == plugin.getPlayerData(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
+                        if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                     } else {
                         String cantBuy = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.enought");
                         if(cantBuy == null) cantBuy = "&eYou need &6%price% &eto buy this kit.";

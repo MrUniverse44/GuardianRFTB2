@@ -26,8 +26,8 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void inGameDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-            Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        if(plugin.getUser(player.getUniqueId()).getGame() != null) {
+            Game game = plugin.getUser(player.getUniqueId()).getGame();
             event.getDrops().clear();
             event.setDeathMessage(null);
             event.setDroppedExp(0);
@@ -59,7 +59,7 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeathRespawn(PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
-        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getUser(player.getUniqueId()).getGame();
         if(game != null) {
             if(game.getBeasts().contains(player)) {
                 player.teleport(game.getBeastSpawn());

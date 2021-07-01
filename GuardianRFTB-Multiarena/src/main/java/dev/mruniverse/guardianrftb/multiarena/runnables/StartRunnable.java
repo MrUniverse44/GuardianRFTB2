@@ -97,14 +97,14 @@ public class StartRunnable  extends BukkitRunnable {
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
                 player.setGameMode(GameMode.ADVENTURE);
-                plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
+                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
             for(Player beasts : currentGame.getBeasts()) {
                 currentGame.getRunners().add(beasts);
                 beasts.getInventory().clear();
                 beasts.getInventory().setItem(plugin.getItemsInfo().getRunnerSlot(), plugin.getItemsInfo().getKitRunner());
                 beasts.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
-                plugin.getPlayerData(beasts.getUniqueId()).setCurrentRole(GameTeam.RUNNERS);
+                plugin.getUser(beasts.getUniqueId()).setCurrentRole(GameTeam.RUNNERS);
                 beasts.teleport(currentGame.getWaiting());
             }
             currentGame.cancelTask();

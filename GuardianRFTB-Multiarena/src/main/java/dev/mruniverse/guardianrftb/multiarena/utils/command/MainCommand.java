@@ -77,7 +77,7 @@ public class MainCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("autoPlay")) {
                 if(sender instanceof Player) {
                     Player player = (Player)sender;
-                    PlayerManager pM = plugin.getPlayerData(player.getUniqueId());
+                    PlayerManager pM = plugin.getUser(player.getUniqueId());
                     String buttonMessage;
                     if(pM.toggleAutoplay()) {
                         buttonMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.buttons.autoPlay.on");
@@ -95,8 +95,8 @@ public class MainCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("leave")) {
                 if(sender instanceof Player) {
                     Player player = (Player)sender;
-                    if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-                        plugin.getPlayerData(player.getUniqueId()).getGame().leave(player);
+                    if (plugin.getUser(player.getUniqueId()).getGame() != null) {
+                        plugin.getUser(player.getUniqueId()).getGame().leave(player);
                         return true;
                     }
                     utils.sendMessage(sender, "&cYou aren't playing");
@@ -124,11 +124,11 @@ public class MainCommand implements CommandExecutor {
 
             if (args[0].equalsIgnoreCase("playAgain")) {
                 if(sender instanceof Player) {
-                    if(plugin.getPlayerData(((Player)sender).getUniqueId()).getGame() == null) return true;
+                    if(plugin.getUser(((Player)sender).getUniqueId()).getGame() == null) return true;
                     for (Game game : plugin.getGameManager().getGames()) {
                         if (game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.SELECTING || game.getStatus() == GameStatus.STARTING) {
                             if (game.getPlayers().size() < game.getMax()) {
-                                plugin.getPlayerData(((Player)sender).getUniqueId()).getGame().leaveWithoutSending((Player)sender);
+                                plugin.getUser(((Player)sender).getUniqueId()).getGame().leaveWithoutSending((Player)sender);
                                 plugin.getGameManager().joinGame((Player) sender, game.getConfigName());
                                 return true;
                             }

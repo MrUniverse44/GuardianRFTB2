@@ -42,7 +42,7 @@ public class DamagesListener implements Listener {
             if(event.getDamager().getType().equals(EntityType.PLAYER)) {
                 Player victim = (Player)event.getEntity();
                 Player attacker = (Player)event.getDamager();
-                PlayerManager mng = plugin.getPlayerData(victim.getUniqueId());
+                PlayerManager mng = plugin.getUser(victim.getUniqueId());
                 if(mng == null) return;
                 if(mng.getGame() != null) {
                     Game game = mng.getGame();
@@ -58,9 +58,9 @@ public class DamagesListener implements Listener {
     public void damage(EntityDamageEvent event) {
         if(!event.getEntity().getType().equals(EntityType.PLAYER)) return;
         Player player = (Player)event.getEntity();
-        if(plugin.getPlayerData(player.getUniqueId()) == null) return;
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() == null) return;
-        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        if(plugin.getUser(player.getUniqueId()) == null) return;
+        if(plugin.getUser(player.getUniqueId()).getGame() == null) return;
+        Game game = plugin.getUser(player.getUniqueId()).getGame();
         if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.SELECTING || game.isInvincible()) {
             event.setCancelled(true);
             if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -113,8 +113,8 @@ public class DamagesListener implements Listener {
             if(event.getDamager() instanceof Arrow) {
                 Arrow arrow = (Arrow) event.getDamager();
                 Player shooter = (Player) arrow.getShooter();
-                if (plugin.getPlayerData(victim.getUniqueId()).getGame() == null) return;
-                Game game = plugin.getPlayerData(victim.getUniqueId()).getGame();
+                if (plugin.getUser(victim.getUniqueId()).getGame() == null) return;
+                Game game = plugin.getUser(victim.getUniqueId()).getGame();
                 if (game.getRunners().contains(victim) && game.getRunners().contains(shooter)) {
                     event.setCancelled(true);
                 }

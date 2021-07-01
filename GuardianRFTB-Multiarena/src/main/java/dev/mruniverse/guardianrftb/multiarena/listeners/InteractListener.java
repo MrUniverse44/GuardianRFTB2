@@ -56,11 +56,11 @@ public class InteractListener implements Listener {
             if(event.getItem().getItemMeta() == null) return;
             if(event.getItem().getType().equals(plugin.getItemsInfo().getExit().getType()) && event.getItem().getItemMeta().equals(plugin.getItemsInfo().getExit().getItemMeta())) {
                 event.setCancelled(true);
-                PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+                PlayerManager playerManager = plugin.getUser(player.getUniqueId());
                 String message;
                 int leaveInt = plugin.getSettings().getSettings().getInt("settings.leaveCancelTime");
                 if(playerManager.getLeaveDelay() != 0) {
-                    plugin.getServer().getScheduler().cancelTask(plugin.getPlayerData(event.getPlayer().getUniqueId()).getLeaveDelay());
+                    plugin.getServer().getScheduler().cancelTask(plugin.getUser(event.getPlayer().getUniqueId()).getLeaveDelay());
                     message = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.leave.cancelled");
                     if(message == null) message = "&c&lTeleport cancelled!";
                     playerManager.setLeaveDelay(0);
@@ -73,7 +73,7 @@ public class InteractListener implements Listener {
                 plugin.getUtils().sendLeaveCountdown(player,leaveInt);
                 return;
             }
-            PlayerManager pm = plugin.getPlayerData(player.getUniqueId());
+            PlayerManager pm = plugin.getUser(player.getUniqueId());
             HashMap<ItemStack, Integer> itemToChecks = new HashMap<>(plugin.getItemsInfo().getLobbyItems());
             itemToChecks.put(plugin.getItemsInfo().getKitBeast(), 0);
             itemToChecks.put(plugin.getItemsInfo().getKitRunner(),0);
@@ -135,11 +135,11 @@ public class InteractListener implements Listener {
                             return;
                         case EXIT_GAME:
                         default:
-                            if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
-                                PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+                            if(plugin.getUser(player.getUniqueId()).getGame() != null) {
+                                PlayerManager playerManager = plugin.getUser(player.getUniqueId());
                                 int leaveInt = plugin.getSettings().getSettings().getInt("settings.leaveCancelTime");
                                 if (playerManager.getLeaveDelay() != 0) {
-                                    plugin.getServer().getScheduler().cancelTask(plugin.getPlayerData(event.getPlayer().getUniqueId()).getLeaveDelay());
+                                    plugin.getServer().getScheduler().cancelTask(plugin.getUser(event.getPlayer().getUniqueId()).getLeaveDelay());
                                     playerManager.setLeaveDelay(0);
                                     plugin.getUtils().sendMessage(player, cancelMessage.replace("<leaveCancelTime>", "" + leaveInt));
                                     return;
@@ -157,7 +157,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onKitMenuClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        PlayerManager data = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager data = plugin.getUser(player.getUniqueId());
         if(event.getCurrentItem() == null) return;
         if(event.getInventory().equals(data.getKitMenu(KitType.BEAST).getInventory())) {
             HashMap<ItemStack, String> hash = data.getKitMenu(KitType.BEAST).getItems();
@@ -190,7 +190,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onShopMenuClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) return;
+        if(plugin.getUser(player.getUniqueId()).getGame() != null) return;
         if(event.getCurrentItem() == null) return;
         if(!event.getInventory().equals(plugin.getUtils().getCurrentShop().getInventory())) return;
         HashMap<ItemStack, ShopAction> hash = plugin.getUtils().getCurrentShop().getItems();
@@ -206,7 +206,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onGameMainClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) return;
+        if(plugin.getUser(player.getUniqueId()).getGame() != null) return;
         if(event.getCurrentItem() == null) return;
         if(!event.getInventory().equals(plugin.getGameManager().getGameMainMenu().getInventory())) return;
         HashMap<ItemStack, MainAction> hash = plugin.getGameManager().getGameMainMenu().getItems();
@@ -222,7 +222,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onGameMenuClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        if(plugin.getPlayerData(player.getUniqueId()).getGame() != null) return;
+        if(plugin.getUser(player.getUniqueId()).getGame() != null) return;
         if(event.getCurrentItem() == null) return;
         GameType gameType = null;
         for(GameType gameType1 : GameType.values()) {
@@ -238,7 +238,7 @@ public class InteractListener implements Listener {
     }
     @EventHandler
     public void onChestClick(PlayerInteractEvent e) {
-        Game game = plugin.getPlayerData(e.getPlayer().getUniqueId()).getGame();
+        Game game = plugin.getUser(e.getPlayer().getUniqueId()).getGame();
         if(game == null) return;
         if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.RESTARTING) {
             e.setCancelled(true);
@@ -267,7 +267,7 @@ public class InteractListener implements Listener {
         player.openInventory(plugin.getGameManager().getGameChest(chestName).getInventory());
     }
     private void checkGameChest(Player player, Location location) {
-        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getUser(player.getUniqueId()).getGame();
         if(game == null) return;
         if(game.getChestLocations() == null) return;
         for(String chests : game.getChestTypes()) {
@@ -280,7 +280,7 @@ public class InteractListener implements Listener {
         }
     }
     private boolean isGameChest(Player player,Location location) {
-        Game game = plugin.getPlayerData(player.getUniqueId()).getGame();
+        Game game = plugin.getUser(player.getUniqueId()).getGame();
         if(game == null) return false;
         for(String chests : game.getChestTypes()) {
             if(game.getChestLocations().get(chests).contains(location)) {

@@ -199,10 +199,10 @@ public class ScoreInfo {
 
     public String replaceVariables(String text,Player player) {
         text = text.replace("<player_name>",player.getName());
-        if(plugin.getPlayerData(player.getUniqueId()) != null) {
-            text = text.replace("<player_coins>", "" + plugin.getPlayerData(player.getUniqueId()).getCoins())
-                    .replace("<player_kits>","" + plugin.getPlayerData(player.getUniqueId()).getKits().size())
-                    .replace("<player_wins>","" + plugin.getPlayerData(player.getUniqueId()).getWins());
+        if(plugin.getUser(player.getUniqueId()) != null) {
+            text = text.replace("<player_coins>", "" + plugin.getUser(player.getUniqueId()).getCoins())
+                    .replace("<player_kits>","" + plugin.getUser(player.getUniqueId()).getKits().size())
+                    .replace("<player_wins>","" + plugin.getUser(player.getUniqueId()).getWins());
         } else {
             text = text.replace("<player_coins>", "0")
                     .replace("<player_kits>", "1")
@@ -213,7 +213,7 @@ public class ScoreInfo {
                 .replace("<server_online>",plugin.getServer().getOnlinePlayers().size() + "")
                 .replace("<timeFormat>",getDateFormat());
 
-        PlayerManager manager = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager manager = plugin.getUser(player.getUniqueId());
         if(manager != null) {
             if (manager.getGame() != null) {
                 String arenaTimeText;

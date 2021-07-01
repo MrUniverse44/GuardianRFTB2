@@ -181,7 +181,7 @@ public class GameInfo implements Game {
      */
     @Override
     public void join(Player player) {
-        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         if (!gameStatus.equals(GameStatus.WAITING) && !gameStatus.equals(GameStatus.SELECTING) && !gameStatus.equals(GameStatus.STARTING)) {
@@ -238,7 +238,7 @@ public class GameInfo implements Game {
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
-            PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+            PlayerManager currentData = plugin.getUser(player.getUniqueId());
             currentData.setLastCheckpoint(null);
             currentData.setCurrentRole(GameTeam.RUNNERS);
         }
@@ -287,7 +287,7 @@ public class GameInfo implements Game {
                     .replace("%game_max%",this.max+""));
         }
         if(player.isOnline()) {
-            PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+            PlayerManager currentData = plugin.getUser(player.getUniqueId());
             currentData.setLastCheckpoint(null);
             currentData.setCurrentRole(GameTeam.RUNNERS);
             player.getInventory().clear();
@@ -431,7 +431,7 @@ public class GameInfo implements Game {
         }
 
         for(Player runner : this.runners) {
-            plugin.getPlayerData(runner.getUniqueId()).addWins();
+            plugin.getUser(runner.getUniqueId()).addWins();
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -446,7 +446,7 @@ public class GameInfo implements Game {
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.BEASTS);
         }
         for(Player beast : this.beasts) {
-            plugin.getPlayerData(beast.getUniqueId()).addWins();
+            plugin.getUser(beast.getUniqueId()).addWins();
         }
         plugin.setCurrentBoard(GuardianBoard.WIN_BEAST);
         this.invincible = true;
@@ -472,7 +472,7 @@ public class GameInfo implements Game {
     public void deathBeast(Player beast) {
         beasts.remove(beast);
         spectators.add(beast);
-        plugin.getPlayerData(beast.getUniqueId()).addDeaths();
+        plugin.getUser(beast.getUniqueId()).addDeaths();
         beast.setGameMode(GameMode.SPECTATOR);
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.hidePlayer(beast);
@@ -503,7 +503,7 @@ public class GameInfo implements Game {
             runner.setGameMode(GameMode.ADVENTURE);
             runner.teleport(beastSpawn);
         }
-        plugin.getPlayerData(runner.getUniqueId()).addDeaths();
+        plugin.getUser(runner.getUniqueId()).addDeaths();
         if(runners.size() == 0) winBeasts();
     }
 

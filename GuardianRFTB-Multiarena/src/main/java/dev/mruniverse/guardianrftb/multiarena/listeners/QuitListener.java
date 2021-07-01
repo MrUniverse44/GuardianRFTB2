@@ -16,7 +16,7 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
         plugin.getScoreboards().removeScore(event.getPlayer());
-        PlayerManager manager = plugin.getPlayerData(event.getPlayer().getUniqueId());
+        PlayerManager manager = plugin.getUser(event.getPlayer().getUniqueId());
         if(manager.getGame() != null) {
             manager.getGame().leave(event.getPlayer());
         }

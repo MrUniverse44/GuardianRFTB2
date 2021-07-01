@@ -82,7 +82,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public boolean existPlayer(Player player) { return guardianPlayers.containsKey(player.getUniqueId()); }
     public void removePlayer(Player player) { guardianPlayers.remove(player.getUniqueId()); }
     public HashMap<UUID, PlayerManager> getRigoxPlayers() { return guardianPlayers; }
-    public PlayerManager getPlayerData(UUID uuid) {
+    public PlayerManager getUser(UUID uuid) {
         if(guardianPlayers.get(uuid) == null) {
             Player player = Bukkit.getPlayer(uuid);
             if(player != null) {
@@ -383,65 +383,50 @@ public final class GuardianRFTB extends JavaPlugin {
 
 
     public void getItems(GameEquip gameEquipment, Player player) {
-        switch (gameEquipment) {
-            case BEAST_KIT:
-                String kitID = getPlayerData(player.getUniqueId()).getSelectedKit();
-                if(kitID.equalsIgnoreCase("NONE")) {
-                    for(Map.Entry<ItemStack,Integer> data : itemsInfo.getBeastInventory().entrySet()) {
-                        player.getInventory().setItem(data.getValue(),data.getKey());
-                    }
-                    player.getInventory().setHelmet(itemsInfo.getBeastHelmet());
-                    player.getInventory().setChestplate(itemsInfo.getBeastChestplate());
-                    player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
-                    player.getInventory().setBoots(itemsInfo.getBeastBoots());
-                    return;
-                }
-                KitInfo kitInfo = getKitLoader().getKitsUsingID(KitType.BEAST).get(kitID);
-                if(kitInfo == null) {
-                    for(Map.Entry<ItemStack,Integer> data : itemsInfo.getBeastInventory().entrySet()) {
-                        player.getInventory().setItem(data.getValue(),data.getKey());
-                    }
-                    player.getInventory().setHelmet(itemsInfo.getBeastHelmet());
-                    player.getInventory().setChestplate(itemsInfo.getBeastChestplate());
-                    player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
-                    player.getInventory().setBoots(itemsInfo.getBeastBoots());
-                    return;
-                }
-                for(Map.Entry<ItemStack,Integer> data : kitInfo.getInventoryItems().entrySet()) {
-                    player.getInventory().setItem(data.getValue(),data.getKey());
-                }
-                if(kitInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(kitInfo.getArmor(GuardianArmor.HELMET));
-                if(kitInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(kitInfo.getArmor(GuardianArmor.CHESTPLATE));
-                if(kitInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(kitInfo.getArmor(GuardianArmor.LEGGINGS));
-                if(kitInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(kitInfo.getArmor(GuardianArmor.BOOTS));
-                return;
-            case KILLER_KIT:
-                String killerID = getPlayerData(player.getUniqueId()).getSelectedKit();
-                if(killerID.equalsIgnoreCase("NONE")) return;
-                KitInfo killerInfo = getKitLoader().getKitsUsingID(KitType.KILLER).get(killerID);
-                if(killerInfo == null) return;
-                for(Map.Entry<ItemStack,Integer> data : killerInfo.getInventoryItems().entrySet()) {
-                    player.getInventory().setItem(data.getValue(),data.getKey());
-                }
-                if(killerInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(killerInfo.getArmor(GuardianArmor.HELMET));
-                if(killerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(killerInfo.getArmor(GuardianArmor.CHESTPLATE));
-                if(killerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(killerInfo.getArmor(GuardianArmor.LEGGINGS));
-                if(killerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(killerInfo.getArmor(GuardianArmor.BOOTS));
-                return;
-            case RUNNER_KIT:
-            default:
-                String runnerID = getPlayerData(player.getUniqueId()).getSelectedKit();
-                if(runnerID.equalsIgnoreCase("NONE")) return;
-                KitInfo runnerInfo = getKitLoader().getKitsUsingID(KitType.RUNNER).get(runnerID);
-                if(runnerInfo == null) return;
-                for(Map.Entry<ItemStack,Integer> data : runnerInfo.getInventoryItems().entrySet()) {
-                    player.getInventory().setItem(data.getValue(),data.getKey());
-                }
-                if(runnerInfo.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(runnerInfo.getArmor(GuardianArmor.HELMET));
-                if(runnerInfo.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(runnerInfo.getArmor(GuardianArmor.CHESTPLATE));
-                if(runnerInfo.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(runnerInfo.getArmor(GuardianArmor.LEGGINGS));
-                if(runnerInfo.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(runnerInfo.getArmor(GuardianArmor.BOOTS));
+        if(gameEquipment != GameEquip.BEAST_KIT) {
+            PlayerManager user = getUser(player.getUniqueId());
+            KitType type = gameEquipment.getKitType();
+            if(user.hasSelectedKit()) {
+                String kit = user.getSelectedKit();
+                KitInfo k = getKitLoader().getKitsUsingID(type).get(kit);
+
+                if(k == null) return;
+
+                giveKit(k,player);
+            }
+            return;
         }
+        for(Map.Entry<ItemStack,Integer> data : itemsInfo.getBeastInventory().entrySet()) {
+            player.getInventory().setItem(data.getValue(),data.getKey());
+        }
+        player.getInventory().setHelmet(itemsInfo.getBeastHelmet());
+        player.getInventory().setChestplate(itemsInfo.getBeastChestplate());
+        player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
+        player.getInventory().setBoots(itemsInfo.getBeastBoots());
+
+        PlayerManager user = getUser(player.getUniqueId());
+        KitType type = gameEquipment.getKitType();
+        if(user.hasSelectedKit()) {
+            String kit = user.getSelectedKit();
+            KitInfo k = getKitLoader().getKitsUsingID(type).get(kit);
+
+            if(k == null) return;
+
+            giveKit(k,player);
+        }
+
+    }
+
+    public void giveKit(KitInfo kit,Player player) {
+        for(Map.Entry<ItemStack,Integer> data : kit.getInventoryItems().entrySet()) {
+            player.getInventory().setItem(data.getValue(),data.getKey());
+        }
+
+        if(kit.getArmor(GuardianArmor.HELMET) != null) player.getInventory().setHelmet(kit.getArmor(GuardianArmor.HELMET));
+        if(kit.getArmor(GuardianArmor.CHESTPLATE) != null) player.getInventory().setChestplate(kit.getArmor(GuardianArmor.CHESTPLATE));
+        if(kit.getArmor(GuardianArmor.LEGGINGS) != null) player.getInventory().setLeggings(kit.getArmor(GuardianArmor.LEGGINGS));
+        if(kit.getArmor(GuardianArmor.BOOTS) != null) player.getInventory().setBoots(kit.getArmor(GuardianArmor.BOOTS));
+
     }
 
 }

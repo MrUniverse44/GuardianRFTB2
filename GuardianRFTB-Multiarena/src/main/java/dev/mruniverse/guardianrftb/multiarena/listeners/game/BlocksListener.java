@@ -22,13 +22,13 @@ public class BlocksListener implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
-        if(plugin.getPlayerData(event.getPlayer().getUniqueId()).getGame() != null) {
+        if(plugin.getUser(event.getPlayer().getUniqueId()).getGame() != null) {
             event.setCancelled(true);
         }
     }
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
-        if(plugin.getPlayerData(event.getPlayer().getUniqueId()).getGame() != null) {
+        if(plugin.getUser(event.getPlayer().getUniqueId()).getGame() != null) {
             event.setCancelled(true);
         }
     }
@@ -36,7 +36,7 @@ public class BlocksListener implements Listener {
     @EventHandler
     public void checkpointAdd(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        PlayerManager data = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager data = plugin.getUser(player.getUniqueId());
         if(data.getGame() == null) return;
         if(event.getBlockPlaced().getType() == Material.BEACON) {
             if(!data.getPointStatus()) {
@@ -54,7 +54,7 @@ public class BlocksListener implements Listener {
 
     @EventHandler
     public void gameDrop(PlayerDropItemEvent event) {
-        Game game = plugin.getPlayerData(event.getPlayer().getUniqueId()).getGame();
+        Game game = plugin.getUser(event.getPlayer().getUniqueId()).getGame();
         if(game != null) {
             event.setCancelled(true);
         }

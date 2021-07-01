@@ -51,7 +51,7 @@ public class KitMenu {
         if(blockedMaterial == null) blockedMaterial = "STAINED_GLASS_PANE:14";
         if(blockedName == null) blockedName = "&c&nKit: %kit_name%";
         for(Map.Entry<String, KitInfo> kitData : plugin.getKitLoader().getKits(mode).entrySet()) {
-            if(plugin.getPlayerData(player.getUniqueId()).getKits().contains(kitData.getValue().getID())) {
+            if(plugin.getUser(player.getUniqueId()).getKits().contains(kitData.getValue().getID())) {
                 ItemStack kitItem = kitData.getValue().getKitItem();
                 kits.put(kitItem,kitData.getKey());
             } else {
@@ -80,7 +80,7 @@ public class KitMenu {
         if(blockedName == null) blockedName = "&c&nKit: %kit_name%";
         for(Map.Entry<String, KitInfo> kitData : plugin.getKitLoader().getKits(mode).entrySet()) {
             if(slot != maxSlot) {
-                if(plugin.getPlayerData(player.getUniqueId()).getKits().contains(kitData.getValue().getID())) {
+                if(plugin.getUser(player.getUniqueId()).getKits().contains(kitData.getValue().getID())) {
                     ItemStack kitItem = kitData.getValue().getKitItem();
                     chestInventory.setItem(kitData.getValue().getKitSlot(), kitItem);
                 } else {

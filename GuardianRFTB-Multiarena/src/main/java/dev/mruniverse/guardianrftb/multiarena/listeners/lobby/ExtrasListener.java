@@ -51,7 +51,7 @@ public class ExtrasListener implements Listener {
                     event.setFoodLevel(20);
                 }
                 Player player = (Player) event.getEntity();
-                if (plugin.getPlayerData(player.getUniqueId()).getGame() != null) {
+                if (plugin.getUser(player.getUniqueId()).getGame() != null) {
                     event.setFoodLevel(20);
                 }
             }
@@ -176,7 +176,7 @@ public class ExtrasListener implements Listener {
         if(e.isCancelled()) return;
         if(plugin.getSettings().getSettings().getBoolean("settings.game.commands.toggle")) {
             Player p = e.getPlayer();
-            if (plugin.getPlayerData(p.getUniqueId()).getGame() != null) {
+            if (plugin.getUser(p.getUniqueId()).getGame() != null) {
                 String[] args = e.getMessage().split(" ");
                 String type = plugin.getSettings().getSettings().getString("settings.game.commands.type");
                 if (type == null) type = "WHITELIST";
@@ -202,13 +202,13 @@ public class ExtrasListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leaveCommand(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
-        if (plugin.getPlayerData(p.getUniqueId()).getGame() != null) {
+        if (plugin.getUser(p.getUniqueId()).getGame() != null) {
             String[] args = e.getMessage().split(" ");
             List<String> commands = plugin.getSettings().getSettings().getStringList("settings.leaveCMDs");
             for (String list : commands) {
                 if (args[0].equalsIgnoreCase(list)) {
                     e.setCancelled(true);
-                    plugin.getPlayerData(p.getUniqueId()).getGame().leave(p);
+                    plugin.getUser(p.getUniqueId()).getGame().leave(p);
                 }
             }
         }

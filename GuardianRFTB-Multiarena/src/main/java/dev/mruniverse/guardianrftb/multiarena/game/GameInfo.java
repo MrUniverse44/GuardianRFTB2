@@ -165,7 +165,7 @@ public class GameInfo implements Game {
             gameStatus = GameStatus.STARTING;
             updateSignsBlocks();
             for(Player player : players) {
-                PlayerManager playerData = plugin.getPlayerData(player.getUniqueId());
+                PlayerManager playerData = plugin.getUser(player.getUniqueId());
                 playerData.setBoard(GuardianBoard.STARTING);
             }
         }
@@ -211,7 +211,7 @@ public class GameInfo implements Game {
      */
     @Override
     public void join(Player player) {
-        PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         if (currentData.getGame() != null) {
@@ -290,7 +290,7 @@ public class GameInfo implements Game {
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
-            PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+            PlayerManager currentData = plugin.getUser(player.getUniqueId());
             currentData.setGame(null);
             currentData.setLastCheckpoint(null);
             currentData.setCurrentRole(GameTeam.RUNNERS);
@@ -345,7 +345,7 @@ public class GameInfo implements Game {
                     .replace("%game_max%",this.max+""));
         }
         if(player.isOnline()) {
-            PlayerManager currentData = plugin.getPlayerData(player.getUniqueId());
+            PlayerManager currentData = plugin.getUser(player.getUniqueId());
             currentData.setStatus(PlayerStatus.IN_LOBBY);
             currentData.setGame(null);
             currentData.setBoard(GuardianBoard.LOBBY);
@@ -370,7 +370,7 @@ public class GameInfo implements Game {
             lastTimer = 30;
             doubleCountPrevent = true;
             for(Player player : players) {
-                plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.SELECTING);
+                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.SELECTING);
             }
         }
     }
@@ -387,7 +387,7 @@ public class GameInfo implements Game {
         this.lastTimer = 10;
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(plugin,this), 0L, 20L);
         for(Player player : players) {
-            plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
+            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
         }
     }
 
@@ -397,10 +397,10 @@ public class GameInfo implements Game {
         updateSignsBlocks();
         this.lastTimer = 15;
         for(Player player : runners) {
-            plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
+            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
         }
         for(Player player : beasts) {
-            plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
+            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
         }
         lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new BeastSpawnRunnable(plugin,this), 0L, 20L);
     }
@@ -500,14 +500,14 @@ public class GameInfo implements Game {
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.RUNNERS);
         }
         for(Player runner : this.runners) {
-            plugin.getPlayerData(runner.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS);
-            plugin.getPlayerData(runner.getUniqueId()).addWins();
+            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS);
+            plugin.getUser(runner.getUniqueId()).addWins();
         }
         for(Player beast : this.beasts) {
-            plugin.getPlayerData(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
         }
         for(Player spectator : this.spectators) {
-            plugin.getPlayerData(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+            plugin.getUser(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -522,14 +522,14 @@ public class GameInfo implements Game {
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.BEASTS);
         }
         for(Player beast : this.beasts) {
-            plugin.getPlayerData(beast.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_BEAST);
-            plugin.getPlayerData(beast.getUniqueId()).addWins();
+            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_BEAST);
+            plugin.getUser(beast.getUniqueId()).addWins();
         }
         for(Player runner : this.runners) {
-            plugin.getPlayerData(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
         }
         for(Player spectator : this.spectators) {
-            plugin.getPlayerData(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+            plugin.getUser(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -555,12 +555,12 @@ public class GameInfo implements Game {
     public void deathBeast(Player beast) {
         beasts.remove(beast);
         spectators.add(beast);
-        plugin.getPlayerData(beast.getUniqueId()).addDeaths();
+        plugin.getUser(beast.getUniqueId()).addDeaths();
         BeastDeathEvent event = new BeastDeathEvent(this,beast);
         Bukkit.getPluginManager().callEvent(event);
         beast.setGameMode(GameMode.SPECTATOR);
         if(beasts.size() == 0) {
-            plugin.getPlayerData(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
             winRunners();
         }
     }
@@ -586,9 +586,9 @@ public class GameInfo implements Game {
             runner.setGameMode(GameMode.ADVENTURE);
             runner.teleport(beastSpawn);
         }
-        plugin.getPlayerData(runner.getUniqueId()).addDeaths();
+        plugin.getUser(runner.getUniqueId()).addDeaths();
         if(runners.size() == 0) {
-            plugin.getPlayerData(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
             winBeasts();
         }
     }

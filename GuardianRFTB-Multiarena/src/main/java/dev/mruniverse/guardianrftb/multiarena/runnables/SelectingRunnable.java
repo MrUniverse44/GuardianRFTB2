@@ -79,7 +79,7 @@ public class SelectingRunnable extends BukkitRunnable {
             Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
                 guardianUtils.sendMessage(player,prefix + enough);
-                plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
+                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
             currentGame.cancelTask();
         }
@@ -97,6 +97,6 @@ public class SelectingRunnable extends BukkitRunnable {
         player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
         player.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
         player.teleport(currentGame.getSelecting());
-        plugin.getPlayerData(player.getUniqueId()).setCurrentRole(GameTeam.BEASTS);
+        plugin.getUser(player.getUniqueId()).setCurrentRole(GameTeam.BEASTS);
     }
 }

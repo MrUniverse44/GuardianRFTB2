@@ -26,7 +26,7 @@ public class TitleRunnable extends BukkitRunnable {
     public void run () {
         if(!isEnabled) cancel();
         for (UUID uuid : plugin.getRigoxPlayers().keySet()) {
-            PlayerManager playerManager = plugin.getPlayerData(uuid);
+            PlayerManager playerManager = plugin.getUser(uuid);
             String currentTitle = titles.get(showingTitle);
             plugin.getScoreboards().setTitle(playerManager.getPlayer(),currentTitle);
             if(showingTitle == (titles.size() - 1)) {

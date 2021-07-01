@@ -89,7 +89,7 @@ public class SelectingRunnable extends BukkitRunnable {
         player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
         player.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
         player.teleport(plugin.getGame().getSelecting());
-        PlayerManager currentPlayer = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager currentPlayer = plugin.getUser(player.getUniqueId());
         currentPlayer.setCurrentRole(GameTeam.BEASTS);
     }
 }

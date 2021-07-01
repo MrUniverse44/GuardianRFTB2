@@ -63,7 +63,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                 String rSubtitle = messages.getString("messages.game.others.titles.beastsGo.toRunners.subtitle");
                 List<String> startInfo = messages.getStringList("messages.game.gameInfo.startGame");
                 for(Player player : currentGame.getBeasts()) {
-                    plugin.getPlayerData(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
+                    plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
                     player.teleport(currentGame.getBeastSpawn());
                     player.getInventory().clear();
                     player.setGameMode(GameMode.SURVIVAL);

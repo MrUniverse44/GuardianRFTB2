@@ -76,7 +76,7 @@ public class EndingRunnable extends BukkitRunnable {
             GameRestartEvent event = new GameRestartEvent(currentGame);
             Bukkit.getPluginManager().callEvent(event);
             for (Player player : currentGame.getPlayers()) {
-                PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+                PlayerManager playerManager = plugin.getUser(player.getUniqueId());
                 if(!playerManager.getAutoPlayStatus()) {
                     back(player);
                 } else {
@@ -99,7 +99,7 @@ public class EndingRunnable extends BukkitRunnable {
 
     private void back(Player player) {
         Location location = plugin.getSettings().getLocation();
-        PlayerManager playerManager = plugin.getPlayerData(player.getUniqueId());
+        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
         if (location != null) {
             player.teleport(location);
         }
