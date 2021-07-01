@@ -32,6 +32,27 @@ public enum GuardianSounds {
                 return "sounds.game.count.selecting.sound";
         }
     }
+    public String getName() {
+        switch (this) {
+            case WIN_SOUND:
+                return "Win Sound";
+            case KILL_SOUND:
+                return "Kill Sound";
+            case DEATH_SOUND:
+                return "Death Sound";
+            case CHECKPOINT_PLACE:
+                return "Checkpoint Place";
+            case CHECKPOINT_USE:
+                return "Checkpoint Use";
+            case STARTING_COUNT:
+                return "Starting Count Sound";
+            case BEAST_COUNT:
+                return "Beast Spawn Sound";
+            default:
+            case GAME_COUNT:
+                return "Selecting Beast Count Sound";
+        }
+    }
     public String getPitchPath() {
         switch (this) {
             case WIN_SOUND:

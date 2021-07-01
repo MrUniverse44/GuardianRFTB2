@@ -1,17 +1,16 @@
 package dev.mruniverse.guardianrftb.multiarena.utils.command;
 
+import dev.mruniverse.guardianlib.core.utils.EnumUtils;
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
-import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.NPCCommand;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -160,7 +159,30 @@ public class MainCommand implements CommandExecutor {
                     }
                     return true;
                 }
-
+                if(args[1].equalsIgnoreCase("changeSound")) {
+                    if(args.length == 2 || args.length == 3) {
+                        utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
+                        utils.sendMessage(sender,"&6Invalid Usage - changeSound usages:");
+                        for(GuardianSounds sounds : GuardianSounds.values()) {
+                            utils.sendMessage(sender, cmdPrefix + " admin changeSound " + sounds.toString().toUpperCase() + " <your sound>");
+                        }
+                        utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
+                        return true;
+                    }
+                    String guardianSound = args[2].toUpperCase();
+                    String sound = args[3].toUpperCase();
+                    try {
+                        if (utils.checkValidSound(sound) && EnumUtils.isValidEnum(GuardianSounds.class,guardianSound)) {
+                            Sound sound1 = Sound.valueOf(sound);
+                            GuardianSounds sound2 = GuardianSounds.valueOf(guardianSound);
+                            plugin.getSoundsInfo().changeSound(sound2,sound1);
+                            utils.sendMessage(sender,"&aSound of &b" + sound2.getName() + "&a now is &b" + sound);
+                        } else {
+                            utils.sendMessage(sender,"&cThe sound or the GuardianSound is incorrect, please check your command.");
+                        }
+                    }catch (Throwable ignored) { utils.sendMessage(sender,"&cThis sound &e" + sound + " &cdoesn't exists");}
+                    return true;
+                }
                 if(args[1].equalsIgnoreCase("2")) {
                     if(hasPermission(sender,"grftb.admin.help.game",true)) {
                         sender.sendMessage(" ");

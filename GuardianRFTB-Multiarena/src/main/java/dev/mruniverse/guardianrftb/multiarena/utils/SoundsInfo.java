@@ -58,7 +58,31 @@ public class SoundsInfo {
 
     public Sound getSound(GuardianSounds sound) {
         if(sounds.get(sound) == null) updateSound(sound);
+        checkForNull(sound);
         return sounds.get(sound);
+    }
+    public void checkForNull(GuardianSounds sound) {
+
+        if(sounds.get(sound) == null) {
+            Sound sd = GuardianUtils.randomEnum(Sound.class);
+            plugin.getLogs().info("Sound of '" + sound.getName() + "' has been changed to " + sd.toString());
+            plugin.getLogs().info("Because the sound doesn't exists, if you want change this sound");
+            plugin.getLogs().info("Use the command &b/rftb admin changeSound " + sound.toString().toUpperCase() + " <your sound>&f.");
+            sounds.put(sound,sd);
+        }
+        if(pitch.get(sound) == null) {
+            plugin.getLogs().info("Pitch of '" + sound.getName() + "' has been changed to 2.0F");
+            pitch.put(sound,2.0F);
+        }
+        if(volume.get(sound) == null) {
+            plugin.getLogs().info("Volume of '" + sound.getName() + "' has been changed to 1.0F");
+            volume.put(sound,1.0F);
+        }
+
+    }
+
+    public void changeSound(GuardianSounds sound1,Sound sound2){
+        sounds.put(sound1,sound2);
     }
 
     public Float getPitch(GuardianSounds sound) {

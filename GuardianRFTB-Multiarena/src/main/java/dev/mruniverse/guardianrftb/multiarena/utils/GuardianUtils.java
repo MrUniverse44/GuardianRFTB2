@@ -24,6 +24,7 @@ public class GuardianUtils {
     private final GuardianRFTB plugin;
     private final Utils utils = GuardianLIB.getControl().getUtils();
     private final ShopMenu currentShop;
+    private static final Random random = new Random();
 
     /**
      * @param plugin main plugin
@@ -99,6 +100,11 @@ public class GuardianUtils {
                 if(!line.contains("<isBeast>")) utils.sendMessage(player,line);
             }
         }
+    }
+
+    public static <T extends Enum<?>> T randomEnum(Class<T> clazz){
+        int x = random.nextInt(clazz.getEnumConstants().length);
+        return clazz.getEnumConstants()[x];
     }
 
     public void rewardInfo(Player player,List<String> list,boolean winnerTeamIsRunners) {
