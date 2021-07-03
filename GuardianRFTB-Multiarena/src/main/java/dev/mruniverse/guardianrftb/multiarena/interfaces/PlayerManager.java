@@ -75,7 +75,7 @@ public interface PlayerManager {
     void setDeaths(int deaths);
 
     String getID();
-sssssssssssss
+
     void addDeaths();
 
     void create();
