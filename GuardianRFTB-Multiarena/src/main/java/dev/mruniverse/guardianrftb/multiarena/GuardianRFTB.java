@@ -9,6 +9,7 @@ import dev.mruniverse.guardianrftb.multiarena.game.GameManager;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.DataStorage;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.FileStorage;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitInfo;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitLoader;
 import dev.mruniverse.guardianrftb.multiarena.listeners.ListenerController;
@@ -84,7 +85,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public boolean existPlayer(Player player) { return guardianPlayers.containsKey(player.getUniqueId()); }
     public void removePlayer(Player player) { guardianPlayers.remove(player.getUniqueId()); }
     public HashMap<UUID, PlayerManagerImpl> getRigoxPlayers() { return guardianPlayers; }
-    public PlayerManagerImpl getUser(UUID uuid) {
+    public PlayerManager getUser(UUID uuid) {
         if(guardianPlayers.get(uuid) == null) {
             Player player = Bukkit.getPlayer(uuid);
             if(player != null) {
@@ -393,7 +394,7 @@ public final class GuardianRFTB extends JavaPlugin {
 
     public void getItems(GameEquip gameEquipment, Player player) {
         if(gameEquipment != GameEquip.BEAST_KIT) {
-            PlayerManagerImpl user = getUser(player.getUniqueId());
+            PlayerManager user = getUser(player.getUniqueId());
             KitType type = gameEquipment.getKitType();
             if(user.hasSelectedKit()) {
                 String kit = user.getSelectedKit();
@@ -413,7 +414,7 @@ public final class GuardianRFTB extends JavaPlugin {
         player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
         player.getInventory().setBoots(itemsInfo.getBeastBoots());
 
-        PlayerManagerImpl user = getUser(player.getUniqueId());
+        PlayerManager user = getUser(player.getUniqueId());
         KitType type = gameEquipment.getKitType();
         if(user.hasSelectedKit()) {
             String kit = user.getSelectedKit();
