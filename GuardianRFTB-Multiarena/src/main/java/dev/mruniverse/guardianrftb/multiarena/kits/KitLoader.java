@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.kits;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
-import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

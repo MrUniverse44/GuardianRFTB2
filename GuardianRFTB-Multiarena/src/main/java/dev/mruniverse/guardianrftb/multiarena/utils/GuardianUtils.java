@@ -7,7 +7,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -242,25 +242,25 @@ public class GuardianUtils {
     }
 
     public String replaceVariables(String text,Player player) {
-        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
-        if(playerManager == null) {
+        PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
+        if(playerManagerImpl == null) {
             plugin.addPlayer(player);
-            playerManager = plugin.getUser(player.getUniqueId());
+            playerManagerImpl = plugin.getUser(player.getUniqueId());
         }
 
         text = text.replace("<player_name>",player.getName())
                 .replace("[new line]","\n")
-                .replace("<player_coins>",playerManager.getCoins() + "")
-                .replace("<player_wins>",playerManager.getKits().size() + "")
-                .replace("<player_kills>",playerManager.getKills() + "")
-                .replace("<player_deaths>",playerManager.getDeaths() + "")
+                .replace("<player_coins>", playerManagerImpl.getCoins() + "")
+                .replace("<player_wins>", playerManagerImpl.getKits().size() + "")
+                .replace("<player_kills>", playerManagerImpl.getKills() + "")
+                .replace("<player_deaths>", playerManagerImpl.getDeaths() + "")
                 .replace("<player_beast_kit>","Not selected")
                 .replace("<player_runner_kit>","Not selected")
                 .replace("<online>",plugin.getServer().getOnlinePlayers().size() + "")
                 .replace("<timeFormat>",getDateFormat());
 
-        if (playerManager.getGame() != null) {
-            Game currentGame = playerManager.getGame();
+        if (playerManagerImpl.getGame() != null) {
+            Game currentGame = playerManagerImpl.getGame();
             text = text.replace("<arena_name>",currentGame.getName())
                     .replace("<arena_online>","" + currentGame.getPlayers().size())
                     .replace("<arena_max>","" + currentGame.getMax())
@@ -270,7 +270,7 @@ public class GuardianUtils {
                     .replace("<arena_mode>",currentGame.getType().getType())
                     .replace("<arena_timeLeft>",currentGame.getLastTimer() + "")
                     .replace("<arena_status>",currentGame.getStatus().getStatus())
-                    .replace("<player_role>",playerManager.getCurrentRole())
+                    .replace("<player_role>", playerManagerImpl.getCurrentRole())
                     .replace("<arena_time_number>", currentGame.getLastTimer() + "");
         }
         if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }
@@ -324,15 +324,15 @@ public class GuardianUtils {
     }
 
     public void sendLeaveCountdown(final Player player, final int delay) {
-        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
+        PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
         int delayValue = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             int countdown = delay;
             public void run() {
                 if (this.countdown == 0) {
-                    plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
-                    playerManager.setLeaveDelay(0);
-                    if(playerManager.getGame() != null) {
-                        playerManager.getGame().leave(player);
+                    plugin.getServer().getScheduler().cancelTask(playerManagerImpl.getLeaveDelay());
+                    playerManagerImpl.setLeaveDelay(0);
+                    if(playerManagerImpl.getGame() != null) {
+                        playerManagerImpl.getGame().leave(player);
                     }
                 } else {
                     this.countdown--;

@@ -5,6 +5,7 @@ import dev.mruniverse.guardianlib.core.holograms.PersonalHologram;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerManager {
+public class PlayerManagerImpl implements PlayerManager {
     private final GuardianRFTB plugin;
 
     private final KitMenu beastMenu;
@@ -50,7 +51,7 @@ public class PlayerManager {
     private String selectedKit;
     private String kits;
 
-    public PlayerManager(GuardianRFTB plugin, Player player) {
+    public PlayerManagerImpl(GuardianRFTB plugin, Player player) {
         this.plugin = plugin;
         this.uuid = player.getUniqueId();
         leaveDelay = 0;
@@ -230,13 +231,13 @@ public class PlayerManager {
                 kits = "K" + kitID;
             }
         }
-        if(plugin.getData().getSQL().kits.get(getID()) != null) {
-            String lastResult = plugin.getData().getSQL().kits.get(getID());
+        if(plugin.getData().getSQL().getKits().get(getID()) != null) {
+            String lastResult = plugin.getData().getSQL().getKits().get(getID());
             if(!lastResult.equalsIgnoreCase("")) {
-                plugin.getData().getSQL().kits.put(getID(), lastResult + ",K" + kitID);
+                plugin.getData().getSQL().getKits().put(getID(), lastResult + ",K" + kitID);
                 kits = lastResult + ",K" + kitID;
             } else {
-                plugin.getData().getSQL().kits.put(getID(), "K" + kitID);
+                plugin.getData().getSQL().getKits().put(getID(), "K" + kitID);
                 kits = "K" + kitID;
             }
         }
@@ -247,8 +248,8 @@ public class PlayerManager {
             String[] kitShortList = kits.split(",");
             return Arrays.asList(kitShortList);
         }
-        if(plugin.getData().getSQL().kits.get(getID()) != null) {
-            String kitsBuy = plugin.getData().getSQL().kits.get(getID());
+        if(plugin.getData().getSQL().getKits().get(getID()) != null) {
+            String kitsBuy = plugin.getData().getSQL().getKits().get(getID());
             kitsBuy = kitsBuy.replace(" ","");
             String[] kitShortList = kitsBuy.split(",");
             return Arrays.asList(kitShortList);

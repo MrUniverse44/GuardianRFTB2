@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.storage;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.SQL;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -10,14 +11,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class SQL {
+public class SQLImpl implements SQL {
     public HashMap<String, Integer> coins = new HashMap<>();
     public HashMap<String, String> kits = new HashMap<>();
     public HashMap<String, String> selectedKits = new HashMap<>();
     private final GuardianRFTB plugin;
-    public SQL(GuardianRFTB main) {
+    public SQLImpl(GuardianRFTB main) {
         plugin = main;
     }
+
+    public HashMap<String, Integer> getCoins() { return coins; }
+
+    public HashMap<String, String> getKits() { return kits; }
+
+    public HashMap<String, String> getSelectedKits() { return selectedKits; }
 
     public void putData() {
         if (coins.size() != 0)
@@ -73,10 +80,10 @@ public class SQL {
             }
         } else {
             String id = player.getUniqueId().toString().replace("-","");
-            PlayerManager playerManager = plugin.getUser(player.getUniqueId());
-            playerManager.setCoins(coins.get(id));
-            playerManager.setSelectedKit(selectedKits.get(id));
-            playerManager.setKits(kits.get(id));
+            PlayerManagerImpl playerManagerImpl = plugin.getUser(player.getUniqueId());
+            playerManagerImpl.setCoins(coins.get(id));
+            playerManagerImpl.setSelectedKit(selectedKits.get(id));
+            playerManagerImpl.setKits(kits.get(id));
         }
     }
 }

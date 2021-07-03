@@ -8,8 +8,8 @@ import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.action.ActionClic
 import dev.mruniverse.guardianrftb.multiarena.cloudlytext.part.hover.HoverBuilder;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameRestartEvent;
-import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianText;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -76,15 +76,15 @@ public class EndingRunnable extends BukkitRunnable {
             GameRestartEvent event = new GameRestartEvent(currentGame);
             Bukkit.getPluginManager().callEvent(event);
             for (Player player : currentGame.getPlayers()) {
-                PlayerManager playerManager = plugin.getUser(player.getUniqueId());
-                if(!playerManager.getAutoPlayStatus()) {
+                PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
+                if(!playerManagerImpl.getAutoPlayStatus()) {
                     back(player);
                 } else {
-                    playerManager.setStatus(PlayerStatus.IN_LOBBY);
-                    playerManager.setGame(null);
-                    if (playerManager.getLeaveDelay() != 0) {
-                        plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
-                        playerManager.setLeaveDelay(0);
+                    playerManagerImpl.setStatus(PlayerStatus.IN_LOBBY);
+                    playerManagerImpl.setGame(null);
+                    if (playerManagerImpl.getLeaveDelay() != 0) {
+                        plugin.getServer().getScheduler().cancelTask(playerManagerImpl.getLeaveDelay());
+                        playerManagerImpl.setLeaveDelay(0);
                     }
                     if(!canJoin(player)) {
                         back(player);
@@ -99,7 +99,7 @@ public class EndingRunnable extends BukkitRunnable {
 
     private void back(Player player) {
         Location location = plugin.getSettings().getLocation();
-        PlayerManager playerManager = plugin.getUser(player.getUniqueId());
+        PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
         if (location != null) {
             player.teleport(location);
         }
@@ -108,18 +108,18 @@ public class EndingRunnable extends BukkitRunnable {
         player.getInventory().setLeggings(null);
         player.getInventory().setBoots(null);
         player.setGameMode(plugin.getSettings().getGameMode());
-        playerManager.setStatus(PlayerStatus.IN_LOBBY);
-        playerManager.setGame(null);
-        playerManager.setPointStatus(false);
-        playerManager.setLastCheckpoint(null);
-        playerManager.setBoard(GuardianBoard.LOBBY);
+        playerManagerImpl.setStatus(PlayerStatus.IN_LOBBY);
+        playerManagerImpl.setGame(null);
+        playerManagerImpl.setPointStatus(false);
+        playerManagerImpl.setLastCheckpoint(null);
+        playerManagerImpl.setBoard(GuardianBoard.LOBBY);
         player.getInventory().clear();
         for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
             player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
         }
-        if (playerManager.getLeaveDelay() != 0) {
-            plugin.getServer().getScheduler().cancelTask(playerManager.getLeaveDelay());
-            playerManager.setLeaveDelay(0);
+        if (playerManagerImpl.getLeaveDelay() != 0) {
+            plugin.getServer().getScheduler().cancelTask(playerManagerImpl.getLeaveDelay());
+            playerManagerImpl.setLeaveDelay(0);
         }
         player.updateInventory();
     }

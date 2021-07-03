@@ -2,18 +2,20 @@ package dev.mruniverse.guardianrftb.multiarena.storage;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.MySQL;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MySQL {
-    private final GuardianRFTB plugin;
-    public MySQL(GuardianRFTB main) {
+public class MySQLImpl implements MySQL {
+    private GuardianRFTB plugin;
+    public MySQLImpl(GuardianRFTB main) {
         plugin = main;
     }
     public Connection con;
 
+    @Override
     public void connect(String host, String db, String user, String password) {
         try {
             String url= plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.jdbc-url");
@@ -23,7 +25,7 @@ public class MySQL {
                     .replace("[port]",port + "")
                     .replace("[db]",db);
             con = DriverManager.getConnection(url,user,password);
-            plugin.getLogs().info("Connected with MySQL! creating tables");
+            plugin.getLogs().info("Connected with MySQLImpl! creating tables");
             List<String> integers = new ArrayList<>();
             integers.add("Coins");
             integers.add("Wins");
@@ -36,14 +38,18 @@ public class MySQL {
             plugin.getData().createMultiTable(plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.table"), integers, strings);
             plugin.getLogs().info("Tables created!");
         } catch (SQLException e) {
-            plugin.getLogs().error("Plugin can't connect to MySQL or cant initialize tables.");
+            plugin.getLogs().error("Plugin can't connect to MySQLImpl or cant initialize tables.");
             plugin.getLogs().error(e);
-            plugin.getLogs().error("Using SQL instead MySQL.");
+            plugin.getLogs().error("Using SQLImpl instead MySQLImpl.");
             plugin.getLogs().error("-------------------------");
             plugin.getData().getSQL().loadData();
         }
     }
 
+    @Override
+    public void setPlugin(GuardianRFTB plugin) { this.plugin = plugin; }
+
+    @Override
     public void close() {
         if (con != null)
             try {
@@ -51,6 +57,7 @@ public class MySQL {
             } catch (SQLException ignored) { }
     }
 
+    @Override
     public void pUpdate(String qry,String result,String ID) {
         try {
             PreparedStatement statement = con.prepareStatement(qry);
@@ -64,10 +71,13 @@ public class MySQL {
         }
     }
 
+    @Override
     public Connection getConnection() {
         return con;
     }
 
+
+    @Override
     public void Update(String qry) {
         try {
             Statement stmt = con.createStatement();
@@ -77,6 +87,8 @@ public class MySQL {
             plugin.getLogs().error(e);
         }
     }
+
+    @Override
     @SuppressWarnings("unused")
     public ResultSet pQuery(String query) {
         ResultSet rs = null;
@@ -91,6 +103,8 @@ public class MySQL {
         return rs;
     }
 
+
+    @Override
     public ResultSet Query(String qry) {
         ResultSet rs = null;
         try {

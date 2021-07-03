@@ -6,6 +6,8 @@ import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.game.GameManager;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.DataStorage;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.FileStorage;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitInfo;
 import dev.mruniverse.guardianrftb.multiarena.kits.KitLoader;
@@ -13,9 +15,9 @@ import dev.mruniverse.guardianrftb.multiarena.listeners.ListenerController;
 import dev.mruniverse.guardianrftb.multiarena.runnables.PlayerRunnable;
 import dev.mruniverse.guardianrftb.multiarena.runnables.TitleRunnable;
 import dev.mruniverse.guardianrftb.multiarena.scoreboard.BoardController;
-import dev.mruniverse.guardianrftb.multiarena.storage.DataStorage;
-import dev.mruniverse.guardianrftb.multiarena.storage.FileStorage;
-import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.DataStorageImpl;
+import dev.mruniverse.guardianrftb.multiarena.storage.FileStorageImpl;
+import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManagerImpl;
 import dev.mruniverse.guardianrftb.multiarena.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -30,7 +32,7 @@ import java.util.*;
 
 @SuppressWarnings("unused")
 public final class GuardianRFTB extends JavaPlugin {
-    private final HashMap<UUID, PlayerManager> guardianPlayers = new HashMap<>();
+    private final HashMap<UUID, PlayerManagerImpl> guardianPlayers = new HashMap<>();
     private GuardianUtils guardianUtils;
 
     public static GuardianRFTB instance;
@@ -42,7 +44,7 @@ public final class GuardianRFTB extends JavaPlugin {
 
     private String serverVersion;
 
-    private FileStorage fileStorage;
+    private FileStorage fileStorageImpl;
     private ExternalLogger logger;
     private ItemsInfo itemsInfo;
     private settingsInfo sInfo;
@@ -53,13 +55,13 @@ public final class GuardianRFTB extends JavaPlugin {
     private TitleRunnable titleRunnable;
     private SoundsInfo soundsInfo;
     private GuardianPlaceholders guardianPlaceholders;
-    private DataStorage dataStorage;
+    private DataStorage dataStorageImpl;
 
     public String getServerVersion() { return serverVersion; }
     public ExternalLogger getLogs() { return logger; }
     public ListenerController getListener() { return listenerController; }
     public ItemsInfo getItemsInfo() { return itemsInfo; }
-    public FileStorage getStorage() { return fileStorage; }
+    public FileStorage getStorage() { return fileStorageImpl; }
     public GuardianLIB getLib() { return GuardianLIB.getControl(); }
     public settingsInfo getSettings() { return sInfo;}
     public GameManager getGameManager() { return gameManager; }
@@ -68,7 +70,7 @@ public final class GuardianRFTB extends JavaPlugin {
     public PlayerRunnable getRunnable() { return runnable; }
     public TitleRunnable getTitleRunnable() { return titleRunnable; }
     public SoundsInfo getSoundsInfo() { return soundsInfo; }
-    public DataStorage getData() { return dataStorage; }
+    public DataStorage getData() { return dataStorageImpl; }
     public boolean hasPAPI() { return hasPAPI; }
     public boolean isOldVersion() { return (serverVersion.contains("v1_8") || serverVersion.contains("v1_9") || serverVersion.contains("v1_10") || serverVersion.contains("v1_11") || serverVersion.contains("v1_12")); }
 
@@ -76,13 +78,13 @@ public final class GuardianRFTB extends JavaPlugin {
 
     public void addPlayer(Player player){
         if(!existPlayer(player)) {
-            guardianPlayers.put(player.getUniqueId(),new PlayerManager(this,player));
+            guardianPlayers.put(player.getUniqueId(),new PlayerManagerImpl(this,player));
         }
     }
     public boolean existPlayer(Player player) { return guardianPlayers.containsKey(player.getUniqueId()); }
     public void removePlayer(Player player) { guardianPlayers.remove(player.getUniqueId()); }
-    public HashMap<UUID, PlayerManager> getRigoxPlayers() { return guardianPlayers; }
-    public PlayerManager getUser(UUID uuid) {
+    public HashMap<UUID, PlayerManagerImpl> getRigoxPlayers() { return guardianPlayers; }
+    public PlayerManagerImpl getUser(UUID uuid) {
         if(guardianPlayers.get(uuid) == null) {
             Player player = Bukkit.getPlayer(uuid);
             if(player != null) {
@@ -105,8 +107,16 @@ public final class GuardianRFTB extends JavaPlugin {
         getKitLoader().unload();
         getUtils().getCurrentShop().unload();
         getGameManager().unload();
-        if(dataStorage == null) return;
-        dataStorage.disableDatabase();
+        if(dataStorageImpl == null) return;
+        dataStorageImpl.disableDatabase();
+    }
+
+    public void setDataStorage(DataStorage storage) {
+        this.dataStorageImpl = storage;
+    }
+
+    public void setFileStorage(FileStorage fileStorage) {
+        this.fileStorageImpl = fileStorage;
     }
 
     @Override
@@ -123,8 +133,8 @@ public final class GuardianRFTB extends JavaPlugin {
                 String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
                 serverVersion = version.substring(0, version.lastIndexOf("_"));
 
-                fileStorage = new FileStorage(instance);
-                fileStorage.save(SaveMode.ALL);
+                fileStorageImpl = new FileStorageImpl(instance);
+                fileStorageImpl.save(SaveMode.ALL);
                 sInfo = new settingsInfo(instance);
 
                 hasPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
@@ -133,9 +143,9 @@ public final class GuardianRFTB extends JavaPlugin {
                 boardController = new BoardController(instance);
                 getListener().loadCommand("rftb");
                 getListener().loadCommand("grftb");
-                String lang = fileStorage.getControl(GuardianFiles.SETTINGS).getString("settings.language");
+                String lang = fileStorageImpl.getControl(GuardianFiles.SETTINGS).getString("settings.language");
                 if(lang == null) lang = "en";
-                instance.fileStorage.setMessages(lang);
+                instance.fileStorageImpl.setMessages(lang);
                 logger.info("language (code) loaded: " + lang);
 
                 gameManager = new GameManager(instance);
@@ -155,8 +165,8 @@ public final class GuardianRFTB extends JavaPlugin {
                     guardianPlaceholders.register();
                 }
                 soundsInfo = new SoundsInfo(instance);
-                dataStorage = new DataStorage(instance);
-                dataStorage.loadDatabase();
+                dataStorageImpl = new DataStorageImpl(instance);
+                dataStorageImpl.loadDatabase();
                 guardianUtils = new GuardianUtils(instance);
 
                 if (getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.update-check")) {
@@ -383,7 +393,7 @@ public final class GuardianRFTB extends JavaPlugin {
 
     public void getItems(GameEquip gameEquipment, Player player) {
         if(gameEquipment != GameEquip.BEAST_KIT) {
-            PlayerManager user = getUser(player.getUniqueId());
+            PlayerManagerImpl user = getUser(player.getUniqueId());
             KitType type = gameEquipment.getKitType();
             if(user.hasSelectedKit()) {
                 String kit = user.getSelectedKit();
@@ -403,7 +413,7 @@ public final class GuardianRFTB extends JavaPlugin {
         player.getInventory().setLeggings(itemsInfo.getBeastLeggings());
         player.getInventory().setBoots(itemsInfo.getBeastBoots());
 
-        PlayerManager user = getUser(player.getUniqueId());
+        PlayerManagerImpl user = getUser(player.getUniqueId());
         KitType type = gameEquipment.getKitType();
         if(user.hasSelectedKit()) {
             String kit = user.getSelectedKit();

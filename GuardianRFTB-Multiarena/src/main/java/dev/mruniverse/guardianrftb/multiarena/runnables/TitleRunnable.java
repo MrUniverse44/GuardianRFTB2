@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
-import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -26,9 +26,9 @@ public class TitleRunnable extends BukkitRunnable {
     public void run () {
         if(!isEnabled) cancel();
         for (UUID uuid : plugin.getRigoxPlayers().keySet()) {
-            PlayerManager playerManager = plugin.getUser(uuid);
+            PlayerManager playerManagerImpl = plugin.getUser(uuid);
             String currentTitle = titles.get(showingTitle);
-            plugin.getScoreboards().setTitle(playerManager.getPlayer(),currentTitle);
+            plugin.getScoreboards().setTitle(playerManagerImpl.getPlayer(),currentTitle);
             if(showingTitle == (titles.size() - 1)) {
                 showingTitle = 0;
             } else {

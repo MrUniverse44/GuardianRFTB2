@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,14 +56,14 @@ public class InteractListener implements Listener {
             if(event.getItem().getItemMeta() == null) return;
             if(event.getItem().getType().equals(plugin.getItemsInfo().getExit().getType()) && event.getItem().getItemMeta().equals(plugin.getItemsInfo().getExit().getItemMeta())) {
                 event.setCancelled(true);
-                PlayerManager playerManager = plugin.getUser(player.getUniqueId());
+                PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
                 String message;
                 int leaveInt = plugin.getSettings().getSettings().getInt("settings.leaveCancelTime");
-                if(playerManager.getLeaveDelay() != 0) {
+                if(playerManagerImpl.getLeaveDelay() != 0) {
                     plugin.getServer().getScheduler().cancelTask(plugin.getUser(event.getPlayer().getUniqueId()).getLeaveDelay());
                     message = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.leave.cancelled");
                     if(message == null) message = "&c&lTeleport cancelled!";
-                    playerManager.setLeaveDelay(0);
+                    playerManagerImpl.setLeaveDelay(0);
                     plugin.getUtils().sendMessage(player, message.replace("<leaveCancelTime>",""+leaveInt));
                     return;
                 }
@@ -136,11 +136,11 @@ public class InteractListener implements Listener {
                         case EXIT_GAME:
                         default:
                             if(plugin.getUser(player.getUniqueId()).getGame() != null) {
-                                PlayerManager playerManager = plugin.getUser(player.getUniqueId());
+                                PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
                                 int leaveInt = plugin.getSettings().getSettings().getInt("settings.leaveCancelTime");
-                                if (playerManager.getLeaveDelay() != 0) {
+                                if (playerManagerImpl.getLeaveDelay() != 0) {
                                     plugin.getServer().getScheduler().cancelTask(plugin.getUser(event.getPlayer().getUniqueId()).getLeaveDelay());
-                                    playerManager.setLeaveDelay(0);
+                                    playerManagerImpl.setLeaveDelay(0);
                                     plugin.getUtils().sendMessage(player, cancelMessage.replace("<leaveCancelTime>", "" + leaveInt));
                                     return;
                                 }

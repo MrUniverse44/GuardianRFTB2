@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.storage;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.FileStorage;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class FileStorage {
-    private final GuardianRFTB plugin;
+public class FileStorageImpl implements FileStorage {
+    private GuardianRFTB plugin;
     private FileConfiguration settings,messages,mysql,data,menus,items,games,boards,chests,kits,messagesEn,messagesEs,sounds,holograms;
     private final File rxSettings;
     private final File rxMessagesEn;
@@ -31,7 +32,7 @@ public class FileStorage {
     private final File rxHolograms;
     private final File rxChests;
     private final File rxKits;
-    public FileStorage(GuardianRFTB plugin) {
+    public FileStorageImpl(GuardianRFTB plugin) {
         this.plugin = plugin;
         File dataFolder = plugin.getDataFolder();
         rxSettings = new File(dataFolder, "settings.yml");
@@ -65,6 +66,12 @@ public class FileStorage {
 
     }
 
+    @Override
+    public void setPlugin(GuardianRFTB plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
     public void setMessages(String code) {
         if(code.equalsIgnoreCase("en")) {
             rxMessages = rxMessagesEn;
@@ -80,6 +87,7 @@ public class FileStorage {
         messages = loadConfig("messages_" + code);
     }
 
+    @Override
     public File getFile(GuardianFiles fileToGet) {
         switch (fileToGet) {
             case HOLOGRAMS:
@@ -120,6 +128,7 @@ public class FileStorage {
      *
      * @param configName config to create/reload.
      */
+    @Override
     public FileConfiguration loadConfig(String configName) {
         File configFile = new File(plugin.getDataFolder(), configName + ".yml");
 
@@ -144,6 +153,7 @@ public class FileStorage {
      *
      * @param rigoxFile config to create/reload.
      */
+    @Override
     public FileConfiguration loadConfig(File rigoxFile) {
         if (!rigoxFile.exists()) {
             saveConfig(rigoxFile);
@@ -166,6 +176,7 @@ public class FileStorage {
      *
      * @param Mode mode of reload.
      */
+    @Override
     public void reloadFile(SaveMode Mode) {
         switch (Mode) {
             case HOLOGRAMS:
@@ -225,10 +236,11 @@ public class FileStorage {
     }
 
     /**
-     * Save config File using FileStorage
+     * Save config File using FileStorageImpl
      *
      * @param fileToSave config to save/create with saveMode.
      */
+    @Override
     public void save(SaveMode fileToSave) {
         try {
             switch (fileToSave) {
@@ -296,6 +308,7 @@ public class FileStorage {
      *
      * @param configName config to save/create.
      */
+    @Override
     public void saveConfig(String configName) {
         File folderDir = plugin.getDataFolder();
         File file = new File(plugin.getDataFolder(), configName + ".yml");
@@ -320,6 +333,7 @@ public class FileStorage {
      *
      * @param fileToSave config to save/create.
      */
+    @Override
     public void saveConfig(File fileToSave) {
         if (!fileToSave.getParentFile().exists()) {
             boolean createFile = fileToSave.mkdir();
@@ -344,6 +358,7 @@ public class FileStorage {
      *
      * @param fileToControl config to control.
      */
+    @Override
     public FileConfiguration getControl(GuardianFiles fileToControl) {
         switch (fileToControl) {
             case HOLOGRAMS:
@@ -392,6 +407,7 @@ public class FileStorage {
         }
     }
 
+    @Override
     public List<String> getContent(GuardianFiles file, String path, boolean getKeys) {
         List<String> rx = new ArrayList<>();
         ConfigurationSection section = getControl(file).getConfigurationSection(path);
