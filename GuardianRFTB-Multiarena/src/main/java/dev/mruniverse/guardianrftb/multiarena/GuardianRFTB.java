@@ -84,7 +84,7 @@ public final class GuardianRFTB extends JavaPlugin {
     }
     public boolean existPlayer(Player player) { return guardianPlayers.containsKey(player.getUniqueId()); }
     public void removePlayer(Player player) { guardianPlayers.remove(player.getUniqueId()); }
-    public HashMap<UUID, PlayerManagerImpl> getRigoxPlayers() { return guardianPlayers; }
+    public HashMap<UUID, PlayerManager> getRigoxPlayers() { return guardianPlayers; }
     public PlayerManager getUser(UUID uuid) {
         if(guardianPlayers.get(uuid) == null) {
             Player player = Bukkit.getPlayer(uuid);
