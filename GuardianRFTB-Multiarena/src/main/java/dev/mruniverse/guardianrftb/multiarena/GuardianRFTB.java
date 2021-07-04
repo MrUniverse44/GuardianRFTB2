@@ -33,7 +33,7 @@ import java.util.*;
 
 @SuppressWarnings("unused")
 public final class GuardianRFTB extends JavaPlugin {
-    private final HashMap<UUID, PlayerManagerImpl> guardianPlayers = new HashMap<>();
+    private final HashMap<UUID, PlayerManager> guardianPlayers = new HashMap<>();
     private GuardianUtils guardianUtils;
 
     public static GuardianRFTB instance;
