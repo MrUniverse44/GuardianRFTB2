@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.storage;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.SQL;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -80,7 +81,7 @@ public class SQLImpl implements SQL {
             }
         } else {
             String id = player.getUniqueId().toString().replace("-","");
-            PlayerManagerImpl playerManagerImpl = plugin.getUser(player.getUniqueId());
+            PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
             playerManagerImpl.setCoins(coins.get(id));
             playerManagerImpl.setSelectedKit(selectedKits.get(id));
             playerManagerImpl.setKits(kits.get(id));
