@@ -13,6 +13,26 @@
 sounds:
   # Game Sounds
   game:
+    # Kit Select
+    kit-select:
+      # Toggle Sound
+      toggle: false
+      # Volume (Float)
+      volume: "1.0F"
+      # Pitch (Float)
+      pitch: "0.5F"
+      # Sound
+      sound : NOTE_PLING
+    # Kit Select
+    kit-buy:
+      # Toggle Sound
+      toggle: false
+      # Volume (Float)
+      volume: "1.0F"
+      # Pitch (Float)
+      pitch: "0.5F"
+      # Sound
+      sound: ORB_PICKUP
     # Checkpoint Use Sound
     checkpoint-use:
       # Toggle Sound

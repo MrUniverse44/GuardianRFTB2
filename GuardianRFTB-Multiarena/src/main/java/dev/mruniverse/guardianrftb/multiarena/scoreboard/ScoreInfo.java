@@ -17,9 +17,8 @@ import java.util.List;
 
 public class ScoreInfo {
     private final GuardianRFTB plugin;
-    public ScoreInfo(GuardianRFTB plugin) {
-        this.plugin = plugin;
-    }
+
+    public ScoreInfo(GuardianRFTB plugin) { this.plugin = plugin; }
 
     public List<String> getLines(GuardianBoard board, Player player) {
         List<String> lines = new ArrayList<>();
