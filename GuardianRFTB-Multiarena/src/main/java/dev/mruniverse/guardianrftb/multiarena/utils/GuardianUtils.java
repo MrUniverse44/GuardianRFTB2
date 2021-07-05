@@ -247,11 +247,11 @@ public class GuardianUtils {
             plugin.addPlayer(player);
             playerManagerImpl = plugin.getUser(player.getUniqueId());
         }
-
         text = text.replace("<player_name>",player.getName())
                 .replace("[new line]","\n")
                 .replace("<player_coins>", playerManagerImpl.getCoins() + "")
-                .replace("<player_wins>", playerManagerImpl.getKits().size() + "")
+                .replace("<player_wins>",playerManagerImpl.getWins() + "")
+                .replace("<player_kits>", playerManagerImpl.getKits().size() + "")
                 .replace("<player_kills>", playerManagerImpl.getKills() + "")
                 .replace("<player_deaths>", playerManagerImpl.getDeaths() + "")
                 .replace("<player_beast_kit>","Not selected")
@@ -260,7 +260,14 @@ public class GuardianUtils {
                 .replace("<timeFormat>",getDateFormat());
 
         if (playerManagerImpl.getGame() != null) {
+            String second;
             Game currentGame = playerManagerImpl.getGame();
+            int time = currentGame.getLastTimer();
+            if(time == 1) {
+                second = plugin.getSettings().getSettings().getString("settings.timer.second","second");
+            } else {
+                second = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");;
+            }
             text = text.replace("<arena_name>",currentGame.getName())
                     .replace("<arena_online>","" + currentGame.getPlayers().size())
                     .replace("<arena_max>","" + currentGame.getMax())
@@ -271,7 +278,8 @@ public class GuardianUtils {
                     .replace("<arena_timeLeft>",currentGame.getLastTimer() + "")
                     .replace("<arena_status>",currentGame.getStatus().getStatus())
                     .replace("<player_role>", playerManagerImpl.getCurrentRole())
-                    .replace("<arena_time_number>", currentGame.getLastTimer() + "");
+                    .replace("<arena_time_number>", currentGame.getLastTimer() + "")
+                    .replace("<arena_time_text>",second);
         }
         if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }
         return text;
