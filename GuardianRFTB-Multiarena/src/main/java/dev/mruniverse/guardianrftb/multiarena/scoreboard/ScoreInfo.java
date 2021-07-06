@@ -204,7 +204,7 @@ public class ScoreInfo {
     public boolean size(String line) {
         line = ChatColor.translateAlternateColorCodes('&',line);
         if(39 <= line.length()) {
-            plugin.getLogs().error("Line: '" + line + "' has more than 39 characters, String length is longer than maximum allowed (" + line.length() + " > 39)");
+            plugin.getLogs().error("&fLine: '" + line + "&f' has more than 39 characters, String length is longer than maximum allowed (" + line.length() + " > 39)");
             plugin.getLogs().error("This issue can kick users showing an error.");
             return true;
         }
