@@ -203,12 +203,12 @@ public class ScoreInfo {
 
     public boolean size(String line) {
         line = ChatColor.translateAlternateColorCodes('&',line);
-        if(line.length() <= 39) {
-            plugin.getLogs().error("Line: '" + line + "' has more than 40 characters, String length is longer than maximum allowed (" + line.length() + " > 40)");
+        if(39 >= line.length()) {
+            plugin.getLogs().error("Line: '" + line + "' has more than 39 characters, String length is longer than maximum allowed (" + line.length() + " > 39)");
             plugin.getLogs().error("This issue can kick users showing an error.");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public String getTitle(GuardianBoard board) {
