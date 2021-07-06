@@ -202,6 +202,7 @@ public class ExtrasListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void leaveCommand(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
+        if (plugin.getUser(p.getUniqueId()) == null) return;
         if (plugin.getUser(p.getUniqueId()).getGame() != null) {
             String[] args = e.getMessage().split(" ");
             List<String> commands = plugin.getSettings().getSettings().getStringList("settings.leaveCMDs");
