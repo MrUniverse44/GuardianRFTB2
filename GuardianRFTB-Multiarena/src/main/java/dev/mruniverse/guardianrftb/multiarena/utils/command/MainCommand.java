@@ -144,24 +144,35 @@ public class MainCommand implements CommandExecutor {
 
             if (args[0].equalsIgnoreCase("joinAll")) {
                 if(hasPermission(sender,"grftb.command.joinAll",true)) {
-                    if (args.length == 2) {
+                    if (args.length != 1) {
                         String game = args[1];
+                        utils.sendMessage(sender,"&aSearching game named: &b" + game);
                         Game currentGame = plugin.getGameManager().getGame(game);
                         if (currentGame == null) {
                             utils.sendMessage(sender, "&c&lThis game doesn't exists!");
                             return true;
                         }
-                        for (Player player : Bukkit.getOnlinePlayers()) {
+                        utils.sendMessage(sender,"&a&lGame Found! &aTrying to send all players to game &b" + game);
+                        utils.sendMessage(sender,"&aGame Info:");
+                        utils.sendMessage(sender,"&6- &eMax: &f" + currentGame.getMax());
+                        utils.sendMessage(sender,"&6- &eOnline: &f" + currentGame.getPlayers().size());
+                        utils.sendMessage(sender,"&6- &eStatus: &f" + currentGame.getStatus());
+                        utils.sendMessage(sender,"&aPriority Players: ");
+                        for (Player player : plugin.getServer().getOnlinePlayers()) {
                             if (player.hasPermission("guardianrftb.game.joinPriority")) {
-                                if (plugin.getUser(player.getUniqueId()).getGame() != null) {
-                                    plugin.getGameManager().joinGame(player, game);
-                                }
+                                utils.sendMessage(sender,"&6- &e" + player.getName());
+                                currentGame.join(player);
                             }
                         }
 
-                        for (Player player : Bukkit.getOnlinePlayers()) {
-                            if (plugin.getUser(player.getUniqueId()).getGame() != null && currentGame.getPlayers().size() != currentGame.getMax()) {
-                                plugin.getGameManager().joinGame(player, game);
+
+                        utils.sendMessage(sender,"&aNormal Players: ");
+                        for (Player player : plugin.getServer().getOnlinePlayers()) {
+                            if(!player.hasPermission("guardianrftb.game.joinPriority")) {
+                                utils.sendMessage(sender,"&6- &e" + player.getName());
+                                if (currentGame.getPlayers().size() != currentGame.getMax()) {
+                                    currentGame.join(player);
+                                }
                             }
                         }
                         return true;

@@ -61,6 +61,7 @@ public class BoardController {
         }
     }
     private boolean existPlayer(Player player) {
+        if(player == null) return false;
         return players.containsKey(player.getUniqueId());
     }
 

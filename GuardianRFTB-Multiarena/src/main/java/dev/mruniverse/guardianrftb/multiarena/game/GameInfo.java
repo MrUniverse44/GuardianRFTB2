@@ -186,12 +186,17 @@ public class GameInfo implements Game {
     }
     @Override
     public void addChestLimit(String chestName,Player player) {
-        int value = chestLimitValues.get(chestName);
-        chestLimitValues.put(chestName,value + 1);
+        int value = chestLimitViewer.get(chestName);
+        List<Player> players = chestLimitUsers.get(chestName);
+        players.add(player);
+        chestLimitUsers.put(chestName,players);
+        chestLimitViewer.put(chestName,value + 1);
     }
 
     @Override
     public boolean isChestLimitParsed(String chestName) {
+        chestLimitViewer.putIfAbsent(chestName, 0);
+        chestLimitValues.putIfAbsent(chestName, 10);
         int current = chestLimitViewer.get(chestName);
         int max = chestLimitValues.get(chestName);
         if(chestLimitVerifier.get(chestName)) {
@@ -254,7 +259,7 @@ public class GameInfo implements Game {
             String chestLimit = gameFile.getString(path + "chest-limits." + chestName,"NONE");
             if(chestLimit.equalsIgnoreCase("NONE")) {
                 chestLimitValues.put(chestName, 0);
-                chestLimitViewer.put(chestName,0);
+                chestLimitViewer.put(chestName, 0);
                 chestLimitVerifier.put(chestName, false);
             } else {
                 chestLimitValues.put(chestName, Integer.parseInt(chestLimit));
@@ -719,6 +724,8 @@ public class GameInfo implements Game {
      */
     @Override
     public void updateSignsBlocks() {
+        /*
+         *
         Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(gameStatus.getBlock());
         if(optionalXMaterial.isPresent()) {
             XMaterial material = optionalXMaterial.get();
@@ -744,7 +751,10 @@ public class GameInfo implements Game {
                     }
                 }
             }
+
+
         }
+        */
     }
     @Override
     public void updateSigns() {
