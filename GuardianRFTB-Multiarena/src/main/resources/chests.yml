@@ -24,6 +24,20 @@
 #        - PROTECTION, 1
 #
 chests:
+  swords:
+    inventoryName: '&8Swords Items'
+    inventoryRows: 5
+    inventorySounds:
+      - ORB_PICKUP
+    items:
+      sword:
+        name: '&bWooden Sword'
+        slot: 22
+        lore:
+          - '&8GuardianRFTB'
+        item: WOODEN_SWORD
+        enchantments:
+          - PUNCH, 2
   armor:
     inventoryName: '&8Armor Items'
     inventoryRows: 6

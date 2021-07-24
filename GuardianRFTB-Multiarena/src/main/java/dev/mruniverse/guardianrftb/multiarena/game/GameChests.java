@@ -25,6 +25,9 @@ public class GameChests {
         createInv();
         loadItems();
     }
+    public String getChestID() {
+        return chestID;
+    }
     public void unload() {
         chestItems.clear();
     }

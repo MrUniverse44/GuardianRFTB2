@@ -19,14 +19,55 @@ import java.util.Objects;
 public class GameManager {
     private final ArrayList<Game> games = new ArrayList<>();
     private final HashMap<World, Game> gamesWorlds = new HashMap<>();
+
     public HashMap<String,GameChests> gameChests = new HashMap<>();
     public HashMap<GameType,GameMenu> gameMenu = new HashMap<>();
+
     private final GameMainMenu gameMainMenu;
     private final GuardianRFTB plugin;
+
+    private GameChests gameSwitchChest = null;
+
+    private boolean chestLimit;
+
+    private boolean chestChange;
+
+    public GameChests getSwitchChest() {
+        return gameSwitchChest;
+    }
+
     public GameManager(GuardianRFTB plugin) {
         this.plugin = plugin;
         gameMainMenu = new GameMainMenu(plugin);
+        FileConfiguration config = plugin.getStorage().getControl(GuardianFiles.SETTINGS);
+        chestLimit = config.getBoolean("settings.game.chest-limit-settings.toggle",true);
+        chestChange = config.getBoolean("settings.game.chest-limit-settings.change-chest.toggle",false);
+        if(chestLimit && chestChange) {
+            String switchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
+            gameSwitchChest = new GameChests(plugin, switchChest);
+        }
     }
+
+    public boolean isChestLimitEnabled() {
+        return chestLimit;
+    }
+
+    public boolean hasChestChangeEnabled() {
+        return chestChange;
+    }
+
+    public void update() {
+        FileConfiguration config = plugin.getStorage().getControl(GuardianFiles.SETTINGS);
+        chestLimit = config.getBoolean("settings.game.chest-limit-settings.toggle",true);
+        chestChange = config.getBoolean("settings.game.chest-limit-settings.change-chest.toggle",false);
+        if(getSwitchChest() != null) {
+            String switchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
+            if(!getSwitchChest().getChestID().equalsIgnoreCase(switchChest)) {
+                gameSwitchChest = new GameChests(plugin,switchChest);
+            }
+        }
+    }
+
     public void loadChests() {
         ConfigurationSection section = plugin.getStorage().getControl(GuardianFiles.CHESTS).getConfigurationSection("chests");
         if(section == null) return;

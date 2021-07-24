@@ -163,6 +163,18 @@ settings:
       ending: Restarting
   # Game Options
   game:
+    # Change the chest when the chest-limit is parsed.
+    chest-limit-settings:
+      # Toggle this option
+      toggle: false
+      # Reset
+      reset-on-dead-chest-users: true
+      # Change to another chest
+      change-chest:
+        # Enable this option
+        toggle: true
+        # Value of the change-chest.
+        chest: 'swords'
     # Change the start-timer to select a beast.
     start-countdown: 30
     # Show Buttons message (PlayAgain, AutoPlay, Leave) on game-end

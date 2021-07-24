@@ -273,15 +273,21 @@ public class InteractListener implements Listener {
         for(String chests : game.getChestTypes()) {
             if(game.getChestLocations().get(chests) != null) {
                 if (game.getChestLocations().get(chests).contains(location)) {
-                    if(game.isChestLimited(chests)) {
+                    if(game.isChestLimited(chests) && plugin.getGameManager().isChestLimitEnabled()) {
                         if(!game.isChestLimitParsed(chests) || game.isChestOf(chests,player)) {
                             openGameChest(player,chests);
                             game.addChestLimit(chests,player);
                             return;
                         }
-                        String prefix = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.prefix","&3&lG&b&lRFTB &8| ");
-                        String limitedChest = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.limited-chest","&aThis chest has been empty for others users.");
-                        plugin.getUtils().sendMessage(player,prefix + limitedChest);
+                        String prefix = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.prefix", "&3&lG&b&lRFTB &8| ");
+                        String limitedChest = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.limited-chest", "&aThis chest has been empty for others users.");
+                        if(plugin.getGameManager().hasChestChangeEnabled()) {
+                            if(plugin.getGameManager().getSwitchChest() != null) {
+                                player.openInventory(plugin.getGameManager().getSwitchChest().getInventory());
+                                return;
+                            }
+                        }
+                        plugin.getUtils().sendMessage(player, prefix + limitedChest);
                         return;
                     }
                     openGameChest(player, chests);
