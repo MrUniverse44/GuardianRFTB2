@@ -724,8 +724,6 @@ public class GameInfo implements Game {
      */
     @Override
     public void updateSignsBlocks() {
-        /*
-         *
         Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(gameStatus.getBlock());
         if(optionalXMaterial.isPresent()) {
             XMaterial material = optionalXMaterial.get();
@@ -754,7 +752,6 @@ public class GameInfo implements Game {
 
 
         }
-        */
     }
     @Override
     public void updateSigns() {
