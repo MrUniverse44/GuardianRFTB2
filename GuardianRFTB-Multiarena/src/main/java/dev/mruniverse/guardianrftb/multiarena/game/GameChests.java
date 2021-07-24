@@ -47,7 +47,7 @@ public class GameChests {
         if(small == 2) return 18;
         if(small == 3) return 27;
         if(small == 4) return 36;
-        if(small == 5) return 46;
+        if(small == 5) return 45;
         return 54;
     }
     private void pasteItems() {

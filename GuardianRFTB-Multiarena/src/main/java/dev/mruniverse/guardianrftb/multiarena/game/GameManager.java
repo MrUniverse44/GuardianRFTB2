@@ -26,14 +26,14 @@ public class GameManager {
     private final GameMainMenu gameMainMenu;
     private final GuardianRFTB plugin;
 
-    private GameChests gameSwitchChest = null;
+    private String gameSwitchChest = "swords";
 
     private boolean chestLimit;
 
     private boolean chestChange;
 
     public GameChests getSwitchChest() {
-        return gameSwitchChest;
+        return getGameChest(gameSwitchChest);
     }
 
     public GameManager(GuardianRFTB plugin) {
@@ -43,8 +43,7 @@ public class GameManager {
         chestLimit = config.getBoolean("settings.game.chest-limit-settings.toggle",true);
         chestChange = config.getBoolean("settings.game.chest-limit-settings.change-chest.toggle",false);
         if(chestLimit && chestChange) {
-            String switchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
-            gameSwitchChest = new GameChests(plugin, switchChest);
+            gameSwitchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
         }
     }
 
@@ -63,7 +62,7 @@ public class GameManager {
         if(getSwitchChest() != null) {
             String switchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
             if(!getSwitchChest().getChestID().equalsIgnoreCase(switchChest)) {
-                gameSwitchChest = new GameChests(plugin,switchChest);
+                gameSwitchChest = switchChest;
             }
         }
     }
