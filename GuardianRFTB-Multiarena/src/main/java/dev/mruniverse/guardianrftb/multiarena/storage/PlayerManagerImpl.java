@@ -63,22 +63,28 @@ public class PlayerManagerImpl implements PlayerManager {
         pointStatus = false;
         lastCheckpoint = null;
         currentGame = null;
-        if (plugin.getStorage().getControl(GuardianFiles.MYSQL).getBoolean("mysql.enabled")) {
-            String table = plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.table");
-            if (!plugin.getData().isRegistered(table, "Player", getID())) {
-                plugin.getData().getData().addPlayer(player.getUniqueId());
-                coins = plugin.getData().getData().getCoins(player.getUniqueId());
-                selectedKit = plugin.getData().getData().getSelectedKit(player.getUniqueId());
-                kits = plugin.getData().getData().getKits(player.getUniqueId());
-                coins = plugin.getData().getData().getCoins(player.getUniqueId());
+        try {
+            if (plugin.getStorage().getControl(GuardianFiles.MYSQL).getBoolean("mysql.enabled")) {
+                String table = plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("mysql.table");
+                if (!plugin.getData().isRegistered(table, "Player", getID())) {
+                    plugin.getData().getData().addPlayer(player.getUniqueId());
+                    coins = plugin.getData().getData().getCoins(player.getUniqueId());
+                    selectedKit = plugin.getData().getData().getSelectedKit(player.getUniqueId());
+                    kits = plugin.getData().getData().getKits(player.getUniqueId());
+                    coins = plugin.getData().getData().getCoins(player.getUniqueId());
+                }
+                return;
             }
-            return;
+            if (!plugin.getData().getSQL().exist(player.getUniqueId())) plugin.getData().getSQL().createPlayer(player);
+            coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
+            selectedKit = plugin.getData().getSQL().getSelectedKit(player.getUniqueId());
+            kits = plugin.getData().getSQL().getKits(player.getUniqueId());
+            coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
+        }catch (Throwable ignored) {
+            coins = 0;
+            selectedKit = "K0";
+            kits = "K0";
         }
-        if(!plugin.getData().getSQL().exist(player.getUniqueId())) plugin.getData().getSQL().createPlayer(player);
-        coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
-        selectedKit = plugin.getData().getSQL().getSelectedKit(player.getUniqueId());
-        kits = plugin.getData().getSQL().getKits(player.getUniqueId());
-        coins = plugin.getData().getSQL().getCoins(player.getUniqueId());
     }
 
     public boolean hasSelectedKit() {
