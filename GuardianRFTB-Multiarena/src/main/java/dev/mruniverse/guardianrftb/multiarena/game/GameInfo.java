@@ -42,6 +42,16 @@ public class GameInfo implements Game {
 
     private final HashMap<String,List<Location>> chestLocations = new HashMap<>();
 
+    private final HashMap<String,Boolean> chestLimitVerifier = new HashMap<>();
+
+    private final HashMap<String,Integer> chestLimitViewer = new HashMap<>();
+
+    private final HashMap<String,Integer> chestLimitDeadValues = new HashMap<>();
+
+    private final HashMap<String,List<Player>> chestLimitUsers = new HashMap<>();
+
+    private final HashMap<String,Integer> chestLimitValues = new HashMap<>();
+
     private final String configName;
     private final String path;
 
@@ -175,9 +185,98 @@ public class GameInfo implements Game {
         return 0;
     }
     @Override
+    public void addChestLimit(String chestName,Player player) {
+        int value = chestLimitValues.get(chestName);
+        chestLimitValues.put(chestName,value + 1);
+    }
+
+    @Override
+    public boolean isChestLimitParsed(String chestName) {
+        int current = chestLimitViewer.get(chestName);
+        int max = chestLimitValues.get(chestName);
+        if(chestLimitVerifier.get(chestName)) {
+            return (current >= max);
+        }
+        return chestLimitVerifier.get(chestName);
+    }
+
+    @Override
+    public void addDeadPlayerChest(String chest) {
+        int value = chestLimitDeadValues.get(chest);
+        int max = chestLimitValues.get(chest);
+        chestLimitDeadValues.put(chest,value + 1);
+
+        if(value >= max) {
+            chestLimitViewer.put(chest,0);
+            chestLimitDeadValues.put(chest,0);
+            chestLimitUsers.put(chest,new ArrayList<>());
+        }
+    }
+
+    @Override
+    public void setChestLimiter(String chest,String limit) {
+        if(limit.equalsIgnoreCase("NONE")) {
+            chestLimitValues.put(chest,0);
+            chestLimitVerifier.put(chest,false);
+            return;
+        }
+        chestLimitValues.put(chest,Integer.parseInt(limit));
+        chestLimitVerifier.put(chest,true);
+    }
+
+    @Override
+    public boolean isChestLimited(String chestName) {
+        return chestLimitVerifier.get(chestName);
+    }
+
+    public void loadChestLimiter() {
+        try {
+            FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
+            if(gameFile.get(path + "chests") != null) {
+                for(String chestType : gameFile.getStringList(path + "chests")) {
+                    loadChestLimit(chestType);
+                }
+            }
+        }catch (Throwable throwable){
+            plugin.getLogs().error("Can't load game Chests Limiters");
+            plugin.getLogs().error(throwable);
+        }
+    }
+
+    @Override
+    public boolean isChestOf(String chestName,Player player) {
+        return chestLimitUsers.get(chestName).contains(player);
+    }
+
+    public void loadChestLimit(String chestName) {
+        FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
+        if(gameFile.get(path + "chest-limits." + chestName) != null) {
+            String chestLimit = gameFile.getString(path + "chest-limits." + chestName,"NONE");
+            if(chestLimit.equalsIgnoreCase("NONE")) {
+                chestLimitValues.put(chestName, 0);
+                chestLimitViewer.put(chestName,0);
+                chestLimitVerifier.put(chestName, false);
+            } else {
+                chestLimitValues.put(chestName, Integer.parseInt(chestLimit));
+                chestLimitVerifier.put(chestName, true);
+                chestLimitViewer.put(chestLimit,0);
+            }
+            chestLimitUsers.put(chestName,new ArrayList<>());
+            chestLimitDeadValues.put(chestName,0);
+        } else {
+            chestLimitDeadValues.put(chestName,0);
+            chestLimitUsers.put(chestName,new ArrayList<>());
+            chestLimitViewer.put(chestName,0);
+            chestLimitVerifier.put(chestName,false);
+            chestLimitValues.put(chestName,0);
+        }
+    }
+
+    @Override
     public void loadChestType(String chestName) {
         try {
             FileConfiguration gameFile = plugin.getStorage().getControl(GuardianFiles.GAMES);
+            loadChestLimit(chestName);
             if(gameFile.get(path + "chests-location." + chestName) != null) {
                 List<Location> newLocations = new ArrayList<>();
                 for(String locations : gameFile.getStringList(path + "chests-location." + chestName)) {
@@ -284,6 +383,7 @@ public class GameInfo implements Game {
         this.players.remove(player);
         this.runners.remove(player);
         this.beasts.remove(player);
+        checkDeadChests(player);
         this.spectators.remove(player);
         if(player.isOnline()) {
             player.getInventory().setHelmet(null);
@@ -312,10 +412,22 @@ public class GameInfo implements Game {
         }
         updateSigns();
     }
+    public void checkDeadChests(Player player) {
+        for(Map.Entry<String,List<Player>> entry : chestLimitUsers.entrySet()) {
+            if(entry.getValue().contains(player)) {
+                List<Player> entryValue = entry.getValue();
+                entryValue.remove(player);
+                chestLimitUsers.put(entry.getKey(),entryValue);
+                addDeadPlayerChest(entry.getKey());
+            }
+        }
+    }
+
     @Override
     public void leave(Player player) {
         this.players.remove(player);
         this.runners.remove(player);
+        checkDeadChests(player);
         this.beasts.remove(player);
         this.spectators.remove(player);
         player.getInventory().setHelmet(null);
@@ -543,7 +655,12 @@ public class GameInfo implements Game {
         this.spectators.clear();
         this.beasts.clear();
         this.runners.clear();
+        this.chestLimitUsers.clear();
+        this.chestLimitDeadValues.clear();
+        this.chestLimitViewer.clear();
+        this.chestLimitVerifier.clear();
         this.beasts.clear();
+        loadChestLimiter();
         this.lastTimer = 30;
         this.gameStatus = GameStatus.WAITING;
         doubleCountPrevent = false;
@@ -555,6 +672,7 @@ public class GameInfo implements Game {
     public void deathBeast(Player beast) {
         beasts.remove(beast);
         spectators.add(beast);
+        checkDeadChests(beast);
         plugin.getUser(beast.getUniqueId()).addDeaths();
         BeastDeathEvent event = new BeastDeathEvent(this,beast);
         Bukkit.getPluginManager().callEvent(event);
@@ -574,6 +692,7 @@ public class GameInfo implements Game {
     @Override
     public void deathRunner(Player runner) {
         runners.remove(runner);
+        checkDeadChests(runner);
         RunnerDeathEvent event = new RunnerDeathEvent(this,runner);
         Bukkit.getPluginManager().callEvent(event);
         if(!gameType.equals(GameType.INFECTED)) {

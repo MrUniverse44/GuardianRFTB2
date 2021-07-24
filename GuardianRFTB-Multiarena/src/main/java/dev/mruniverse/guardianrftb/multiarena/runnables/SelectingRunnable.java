@@ -22,6 +22,7 @@ public class SelectingRunnable extends BukkitRunnable {
     private String second;
     private String seconds;
     private String chosenBeast;
+    private String forcedBeast;
     public SelectingRunnable(GuardianRFTB plugin, Game game) {
         this.plugin = plugin;
         this.currentGame = game;
@@ -31,6 +32,7 @@ public class SelectingRunnable extends BukkitRunnable {
         enough = configuration.getString("messages.game.game-count.enough-players");
         selecting = configuration.getString("messages.game.game-count.selecting");
         chosenBeast = configuration.getString("messages.game.chosenBeast");
+        forcedBeast = configuration.getString("messages.game.forcedBeast");
         prefix = configuration.getString("messages.prefix");
         second = secondConfiguration.getString("settings.timer.second");
         seconds = secondConfiguration.getString("settings.timer.seconds");
@@ -45,6 +47,13 @@ public class SelectingRunnable extends BukkitRunnable {
     @Override
     public void run() {
         if(currentGame.getPlayers().size() >= currentGame.getMin()) {
+            if(currentGame.getBeasts().size() > 0 && currentGame.getType() == GameType.CLASSIC) {
+                currentGame.cancelTask();
+                currentGame.startCount();
+                for(Player player : currentGame.getPlayers()) {
+                    guardianUtils.sendMessage(player,prefix + forcedBeast);
+                }
+            }
             int time = currentGame.getLastTimer();
             if(time != 0) {
                 SoundsInfo sounds = plugin.getSoundsInfo();

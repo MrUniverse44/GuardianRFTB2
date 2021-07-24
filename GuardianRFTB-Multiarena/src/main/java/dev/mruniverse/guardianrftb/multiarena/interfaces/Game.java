@@ -75,6 +75,18 @@ public interface Game {
 
     void setMenuSlot(int slot);
 
+    void addChestLimit(String chest,Player player);
+
+    void addDeadPlayerChest(String chest);
+
+    void setChestLimiter(String chest,String limit);
+
+    boolean isChestLimitParsed(String chestName);
+
+    boolean isChestLimited(String chestName);
+
+    boolean isChestOf(String chestName,Player player);
+
     String getConfigName();
     String getName();
 

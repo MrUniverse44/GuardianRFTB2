@@ -168,6 +168,23 @@ public class GameCommand {
             argumentsIssue(sender);
             return;
         }
+        if(arguments[0].equalsIgnoreCase("setChestLimiter")) {
+            if(arguments.length == 4) {
+                String game = arguments[1];
+                String chest = arguments[2];
+                String limit = arguments[3];
+                if (main.getStorage().getControl(GuardianFiles.GAMES).contains("games." + game)) {
+                    main.getGameManager().setChestLimiter(game, chest,limit);
+                    if (main.getGameManager().getConfigGame(game) != null)
+                        main.getGameManager().getConfigGame(game).setChestLimiter(chest,limit);
+                    utils.sendMessage(sender, "&aChest &b" + chest + "&a limit now is &b" + limit);
+                    return;
+                }
+                return;
+            }
+            argumentsIssue(sender);
+            return;
+        }
         if (arguments[0].equalsIgnoreCase("setBeast")) {
             if(arguments.length == 3) {
                 String game = arguments[1];

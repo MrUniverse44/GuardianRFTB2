@@ -176,6 +176,15 @@ public class GameManager {
             plugin.getLogs().error(throwable);
         }
     }
+    public void setChestLimiter(String game,String chest,String limit) {
+        try {
+            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + game + ".chest-limits." + chest, limit);
+            plugin.getStorage().save(SaveMode.GAMES_FILES);
+        }catch (Throwable throwable) {
+            plugin.getLogs().error("Can't set chest limit for game: " + game);
+            plugin.getLogs().error(throwable);
+        }
+    }
     public void setGameName(String configName, String gameName) {
         try {
             plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + configName + ".gameName", gameName);

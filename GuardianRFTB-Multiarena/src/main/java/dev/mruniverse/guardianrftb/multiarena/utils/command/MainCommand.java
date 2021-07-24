@@ -155,6 +155,8 @@ public class MainCommand implements CommandExecutor {
                         utils.sendMessage(sender,cmdPrefix + " admin game delChest (game) (chest) &e- &fRemove chest from your game");
                         utils.sendMessage(sender,cmdPrefix + " admin game addChestLoc (game) (chest) &e- &fAdd chest-loc to your game");
                         utils.sendMessage(sender,cmdPrefix + " admin game delChestLoc (game) (chest) &e- &fDel chest-loc of your game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setChestLimiter (game) (chest) (number) &e- &fSet chest limit of all the game");
+                        utils.sendMessage(sender,cmdPrefix + " admin game setBeast (game) (player) &e- &fSet an specific player to be the beast");
                         utils.sendMessage(sender,"&b------------ &a(Page 1&l/4&a) &b------------");
                     }
                     return true;

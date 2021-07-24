@@ -16,6 +16,8 @@ messages:
     leave-game: '&b%player% &7ha abandonado la partida! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game-in-game: '&b%player% &7ha abandonado la partida!'
     chosenBeast: '&eEl jugador &b%player% &efue escogido como la bestia!'
+    forcedBeast: '&eLa bestia se ha seleccionado forzosamente por un operador.'
+    limited-chest: '&aEste cofre ha sido vaciado por otros usuarios.'
     game-count:
       selecting: '&eLa bestia sera seleccionada en &c%current_time% &e%current_time_letter%'
       start: '&eEl juego inicia en &c%current_time% &e%current_time_letter%!'

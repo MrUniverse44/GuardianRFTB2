@@ -16,6 +16,8 @@ messages:
     leave-game: '&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game-in-game: '&b%player% &7has left the game!'
     chosenBeast: '&eThe player &b%player% &enow is a beast!'
+    forcedBeast: '&eThe beast has been forced to be selected by an operator.'
+    limited-chest: '&aThis chest has been empty for others users.'
     game-count:
       selecting: '&eThe beast will be chosen in &c%current_time% &e%current_time_letter%'
       start: '&eThe game starts in &c%current_time% &e%current_time_letter%!'
