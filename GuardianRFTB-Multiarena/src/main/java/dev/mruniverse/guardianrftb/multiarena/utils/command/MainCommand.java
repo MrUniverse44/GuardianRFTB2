@@ -10,6 +10,7 @@ import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.NPCCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -61,6 +62,7 @@ public class MainCommand implements CommandExecutor {
                 utils.sendMessage(sender,cmdPrefix + " join (name) &e- &fJoin Arena");
                 utils.sendMessage(sender,cmdPrefix + " randomJoin &e- &fRandom Join");
                 utils.sendMessage(sender,cmdPrefix + " leave &e- &fLeave CMD");
+                if(hasPermission(sender,"grftb.command.joinAll",false)) utils.sendMessage(sender,cmdPrefix + " joinAll (name) &e- &fJoin all server-players to an arena");
                 if(hasPermission(sender,"grftb.admin.help",false)) utils.sendMessage(sender,cmdPrefix + " admin &e- &fAdmin commands");
                 utils.sendMessage(sender,"&b------------ &aGuardian RFTB &b------------");
                 return true;
@@ -137,6 +139,36 @@ public class MainCommand implements CommandExecutor {
                     return true;
                 }
                 utils.sendMessage(sender, "&cThis command only can be used for players");
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("joinAll")) {
+                if(hasPermission(sender,"grftb.command.joinAll",true)) {
+                    if (args.length == 2) {
+                        String game = args[1];
+                        Game currentGame = plugin.getGameManager().getGame(game);
+                        if (currentGame == null) {
+                            utils.sendMessage(sender, "&c&lThis game doesn't exists!");
+                            return true;
+                        }
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            if (player.hasPermission("guardianrftb.game.joinPriority")) {
+                                if (plugin.getUser(player.getUniqueId()).getGame() != null) {
+                                    plugin.getGameManager().joinGame(player, game);
+                                }
+                            }
+                        }
+
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            if (plugin.getUser(player.getUniqueId()).getGame() != null && currentGame.getPlayers().size() != currentGame.getMax()) {
+                                plugin.getGameManager().joinGame(player, game);
+                            }
+                        }
+                        return true;
+                    }
+                    utils.sendMessage(sender,"&aDude this command is incomplete, please check the correct usage.");
+                    return true;
+                }
                 return true;
             }
 
