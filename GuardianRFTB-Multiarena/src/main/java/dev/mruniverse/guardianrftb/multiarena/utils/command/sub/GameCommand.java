@@ -2,9 +2,13 @@ package dev.mruniverse.guardianrftb.multiarena.utils.command.sub;
 
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
+import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
+import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameSelectedBeastEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -159,6 +163,27 @@ public class GameCommand {
                     return;
                 }
                 arenaIssue(sender, game);
+                return;
+            }
+            argumentsIssue(sender);
+            return;
+        }
+        if (arguments[0].equalsIgnoreCase("setBeast")) {
+            if(arguments.length == 3) {
+                String game = arguments[1];
+                String playerString = arguments[2];
+                Player player = Bukkit.getPlayer(playerString);
+                if(player == null) {
+                    utils.sendMessage(sender,"&aThis current player &b" + playerString + " &ais not online.");
+                    return;
+                }
+                if(main.getGameManager().existGame(game)) {
+                    Game currentGame = main.getGameManager().getGame(game);
+                    if(currentGame.getRunners().contains(player)) {
+                        setBeast(currentGame,player,utils);
+
+                    }
+                }
                 return;
             }
             argumentsIssue(sender);
@@ -383,6 +408,25 @@ public class GameCommand {
             }
         }
         argumentsIssue(sender);
+    }
+
+    private void setBeast(Game currentGame,Player player,Utils utils) {
+
+        FileConfiguration configuration = main.getStorage().getControl(GuardianFiles.MESSAGES);
+        String chosenBeast = configuration.getString("messages.game.chosenBeast","&eThe player &b%player% &enow is a beast!");
+        String prefix = configuration.getString("messages.prefix","");
+        currentGame.getBeasts().add(player);
+        currentGame.getRunners().remove(player);
+        GameSelectedBeastEvent event = new GameSelectedBeastEvent(currentGame,player);
+        Bukkit.getPluginManager().callEvent(event);
+        for(Player game : currentGame.getPlayers()) {
+            utils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()));
+        }
+        player.getInventory().clear();
+        player.getInventory().setItem(main.getItemsInfo().getBeastSlot(), main.getItemsInfo().getKitBeast());
+        player.getInventory().setItem(main.getItemsInfo().getExitSlot(), main.getItemsInfo().getExit());
+        player.teleport(currentGame.getSelecting());
+        main.getUser(player.getUniqueId()).setCurrentRole(GameTeam.BEASTS);
     }
 
     private boolean falseChest(Material evalMaterial) {

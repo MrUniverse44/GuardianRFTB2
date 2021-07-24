@@ -367,7 +367,7 @@ public class GameInfo implements Game {
             gameStatus = GameStatus.SELECTING;
             updateSignsBlocks();
             lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(plugin,this), 0L, 20L);
-            lastTimer = 30;
+            lastTimer = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.game.start-countdown",30);
             doubleCountPrevent = true;
             for(Player player : players) {
                 plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.SELECTING);

@@ -163,6 +163,8 @@ settings:
       ending: Restarting
   # Game Options
   game:
+    # Change the start-timer to select a beast.
+    start-countdown: 30
     # Show Buttons message (PlayAgain, AutoPlay, Leave) on game-end
     show-game-buttons-on-end: false
     # Show Beast distance in a actionbar or BossBar
