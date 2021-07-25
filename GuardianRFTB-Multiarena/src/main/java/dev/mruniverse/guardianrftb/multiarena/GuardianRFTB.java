@@ -265,18 +265,37 @@ public final class GuardianRFTB extends JavaPlugin {
             for (String beastDefaultInv : getStorage().getContent(GuardianFiles.ITEMS,"playing.beast-inventory",false)) {
                 String path = "playing.beast-inventory." + beastDefaultInv + ".";
                 if (items.get(path + "enchantments") == null) {
-                    itemsInfo.getBeastInventory().put(getItemWithData(
-                            items.getString(path + "item"),
-                            items.getString(path + "name"),
-                            items.getStringList(path + "lore")
-                    ),items.getInt(path + "slot"));
+                    if(items.get(path + "amount") == null) {
+                        itemsInfo.getBeastInventory().put(getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore")
+                        ), items.getInt(path + "slot"));
+                    } else {
+                        itemsInfo.getBeastInventory().put(getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore"),
+                                items.getInt(path + "amount")
+                        ), items.getInt(path + "slot"));
+                    }
                 } else {
-                    itemsInfo.getBeastInventory().put(getItemWithData(
-                            items.getString(path + "item"),
-                            items.getString(path + "name"),
-                            items.getStringList(path + "lore"),
-                            items.getStringList(path + "enchantments")
-                    ),items.getInt(path + "slot"));
+                    if(items.get(path + "amount") == null) {
+                        itemsInfo.getBeastInventory().put(getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore"),
+                                items.getStringList(path + "enchantments")
+                        ), items.getInt(path + "slot"));
+                    } else {
+                        itemsInfo.getBeastInventory().put(getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore"),
+                                items.getStringList(path + "enchantments"),
+                                items.getInt(path + "amount")
+                        ), items.getInt(path + "slot"));
+                    }
                 }
 
 
@@ -349,6 +368,35 @@ public final class GuardianRFTB extends JavaPlugin {
         Optional<XMaterial> optional = XMaterial.matchXMaterial(material);
         if(optional.isPresent()) {
             return utils.getItem(optional.get(), name, lore);
+        }
+        getLogs().error("Item " + material + " doesn't exists!");
+        return null;
+    }
+
+    private ItemStack getItemWithData(@Nullable String material,@Nullable String name, List<String> lore,int amount) {
+        Utils utils = getLib().getUtils();
+        if(material == null) material = "BEDROCK";
+        if(name == null) name = "INVALID_NAME";
+        Optional<XMaterial> optional = XMaterial.matchXMaterial(material);
+        if(optional.isPresent()) {
+            ItemStack item = utils.getItem(optional.get(),name,lore);
+            item.setAmount(amount);
+            return item;
+        }
+        getLogs().error("Item " + material + " doesn't exists!");
+        return null;
+    }
+
+    private ItemStack getItemWithData(@Nullable String material,@Nullable String name,List<String> lore,List<String> enchantments,int amount) {
+        Utils utils = getLib().getUtils();
+        if(material == null) material = "BEDROCK";
+        if(name == null) name = "INVALID_NAME";
+        Optional<XMaterial> optional = XMaterial.matchXMaterial(material);
+        if(optional.isPresent()) {
+            ItemStack currentItem = utils.getItem(optional.get(), name, lore);
+            ItemStack enchantedItem = utils.getEnchantmentList(currentItem,enchantments,"none");
+            enchantedItem.setAmount(amount);
+            return enchantedItem;
         }
         getLogs().error("Item " + material + " doesn't exists!");
         return null;
