@@ -11,6 +11,8 @@
 # SpigotMC Link: https://www.spigotmc.org/resources/88817/
 #
 settings:
+  # Enable this option to prevent-chunk-unloading (only enable this option if your server is only dedicated for this minigame or you have some users in games
+  cancel-chunk-unload: true
   # Enable Check update when the plugin load
   update-check: true
   # Plugin language file, if you want add your custom lang file you need put the name ("messages_<code>.yml") and in the language you put the code, example:

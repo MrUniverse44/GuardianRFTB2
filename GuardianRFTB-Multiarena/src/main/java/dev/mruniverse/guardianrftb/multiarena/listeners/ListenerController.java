@@ -24,9 +24,11 @@ public class ListenerController {
     private final QuitListener quitListener;
     private final ExtrasListener extrasListener;
     private final ChatListener chatListener;
+    private final ChunkListener chunkListener;
     private final InteractListener interactListener;
     public ListenerController(GuardianRFTB plugin) {
         this.plugin = plugin;
+        chunkListener = new ChunkListener(plugin);
         extrasListener = new ExtrasListener(plugin);
         damageListener = new DamageListener(plugin);
         deathListener = new DeathListener(plugin);
@@ -44,6 +46,7 @@ public class ListenerController {
         pluginManager.registerEvents(quitListener,plugin);
         pluginManager.registerEvents(extrasListener,plugin);
         pluginManager.registerEvents(joinListener,plugin);
+        pluginManager.registerEvents(chunkListener,plugin);
         pluginManager.registerEvents(signListener,plugin);
         pluginManager.registerEvents(damageListener,plugin);
         pluginManager.registerEvents(damagesListener,plugin);
@@ -61,6 +64,7 @@ public class ListenerController {
         blocksListener.updateAll();
         quitListener.updateAll();
         joinListener.updateAll();
+        chunkListener.updateAll();
         damagesListener.updateAll();
         damageListener.updateAll();
         deathListener.updateAll();

@@ -9,6 +9,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -343,6 +344,10 @@ public class GuardianUtils {
                         playerManagerImpl.getGame().leave(player);
                     }
                 } else {
+                    if(this.countdown == 2) {
+                        Chunk lobbyChunk = plugin.getSettings().getLocation().getChunk();
+                        if(!lobbyChunk.isLoaded()) lobbyChunk.load();
+                    }
                     this.countdown--;
                 }
             }

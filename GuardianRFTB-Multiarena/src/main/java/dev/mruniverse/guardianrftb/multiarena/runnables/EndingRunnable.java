@@ -15,6 +15,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -50,6 +51,10 @@ public class EndingRunnable extends BukkitRunnable {
     public void run() {
         int time = this.time;
         if(time != 0) {
+            if(time == 3) {
+                Chunk lobbyChunk = plugin.getSettings().getLocation().getChunk();
+                if(!lobbyChunk.isLoaded()) lobbyChunk.load();
+            }
             if(time == rewardTime) {
                 for(Player player : currentGame.getPlayers()) {
                     plugin.getUtils().rewardInfo(player,plugin.getStorage().getControl(GuardianFiles.MESSAGES).getStringList("messages.game.gameInfo.rewardSummary"),winnerIsRunner);

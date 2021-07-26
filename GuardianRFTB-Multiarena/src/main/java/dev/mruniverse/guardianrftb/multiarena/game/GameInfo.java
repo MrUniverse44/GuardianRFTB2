@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -334,7 +335,25 @@ public class GameInfo implements Game {
             plugin.getUtils().sendMessage(player, prefix + messages.getString("messages.others.full"));
             return;
         }
+        Chunk lobbyChunk = plugin.getSettings().getLocation().getChunk();
+        if(!lobbyChunk.isLoaded()){
+            lobbyChunk.load();
+            BukkitRunnable runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    fastJoin(player);
+                }
+            };
+            runnable.runTaskLaterAsynchronously(plugin,20L);
+            return;
+        }
+        fastJoin(player);
+    }
 
+    private void fastJoin(Player player) {
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        String prefix = messages.getString("messages.prefix");
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(this.waiting);
@@ -430,6 +449,22 @@ public class GameInfo implements Game {
 
     @Override
     public void leave(Player player) {
+        Chunk lobbyChunk = plugin.getSettings().getLocation().getChunk();
+        if(!lobbyChunk.isLoaded()){
+            lobbyChunk.load();
+            BukkitRunnable runnable = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    fastLeave(player);
+                }
+            };
+            runnable.runTaskLaterAsynchronously(plugin,20L);
+            return;
+        }
+        fastLeave(player);
+    }
+
+    private void fastLeave(Player player) {
         this.players.remove(player);
         this.runners.remove(player);
         checkDeadChests(player);
