@@ -21,9 +21,29 @@ public class ItemsInfo {
     private Integer beastSlot;
     private Integer killerSlot;
 
+    private ItemStack spectator;
+    private ItemStack settings;
+    private ItemStack playAgain;
+    private ItemStack leave;
+
+    private Integer spectatorSlot;
+    private Integer settingsSlot;
+    private Integer playAgainSlot;
+    private Integer leaveSlot;
+
+    private boolean spectatorItem;
+    private boolean settingsItem;
+    private boolean playAgainItem;
+    private boolean leaveItem;
+
     private final HashMap<ItemStack, Integer> lobbyItems = new HashMap<>();
     private final HashMap<ItemStack, Integer> beastInventory = new HashMap<>();
     private final HashMap<ItemStack, ItemFunction> currentItem = new HashMap<>();
+
+    public void setSpectator(ItemStack itemStack) { spectator = itemStack; }
+    public void setSettings(ItemStack itemStack) { settings = itemStack; }
+    public void setPlayAgain(ItemStack itemStack) { playAgain = itemStack; }
+    public void setLeave(ItemStack itemStack) { leave = itemStack; }
 
     public void setExit(ItemStack itemStack) { exit = itemStack; }
     public void setCheckPoint(ItemStack itemStack) { checkPoint = itemStack; }
@@ -36,10 +56,20 @@ public class ItemsInfo {
     public void setBeastBoots(ItemStack itemStack) { beastBoots = itemStack; }
 
 
+    public void setSpectatorSlot(int slot) { spectatorSlot = slot; }
+    public void setSettingsSlot(int slot) { settingsSlot = slot; }
+    public void setPlayAgainSlot(int slot) { playAgainSlot = slot; }
+    public void setLeaveSlot(int slot) { leaveSlot = slot; }
+
     public void setExitSlot(int slot) { exitSlot = slot; }
     public void setRunnerSlot(int slot) { runnerSlot = slot; }
     public void setKillerSlot(int slot) { killerSlot = slot; }
     public void setBeastSlot(int slot) { beastSlot = slot; }
+
+    public ItemStack getSpectator() { return spectator; }
+    public ItemStack getSettings() { return settings; }
+    public ItemStack getPlayAgain() { return playAgain; }
+    public ItemStack getLeave() { return leave; }
 
     public ItemStack getExit() { return exit; }
     public ItemStack getCheckPoint() { return checkPoint; }
@@ -51,10 +81,26 @@ public class ItemsInfo {
     public ItemStack getBeastLeggings() { return beastLeggings; }
     public ItemStack getBeastBoots() { return beastBoots; }
 
+    public void setSpectatorItem(boolean toggle) { spectatorItem = toggle; }
+    public void setSettingsItem(boolean toggle) { settingsItem = toggle; }
+    public void setPlayAgainItem(boolean toggle) { playAgainItem = toggle; }
+    public void setLeaveItem(boolean toggle) { leaveItem = toggle; }
+
     public int getExitSlot() { return exitSlot; }
     public int getKillerSlot() { return killerSlot; }
     public int getRunnerSlot() { return runnerSlot; }
     public int getBeastSlot() { return beastSlot; }
+
+    public int getSpectatorSlot() { return spectatorSlot; }
+    public int getSettingsSlot() { return settingsSlot; }
+    public int getPlayAgainSlot() { return playAgainSlot; }
+    public int getLeaveSlot() { return leaveSlot; }
+
+    public boolean isSpectatorItem() { return spectatorItem; }
+    public boolean isSettingsItem() { return settingsItem; }
+    public boolean isPlayAgainItem() { return playAgainItem; }
+    public boolean isLeaveItem() { return leaveItem; }
+
     public int getSlot(ItemStack itemStack) { return lobbyItems.get(itemStack); }
 
     public HashMap<ItemStack,Integer> getLobbyItems() { return lobbyItems; }

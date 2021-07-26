@@ -159,6 +159,7 @@ public final class GuardianRFTB extends JavaPlugin {
 
                 loadLobbyItems();
                 loadGameItems();
+                loadSpectatorItems();
                 loadBeastKit();
                 loadRunnable();
                 if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -259,6 +260,36 @@ public final class GuardianRFTB extends JavaPlugin {
             getLogs().error("Can't get lobby items on startup");
             getLogs().error(throwable);
         }
+    }
+
+    public void loadSpectatorItems() {
+        try {
+            FileConfiguration items = getStorage().getControl(GuardianFiles.ITEMS);
+            for(SpectatorItems spectatorItem : SpectatorItems.values()) {
+                String path = spectatorItem.getPath();
+                if (items.get(path + "enchantments") == null) {
+                    if (items.get(path + "amount") == null) {
+                        spectatorItem.setItem(this,
+                                getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore")
+                        ), items.getInt(path + "slot"),
+                                items.getBoolean(path + "toggle"));
+                    } else {
+                        spectatorItem.setItem(this,
+                                getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore"),
+                                items.getInt(path + "amount")
+                        ), items.getInt(path + "slot"),
+                                items.getBoolean(path + "toggle"));
+                    }
+                }
+            }
+        }catch (Throwable ignored) {}
+
     }
 
     public void loadBeastKit() {

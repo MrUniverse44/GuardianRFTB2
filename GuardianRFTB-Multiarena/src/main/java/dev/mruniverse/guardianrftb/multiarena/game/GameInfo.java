@@ -381,6 +381,9 @@ public class GameInfo implements Game {
                 if(player != player1) player1.hidePlayer(player);
             }
             player.setGameMode(GameMode.ADVENTURE);
+            for(SpectatorItems items : SpectatorItems.values()) {
+                items.giveItem(player,plugin);
+            }
         }
         player.teleport(this.runnerSpawn);
         currentData.setBoard(GuardianBoard.PLAYING);
@@ -400,6 +403,9 @@ public class GameInfo implements Game {
         } else {
             for(Player player1 : getPlayers()) {
                 if(player != player1) player1.hidePlayer(player);
+            }
+            for(SpectatorItems items : SpectatorItems.values()) {
+                items.giveItem(player,plugin);
             }
             player.setGameMode(GameMode.ADVENTURE);
         }
@@ -723,6 +729,9 @@ public class GameInfo implements Game {
                 } else {
                     for(Player player1 : getPlayers()) {
                         if(player != player1) player1.hidePlayer(player);
+                    }
+                    for(SpectatorItems items : SpectatorItems.values()) {
+                        items.giveItem(player,plugin);
                     }
                     player.setGameMode(GameMode.ADVENTURE);
                 }

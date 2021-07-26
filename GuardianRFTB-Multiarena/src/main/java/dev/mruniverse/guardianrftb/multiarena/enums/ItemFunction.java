@@ -10,5 +10,9 @@ public enum ItemFunction {
     KIT_KILLERS,
     KIT_BEASTS,
     CHECKPOINT,
-    EXIT_GAME
+    EXIT_GAME,
+    SPECTATE_MENU,
+    SETTINGS_MENU,
+    PLAY_AGAIN_MENU,
+    EXIT_SPECTATE_GAME;
 }

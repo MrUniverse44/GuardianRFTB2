@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners.game;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
+import dev.mruniverse.guardianrftb.multiarena.enums.SpectatorItems;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -46,6 +47,9 @@ public class DeathListener implements Listener {
                     for(Player player1 : game.getPlayers()) {
                         if(player != player1) player1.hidePlayer(player);
                     }
+                    for(SpectatorItems items : SpectatorItems.values()) {
+                        items.giveItem(player,plugin);
+                    }
                     player.setGameMode(GameMode.ADVENTURE);
                 }
             } else {
@@ -58,6 +62,9 @@ public class DeathListener implements Listener {
                     } else {
                         for(Player player1 : game.getPlayers()) {
                             if(player != player1) player1.hidePlayer(player);
+                        }
+                        for(SpectatorItems items : SpectatorItems.values()) {
+                            items.giveItem(player,plugin);
                         }
                         player.setGameMode(GameMode.ADVENTURE);
                     }

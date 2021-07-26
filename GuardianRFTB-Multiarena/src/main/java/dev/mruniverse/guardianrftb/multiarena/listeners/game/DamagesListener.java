@@ -4,6 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.enums.SpectatorItems;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import org.bukkit.GameMode;
@@ -102,6 +103,9 @@ public class DamagesListener implements Listener {
                     for(Player player1 : game.getPlayers()) {
                         if(player != player1) player1.hidePlayer(player);
                     }
+                    for(SpectatorItems items : SpectatorItems.values()) {
+                        items.giveItem(player,plugin);
+                    }
                     player.setGameMode(GameMode.ADVENTURE);
                 }
                 game.deathBeast(player);
@@ -114,6 +118,9 @@ public class DamagesListener implements Listener {
                     } else {
                         for(Player player1 : game.getPlayers()) {
                             if(player != player1) player1.hidePlayer(player);
+                        }
+                        for(SpectatorItems items : SpectatorItems.values()) {
+                            items.giveItem(player,plugin);
                         }
                         player.setGameMode(GameMode.ADVENTURE);
                     }
