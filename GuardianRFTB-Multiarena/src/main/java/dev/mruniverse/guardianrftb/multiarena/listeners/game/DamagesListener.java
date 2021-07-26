@@ -22,6 +22,7 @@ public class DamagesListener implements Listener {
     private String byLava;
     private String byVoid;
     private String byBow;
+    private String byPvP;
     private String byDefault;
 
     public DamagesListener(GuardianRFTB plugin) {
@@ -33,6 +34,8 @@ public class DamagesListener implements Listener {
         if(byVoid == null) byVoid = "&7%victim% was searching a diamond.";
         byDefault = messages.getString("messages.game.deathMessages.otherCause");
         if(byDefault == null) byDefault = "&7%victim% died";
+        byPvP = messages.getString("messages.game.deathMessages.pvp");
+        if(byPvP == null) byDefault = "&7%victim% was killed by %attacker%";
         byBow = messages.getString("messages.game.deathMessages.bow");
         if(byBow == null) byBow = "&7%victim% was shot by %attacker%";
     }
@@ -78,7 +81,7 @@ public class DamagesListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        if((player.getHealth() - event.getFinalDamage()) <= 0) {
+        if((player.getHealth() - event.getFinalDamage()) <= 0 && event.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
             event.setCancelled(true);
             player.getInventory().clear();
             player.setHealth(20);
@@ -113,19 +116,23 @@ public class DamagesListener implements Listener {
             if(event.getDamager() instanceof Arrow) {
                 Arrow arrow = (Arrow) event.getDamager();
                 Player shooter = (Player) arrow.getShooter();
+                if (plugin.getUser(victim.getUniqueId()) == null) return;
                 if (plugin.getUser(victim.getUniqueId()).getGame() == null) return;
                 Game game = plugin.getUser(victim.getUniqueId()).getGame();
                 if (game.getRunners().contains(victim) && game.getRunners().contains(shooter)) {
                     event.setCancelled(true);
+                    return;
                 }
                 if (game.getBeasts().contains(victim) && game.getBeasts().contains(shooter)) {
                     event.setCancelled(true);
+                    return;
                 }
                 if(!event.isCancelled()) {
                     if((victim.getHealth() - event.getFinalDamage()) <= 0) {
                         String deathMessage;
                         if(shooter != null) {
                             deathMessage = byBow.replace("%victim%", victim.getName()).replace("%attacker%", shooter.getName());
+                            plugin.getUser(shooter.getUniqueId()).addKills();
                         } else {
                             deathMessage = byBow.replace("%victim%", victim.getName()).replace("%attacker%", "Unknown Player");
                         }
@@ -133,6 +140,28 @@ public class DamagesListener implements Listener {
                             plugin.getUtils().sendMessage(inGamePlayer,deathMessage);
                         }
                     }
+                }
+                return;
+            }
+            if(event.getDamager().getType() == EntityType.PLAYER) {
+                if (plugin.getUser(victim.getUniqueId()) == null) return;
+                if (plugin.getUser(victim.getUniqueId()).getGame() == null) return;
+                Player player = (Player)event.getDamager();
+                Game game = plugin.getUser(victim.getUniqueId()).getGame();
+                if (game.getRunners().contains(victim) && game.getRunners().contains(player)) {
+                    event.setCancelled(true);
+                    return;
+                }
+                if (game.getBeasts().contains(victim) && game.getBeasts().contains(player)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                String deathMessage;
+                deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", player.getName());
+                plugin.getUser(player.getUniqueId()).addKills();
+                for(Player inGamePlayer : game.getPlayers()) {
+                    plugin.getUtils().sendMessage(inGamePlayer,deathMessage);
                 }
             }
         }
@@ -149,6 +178,8 @@ public class DamagesListener implements Listener {
             case SUICIDE:
             case VOID:
                 return byVoid.replace("%victim%",player.getName());
+            case ENTITY_ATTACK:
+                return byPvP.replace("%victim%",player.getName());
             default:
                 return byDefault.replace("%victim%",player.getName());
         }
@@ -164,5 +195,7 @@ public class DamagesListener implements Listener {
         if(byDefault == null) byDefault = "&7%victim% died";
         byBow = messages.getString("messages.game.deathMessages.bow");
         if(byBow == null) byBow = "&7%victim% was shot by %attacker%";
+        byPvP = messages.getString("messages.game.deathMessages.pvp");
+        if(byPvP == null) byDefault = "&7%victim% was killed by %attacker%";
     }
 }
