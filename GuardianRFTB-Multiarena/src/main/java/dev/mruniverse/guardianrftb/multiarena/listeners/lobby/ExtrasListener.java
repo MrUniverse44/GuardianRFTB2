@@ -207,7 +207,7 @@ public class ExtrasListener implements Listener {
             String[] args = e.getMessage().split(" ");
             List<String> commands = plugin.getSettings().getSettings().getStringList("settings.leaveCMDs");
             for (String list : commands) {
-                if (args[0].equalsIgnoreCase(list)) {
+                if (args[0].equalsIgnoreCase("/" + list)) {
                     e.setCancelled(true);
                     plugin.getUser(p.getUniqueId()).getGame().leave(p);
                 }

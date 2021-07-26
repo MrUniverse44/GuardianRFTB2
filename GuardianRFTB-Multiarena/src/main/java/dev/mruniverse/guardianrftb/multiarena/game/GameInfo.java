@@ -327,7 +327,23 @@ public class GameInfo implements Game {
         }
         if (!gameStatus.equals(GameStatus.WAITING) && !gameStatus.equals(GameStatus.SELECTING) && !gameStatus.equals(GameStatus.STARTING)) {
             if (!gameStatus.equals(GameStatus.RESTARTING)) {
-                plugin.getUtils().sendMessage(player, prefix + messages.getString("messages.others.gamePlaying"));
+                if(!plugin.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.allow-external-spectators")) {
+                    plugin.getUtils().sendMessage(player, prefix + messages.getString("messages.others.gamePlaying"));
+                    return;
+                }
+                Chunk lobbyChunk = plugin.getSettings().getLocation().getChunk();
+                if(!lobbyChunk.isLoaded()){
+                    lobbyChunk.load();
+                    BukkitRunnable runnable = new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            spectatorJoin(player);
+                        }
+                    };
+                    runnable.runTaskLaterAsynchronously(plugin,20L);
+                    return;
+                }
+                spectatorJoin(player);
                 return;
             }
             plugin.getUtils().sendMessage(player, prefix + messages.getString("messages.others.restarting"));
@@ -350,6 +366,43 @@ public class GameInfo implements Game {
             return;
         }
         fastJoin(player);
+    }
+
+    private void spectatorJoin(Player player) {
+        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        String prefix = messages.getString("messages.prefix");
+        String nowSpectating = messages.getString("messages.spectating");
+        player.getInventory().clear();
+        player.setGameMode(GameMode.SPECTATOR);
+        player.teleport(this.runnerSpawn);
+        currentData.setBoard(GuardianBoard.PLAYING);
+        players.add(player);
+        spectators.add(player);
+        currentData.setGame(this);
+        currentData.setPointStatus(false);
+        currentData.setLastCheckpoint(null);
+        if (currentData.getLeaveDelay() != 0) {
+            plugin.getServer().getScheduler().cancelTask(currentData.getLeaveDelay());
+            currentData.setLeaveDelay(0);
+        }
+        currentData.setStatus(PlayerStatus.IN_GAME);
+        currentData.setCurrentRole(GameTeam.RUNNERS);
+        player.setGameMode(GameMode.SPECTATOR);
+        player.setFlying(true);
+        player.setAllowFlight(true);
+        GameJoinEvent event = new GameJoinEvent(this,player);
+        Bukkit.getPluginManager().callEvent(event);
+        player.setHealth(20.0D);
+        player.setFireTicks(0);
+        player.getInventory().setHelmet(null);
+        player.getInventory().setChestplate(null);
+        player.getInventory().setLeggings(null);
+        player.getInventory().setBoots(null);
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
+        player.updateInventory();
     }
 
     private void fastJoin(Player player) {

@@ -15,6 +15,7 @@ messages:
     join-game: '&b%player% &7ha entrado a la partida! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game: '&b%player% &7ha abandonado la partida! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game-in-game: '&b%player% &7ha abandonado la partida!'
+    spectating: '&a&lAhora eres un espectador. Usa &b&l/rftb leave &a&lpara salir.'
     chosenBeast: '&eEl jugador &b%player% &efue escogido como la bestia!'
     forcedBeast: '&eLa bestia se ha seleccionado forzosamente por un operador.'
     limited-chest: '&aEste cofre ha sido vaciado por otros usuarios.'

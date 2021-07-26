@@ -63,9 +63,9 @@ scoreboards:
       - ' '
       - '&f<isWaiting>Waiting for'
       - '&a<isWaiting><arena_need> &fplayers to start'
-      - '&f<isSelecting>Selecting beast in &a<arena_time_number>'
-      - '&f<isStarting>Starting in &a<arena_time_number> &f<arena_time_text>.'
-      - '&f<BeastAppear>You will spawn in &a<arena_time_number>&f!'
+      - '&f<isSelecting>Beast: &a<arena_time_number>'
+      - '&f<isStarting>Start: &a<arena_time_number> &f<arena_time_text>.'
+      - '&f<BeastAppear>Spawn: &a<arena_time_number>&f!'
       - ' '
       - '&eplay.servername.net'
   playing:

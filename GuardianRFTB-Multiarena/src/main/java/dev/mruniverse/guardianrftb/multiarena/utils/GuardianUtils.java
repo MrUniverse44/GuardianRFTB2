@@ -9,6 +9,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -45,6 +46,21 @@ public class GuardianUtils {
      */
     public void sendMessage(Player player,String message) {
         utils.sendMessage(player,replaceVariables(message,player));
+    }
+
+    /**
+     * @param player player to send
+     * @param message current message
+     * @param chatPlayer player from the player.
+     * @param chatMessage message from the chat.
+     */
+    public void sendMessage(Player player,String message,Player chatPlayer,String chatMessage) {
+        message = replaceVariables(message,chatPlayer);
+        if(chatPlayer.hasPermission("grftb.chat.color")) {
+            utils.sendMessage(player, message.replace("%message%", ChatColor.translateAlternateColorCodes('&',chatMessage)));
+        } else {
+            utils.sendMessage(player, message.replace("%message%", ChatColor.stripColor(chatMessage)));
+        }
     }
     /**
      * @param player player to send
@@ -267,7 +283,7 @@ public class GuardianUtils {
             if(time == 1) {
                 second = plugin.getSettings().getSettings().getString("settings.timer.second","second");
             } else {
-                second = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");;
+                second = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");
             }
             text = text.replace("<arena_name>",currentGame.getName())
                     .replace("<arena_online>","" + currentGame.getPlayers().size())

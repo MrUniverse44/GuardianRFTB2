@@ -52,8 +52,7 @@ public class ChatListener implements Listener {
             if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
                 event.setCancelled(true);
                 for (Player lobby : plugin.getSettings().getLocation().getWorld().getPlayers()) {
-                    plugin.getUtils().sendMessage(lobby, lobbyChat.replace("<player_name>", player.getName())
-                            .replace("%message%", event.getMessage()));
+                    plugin.getUtils().sendMessage(lobby, lobbyChat.replace("<player_name>", player.getName()),event.getPlayer(),event.getMessage());
                 }
             }
             return;

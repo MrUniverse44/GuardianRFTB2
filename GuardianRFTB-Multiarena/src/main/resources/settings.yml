@@ -38,7 +38,7 @@ settings:
   # Plugin Date Format
   dateFormat: "dd/MM/yyyy"
   # Toggle perWorldTab option
-  perWorldTab: false
+  perWorldTab: true
   # Leave Cancel Time (In Seconds)
   leaveCancelTime: 3
   # Lobby Options
@@ -166,6 +166,8 @@ settings:
       ending: Restarting
   # Game Options
   game:
+    # Allow players can join as spectator while the game is in-game
+    allow-external-spectators: true
     # Change the chest when the chest-limit is parsed.
     chest-limit-settings:
       # Toggle this option
