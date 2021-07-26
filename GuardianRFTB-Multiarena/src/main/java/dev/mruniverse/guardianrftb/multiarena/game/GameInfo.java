@@ -475,6 +475,8 @@ public class GameInfo implements Game {
         updateSigns();
         player.updateInventory();
         for(Player players : players) {
+            players.showPlayer(player);
+            player.showPlayer(players);
             plugin.getUtils().sendMessage(players,prefix + joinMsg.replace("%player%",player.getName())
                     .replace("%game_online%",this.players.size()+"")
                     .replace("%game_max%",this.max+""));
