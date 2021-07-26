@@ -65,6 +65,7 @@ public class DamagesListener implements Listener {
         if(plugin.getUser(player.getUniqueId()) == null) return;
         if(plugin.getUser(player.getUniqueId()).getGame() == null) return;
         Game game = plugin.getUser(player.getUniqueId()).getGame();
+        if(game.getSpectators().contains(player)) event.setCancelled(true);
         if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.SELECTING || game.isInvincible()) {
             event.setCancelled(true);
             if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
