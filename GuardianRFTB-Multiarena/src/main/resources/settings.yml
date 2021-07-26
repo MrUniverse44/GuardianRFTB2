@@ -32,9 +32,9 @@ settings:
     killer: 0
   # Leave Commands
   leaveCMDs:
-    - "/leave"
-    - "/quit"
-    - "/salir"
+    - "leave"
+    - "quit"
+    - "salir"
   # Plugin Date Format
   dateFormat: "dd/MM/yyyy"
   # Toggle perWorldTab option
