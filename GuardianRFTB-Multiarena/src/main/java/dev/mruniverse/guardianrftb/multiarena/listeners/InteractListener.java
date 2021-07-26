@@ -5,6 +5,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -297,7 +298,7 @@ public class InteractListener implements Listener {
                     if(game.isChestLimited(chests) && plugin.getGameManager().isChestLimitEnabled()) {
                         if(!game.isChestLimitParsed(chests) || game.isChestOf(chests,player)) {
                             openGameChest(player,chests);
-                            game.addChestLimit(chests,player);
+                            if(player.getGameMode() != GameMode.SPECTATOR) game.addChestLimit(chests,player);
                             return;
                         }
                         String prefix = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.prefix", "&3&lG&b&lRFTB &8| ");
