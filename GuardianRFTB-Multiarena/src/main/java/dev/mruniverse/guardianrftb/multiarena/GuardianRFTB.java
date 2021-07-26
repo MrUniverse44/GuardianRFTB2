@@ -170,6 +170,8 @@ public final class GuardianRFTB extends JavaPlugin {
                 dataStorageImpl.loadDatabase();
                 guardianUtils = new GuardianUtils(instance);
 
+                getLib().getNMS().loadChunkListener();
+
                 if (getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.update-check")) {
                     Updater updater = new Updater(instance, 88817);
                     String updaterResult = updater.getUpdateResult();
