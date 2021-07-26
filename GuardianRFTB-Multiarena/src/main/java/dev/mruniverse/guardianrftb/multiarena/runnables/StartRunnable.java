@@ -73,6 +73,7 @@ public class StartRunnable  extends BukkitRunnable {
                 for(Player player : currentGame.getRunners()) {
                     player.teleport(currentGame.getRunnerSpawn());
                     player.setGameMode(GameMode.SURVIVAL);
+                    if(player.getFireTicks() > 0) player.setFireTicks(0);
                     player.getInventory().clear();
                     plugin.getItems(GameEquip.RUNNER_KIT,player);
                     guardianUtils.sendList(player,startInfo);

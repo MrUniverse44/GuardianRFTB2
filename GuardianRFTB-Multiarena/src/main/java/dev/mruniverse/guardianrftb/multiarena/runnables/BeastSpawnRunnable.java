@@ -66,6 +66,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                     plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
                     player.teleport(currentGame.getBeastSpawn());
                     player.getInventory().clear();
+                    if(player.getFireTicks() > 0) player.setFireTicks(0);
                     player.setGameMode(GameMode.SURVIVAL);
                     plugin.getItems(GameEquip.BEAST_KIT,player);
                     guardianUtils.sendList(player,startInfo);
