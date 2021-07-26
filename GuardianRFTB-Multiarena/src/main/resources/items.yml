@@ -102,6 +102,38 @@ InGame:
       - '&8GuardianRFTB'
       - '&eClick to back'
 playing:
+  spectator-inventory:
+    spect:
+      toggle: true
+      item: COMPASS
+      name: '&aSpectate'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+      slot: 0
+    settings:
+      toggle: true
+      item: COMPARATOR
+      name: '&e&lSpectator Settings &7(Right Click)'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+      slot: 4
+    play-again:
+      toggle: true
+      item: PAPER
+      name: '&b&lPlay Again &7(Right Click)'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+      slot: 7
+    leave:
+      item: RED_BED
+      name: '&c&lReturn to the lobby &7(Right Click)'
+      lore:
+        - '&7Here your lore'
+        - '&eplay.servername.net'
+      slot: 8
   beast-inventory:
     Sword:
       item: DIAMOND_SWORD

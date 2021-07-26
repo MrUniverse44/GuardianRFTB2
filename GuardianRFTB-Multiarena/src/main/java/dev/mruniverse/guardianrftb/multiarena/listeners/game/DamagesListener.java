@@ -56,6 +56,7 @@ public class DamagesListener implements Listener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void damage(EntityDamageEvent event) {
         if(!event.getEntity().getType().equals(EntityType.PLAYER)) return;
@@ -95,13 +96,27 @@ public class DamagesListener implements Listener {
                 plugin.getUtils().sendMessage(inGamePlayer,deathMessage);
             }
             if(game.getBeasts().contains(player)) {
-                player.setGameMode(GameMode.SPECTATOR);
+                if(!plugin.getSettings().isSecondSpectator()) {
+                    player.setGameMode(GameMode.SPECTATOR);
+                } else {
+                    for(Player player1 : game.getPlayers()) {
+                        if(player != player1) player1.hidePlayer(player);
+                    }
+                    player.setGameMode(GameMode.ADVENTURE);
+                }
                 game.deathBeast(player);
                 player.teleport(game.getBeastSpawn());
             } else {
                 game.deathRunner(player);
                 if(!game.getType().equals(GameType.INFECTED)) {
-                    player.setGameMode(GameMode.SPECTATOR);
+                    if(!plugin.getSettings().isSecondSpectator()) {
+                        player.setGameMode(GameMode.SPECTATOR);
+                    } else {
+                        for(Player player1 : game.getPlayers()) {
+                            if(player != player1) player1.hidePlayer(player);
+                        }
+                        player.setGameMode(GameMode.ADVENTURE);
+                    }
                     player.teleport(game.getRunnerSpawn());
                 }
             }

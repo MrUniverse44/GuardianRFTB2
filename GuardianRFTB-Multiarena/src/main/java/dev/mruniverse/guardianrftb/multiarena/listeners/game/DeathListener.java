@@ -5,7 +5,6 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,13 +15,10 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class DeathListener implements Listener {
     private final GuardianRFTB plugin;
 
-    private String byLava;
-    private String byVoid;
-    private String byDefault;
-
     public DeathListener(GuardianRFTB plugin) {
         this.plugin = plugin;
     }
+    @SuppressWarnings("deprecation")
     @EventHandler(priority = EventPriority.HIGH)
     public void inGameDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
@@ -44,13 +40,27 @@ public class DeathListener implements Listener {
                 player.setGameMode(GameMode.SPECTATOR);
                 game.deathBeast(player);
                 player.teleport(game.getBeastSpawn());
-                player.setGameMode(GameMode.SPECTATOR);
+                if(!plugin.getSettings().isSecondSpectator()) {
+                    player.setGameMode(GameMode.SPECTATOR);
+                } else {
+                    for(Player player1 : game.getPlayers()) {
+                        if(player != player1) player1.hidePlayer(player);
+                    }
+                    player.setGameMode(GameMode.ADVENTURE);
+                }
             } else {
                 player.spigot().respawn();
                 game.deathRunner(player);
                 if(!game.getType().equals(GameType.INFECTED)) {
                     player.teleport(game.getRunnerSpawn());
-                    player.setGameMode(GameMode.SPECTATOR);
+                    if(!plugin.getSettings().isSecondSpectator()) {
+                        player.setGameMode(GameMode.SPECTATOR);
+                    } else {
+                        for(Player player1 : game.getPlayers()) {
+                            if(player != player1) player1.hidePlayer(player);
+                        }
+                        player.setGameMode(GameMode.ADVENTURE);
+                    }
                 }
             }
             player.setGameMode(GameMode.SPECTATOR);

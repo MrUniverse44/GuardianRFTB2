@@ -374,7 +374,14 @@ public class GameInfo implements Game {
         String prefix = messages.getString("messages.prefix");
         String nowSpectating = messages.getString("messages.spectating");
         player.getInventory().clear();
-        player.setGameMode(GameMode.SPECTATOR);
+        if(!plugin.getSettings().isSecondSpectator()) {
+            player.setGameMode(GameMode.SPECTATOR);
+        } else {
+            for(Player player1 : getPlayers()) {
+                if(player != player1) player1.hidePlayer(player);
+            }
+            player.setGameMode(GameMode.ADVENTURE);
+        }
         player.teleport(this.runnerSpawn);
         currentData.setBoard(GuardianBoard.PLAYING);
         players.add(player);
@@ -388,7 +395,14 @@ public class GameInfo implements Game {
         }
         currentData.setStatus(PlayerStatus.IN_GAME);
         currentData.setCurrentRole(GameTeam.RUNNERS);
-        player.setGameMode(GameMode.SPECTATOR);
+        if(!plugin.getSettings().isSecondSpectator()) {
+            player.setGameMode(GameMode.SPECTATOR);
+        } else {
+            for(Player player1 : getPlayers()) {
+                if(player != player1) player1.hidePlayer(player);
+            }
+            player.setGameMode(GameMode.ADVENTURE);
+        }
         player.setFlying(true);
         player.setAllowFlight(true);
         GameJoinEvent event = new GameJoinEvent(this,player);
@@ -703,7 +717,16 @@ public class GameInfo implements Game {
     public void winRunners() {
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         for(Player player : this.players) {
-            if(this.spectators.contains(player)) player.setGameMode(GameMode.SPECTATOR);
+            if(this.spectators.contains(player)) {
+                if(!plugin.getSettings().isSecondSpectator()) {
+                    player.setGameMode(GameMode.SPECTATOR);
+                } else {
+                    for(Player player1 : getPlayers()) {
+                        if(player != player1) player1.hidePlayer(player);
+                    }
+                    player.setGameMode(GameMode.ADVENTURE);
+                }
+            }
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.RUNNERS);
         }
         for(Player runner : this.runners) {
