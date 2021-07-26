@@ -311,6 +311,16 @@ public class DamagesListener implements Listener {
                     }
                     thrownExpBottle1.remove();
                 }
+
+                if((victim.getHealth() - event.getFinalDamage()) <= 0) {
+                    String deathMessage;
+                    Player attacker = (Player) event.getDamager();
+                    deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", attacker.getName());
+                    plugin.getUser(attacker.getUniqueId()).addKills();
+                    for (Player inGamePlayer : game.getPlayers()) {
+                        plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
+                    }
+                }
             }
             if (event.getDamager() instanceof Player) {
                 Player player = (Player) event.getDamager();
