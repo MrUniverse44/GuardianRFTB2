@@ -189,9 +189,11 @@ public class GameInfo implements Game {
     public void addChestLimit(String chestName,Player player) {
         int value = chestLimitViewer.get(chestName);
         List<Player> players = chestLimitUsers.get(chestName);
-        players.add(player);
-        chestLimitUsers.put(chestName,players);
-        chestLimitViewer.put(chestName,value + 1);
+        if(!players.contains(player)) {
+            players.add(player);
+            chestLimitUsers.put(chestName, players);
+            chestLimitViewer.put(chestName, value + 1);
+        }
     }
 
     @Override
