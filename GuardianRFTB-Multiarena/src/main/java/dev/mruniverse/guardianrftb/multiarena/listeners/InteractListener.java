@@ -90,19 +90,40 @@ public class InteractListener implements Listener {
                             player.openInventory(sInv);
                             return;
                         case KIT_KILLERS:
-                            Inventory kInv = pm.getKitMenu(KitType.KILLER).getInventory();
-                            if(kInv == null) return;
-                            player.openInventory(kInv);
+                            if(plugin.getKitLoader().hasKits(KitType.KILLER)) {
+                                Inventory inventory = pm.getKitMenu(KitType.KILLER).getInventory();
+                                if (inventory == null) return;
+                                player.openInventory(inventory);
+                            } else {
+                                plugin.getUtils().sendMessage(
+                                        player,
+                                        plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.no-kits")
+                                        );
+                            }
                             return;
                         case KIT_BEASTS:
-                            Inventory inventory = pm.getKitMenu(KitType.BEAST).getInventory();
-                            if(inventory == null) return;
-                            player.openInventory(inventory);
+                            if(plugin.getKitLoader().hasKits(KitType.BEAST)) {
+                                Inventory inventory = pm.getKitMenu(KitType.BEAST).getInventory();
+                                if (inventory == null) return;
+                                player.openInventory(inventory);
+                            } else {
+                                plugin.getUtils().sendMessage(
+                                        player,
+                                        plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.no-kits")
+                                );
+                            }
                             return;
                         case KIT_RUNNERS:
-                            Inventory inv = pm.getKitMenu(KitType.RUNNER).getInventory();
-                            if(inv == null) return;
-                            player.openInventory(inv);
+                            if(plugin.getKitLoader().hasKits(KitType.RUNNER)) {
+                                Inventory inv = pm.getKitMenu(KitType.RUNNER).getInventory();
+                                if(inv == null) return;
+                                player.openInventory(inv);
+                            } else {
+                                plugin.getUtils().sendMessage(
+                                        player,
+                                        plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.no-kits")
+                                );
+                            }
                             return;
                         case EXIT_LOBBY:
                             List<String> servers = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getStringList("settings.lobby.Hub-servers");

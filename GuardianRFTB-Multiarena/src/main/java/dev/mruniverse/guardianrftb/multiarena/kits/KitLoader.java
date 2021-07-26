@@ -32,6 +32,17 @@ public class KitLoader {
         plugin.getLogs().info(killerKits.keySet().size() + " Killer(s) Kit(s) loaded!");
 
     }
+    public boolean hasKits(KitType type) {
+        switch (type) {
+            case BEAST:
+                return (beastKits.size() >= 1);
+            case KILLER:
+                return (killerKits.size() >= 1);
+            default:
+            case RUNNER:
+                return (runnerKits.size() >= 1);
+        }
+    }
     public void unload() {
         killerKits.clear();
         killerKitsUsingID.clear();
