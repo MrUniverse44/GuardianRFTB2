@@ -21,12 +21,15 @@ public class settingsInfo {
 
     private final GuardianRFTB plugin;
 
+    private boolean secondSpectator;
+
     private GameMode gameMode;
 
     public settingsInfo(GuardianRFTB plugin) {
         this.plugin = plugin;
         settingsConfiguration = plugin.getStorage().getControl(GuardianFiles.SETTINGS);
         location = GuardianLIB.getControl().getUtils().getLocationFromString(getString(settingsConfiguration.getString("settings.lobby.location"),"notSet"));
+        secondSpectator = settingsConfiguration.getBoolean("settings.game.use-second-spectator-system",false);
         roles = new HashMap<>();
 
         try {
@@ -72,12 +75,17 @@ public class settingsInfo {
         }catch (Throwable ignored) {
             this.gameMode = GameMode.ADVENTURE;
         }
+        secondSpectator = settingsConfiguration.getBoolean("settings.game.use-second-spectator-system",false);
         roles.put(GameTeam.KILLER,getString(settingsConfiguration.getString("settings.game.roles.killer"),"Killer"));
         roles.put(GameTeam.BEASTS,getString(settingsConfiguration.getString("settings.game.roles.beast"),"Beast"));
         roles.put(GameTeam.RUNNERS,getString(settingsConfiguration.getString("settings.game.roles.runner"),"Runner"));
         roles.put(GameTeam.BEASTS2,getString(settingsConfiguration.getString("settings.game.roles.beasts"),"Beasts"));
         roles.put(GameTeam.RUNNERS2,getString(settingsConfiguration.getString("settings.game.roles.runners"),"Runners"));
         roles.put(GameTeam.KILLERS2,getString(settingsConfiguration.getString("settings.game.roles.killers"),"Killers"));
+    }
+
+    public boolean isSecondSpectator() {
+        return secondSpectator;
     }
 
     public String getRole(GameTeam currentTeam) {

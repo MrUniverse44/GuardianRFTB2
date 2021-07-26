@@ -8,13 +8,12 @@ import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.util.Vector;
 
 public class DamagesListener implements Listener {
     private final GuardianRFTB plugin;
@@ -156,16 +155,147 @@ public class DamagesListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-
-                String deathMessage;
-                deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", player.getName());
-                plugin.getUser(player.getUniqueId()).addKills();
-                for(Player inGamePlayer : game.getPlayers()) {
-                    plugin.getUtils().sendMessage(inGamePlayer,deathMessage);
+                if((player.getHealth() - event.getFinalDamage()) <= 0) {
+                    String deathMessage;
+                    deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", player.getName());
+                    plugin.getUser(player.getUniqueId()).addKills();
+                    for (Player inGamePlayer : game.getPlayers()) {
+                        plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
+                    }
                 }
             }
         }
     }
+
+
+
+
+
+
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        if(plugin.getSettings().isSecondSpectator()) {
+            Player victim = (Player) event.getEntity();
+            Game game = plugin.getUser(victim.getUniqueId()).getGame();
+            if (game == null) return;
+            if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
+                Player attacker = (Player) event.getDamager();
+                if ((game.getStatus() == GameStatus.PLAYING || game.getStatus() == GameStatus.IN_GAME)
+                        && game.getSpectators().contains(victim)
+                        && (game.getRunners().contains(attacker) || game.getBeasts().contains(attacker) || game.getKillers().contains(attacker))) {
+                    event.setCancelled(true);
+                }
+            }
+            if (event.getEntity() instanceof Player) {
+                if (event.getDamager() instanceof Arrow && (
+                        (Arrow) event.getDamager()).getShooter() instanceof Player &&
+                        game.getSpectators().size() > 0 &&
+                        game.getSpectators().contains(victim)) {
+                    Arrow arrow1 = (Arrow) event.getDamager();
+                    Vector vector = arrow1.getVelocity();
+                    Player shooter = (Player) arrow1.getShooter();
+                    Player teleport = victim;
+                    teleport.teleport(victim.getLocation().add(0.0D, 2.0D, 0.0D));
+                    teleport.setFlying(true);
+                    if (shooter != null) {
+                        Arrow arrow2 = shooter.launchProjectile(Arrow.class);
+                        arrow2.setShooter(shooter);
+                        arrow2.setVelocity(vector);
+                        arrow2.setBounce(false);
+                    }
+                    event.setCancelled(true);
+                    arrow1.remove();
+                }
+                if (event.getDamager() instanceof Snowball && (
+                        (Snowball) event.getDamager()).getShooter() instanceof Player &&
+                        game.getSpectators().size() > 0 &&
+                        game.getSpectators().contains(victim)) {
+                    Snowball snowball1 = (Snowball) event.getDamager();
+                    Vector vector = snowball1.getVelocity();
+                    Player shooter = (Player) snowball1.getShooter();
+                    Player teleport = victim;
+                    teleport.teleport(victim.getLocation().add(0.0D, 2.0D, 0.0D));
+                    teleport.setFlying(true);
+                    if (shooter != null) {
+                        Snowball snowball2 = shooter.launchProjectile(Snowball.class);
+                        snowball2.setShooter(shooter);
+                        snowball2.setVelocity(vector);
+                        snowball2.setBounce(false);
+                    }
+                    event.setCancelled(true);
+                    snowball1.remove();
+                }
+                if (event.getDamager() instanceof EnderPearl && (
+                        (EnderPearl) event.getDamager()).getShooter() instanceof Player &&
+                        game.getSpectators().size() > 0 &&
+                        game.getSpectators().contains(victim)) {
+                    EnderPearl enderPearl1 = (EnderPearl) event.getDamager();
+                    Vector vector = enderPearl1.getVelocity();
+                    Player shooter = (Player) enderPearl1.getShooter();
+                    Player teleport = victim;
+                    teleport.teleport(victim.getLocation().add(0.0D, 2.0D, 0.0D));
+                    teleport.setFlying(true);
+                    if (shooter != null) {
+                        EnderPearl enderPearl2 = shooter.launchProjectile(EnderPearl.class);
+                        enderPearl2.setShooter(shooter);
+                        enderPearl2.setVelocity(vector);
+                        enderPearl2.setBounce(false);
+                    }
+                    event.setCancelled(true);
+                    enderPearl1.remove();
+                }
+                if (event.getDamager() instanceof Egg && (
+                        (Egg) event.getDamager()).getShooter() instanceof Player &&
+                        game.getSpectators().size() > 0 &&
+                        game.getSpectators().contains(victim)) {
+                    Egg egg1 = (Egg) event.getDamager();
+                    Vector vector = egg1.getVelocity();
+                    Player shooter = (Player) egg1.getShooter();
+                    Player teleport = victim;
+                    teleport.teleport(victim.getLocation().add(0.0D, 2.0D, 0.0D));
+                    teleport.setFlying(true);
+                    if (shooter != null) {
+                        Egg egg2 = shooter.launchProjectile(Egg.class);
+                        egg2.setShooter(shooter);
+                        egg2.setVelocity(vector);
+                        egg2.setBounce(false);
+                    }
+                    event.setCancelled(true);
+                    egg1.remove();
+                }
+                if (event.getDamager() instanceof ThrownExpBottle && (
+                        (ThrownExpBottle) event.getDamager()).getShooter() instanceof Player &&
+                        game.getSpectators().size() > 0 &&
+                        game.getSpectators().contains(victim)) {
+                    ThrownExpBottle thrownExpBottle1 = (ThrownExpBottle) event.getDamager();
+                    Vector vector = thrownExpBottle1.getVelocity();
+                    Player shooter = (Player) thrownExpBottle1.getShooter();
+                    Player teleport = victim;
+                    teleport.teleport(victim.getLocation().add(0.0D, 2.0D, 0.0D));
+                    teleport.setFlying(true);
+                    if (shooter != null) {
+                        ThrownExpBottle thrownExpBottle2 = shooter.launchProjectile(ThrownExpBottle.class);
+                        thrownExpBottle2.setShooter(shooter);
+                        thrownExpBottle2.setVelocity(vector);
+                        thrownExpBottle2.setBounce(false);
+                        event.setCancelled(true);
+                    }
+                    thrownExpBottle1.remove();
+                }
+            }
+            if (event.getDamager() instanceof Player) {
+                Player player = (Player) event.getDamager();
+                if (game.getSpectators().contains(player) || game.getSpectators().contains(victim))
+                    event.setCancelled(true);
+            }
+        }
+    }
+    
+    
+    
+    
 
 
     private String getDeathMessage(Player player, EntityDamageEvent.DamageCause cause) {
