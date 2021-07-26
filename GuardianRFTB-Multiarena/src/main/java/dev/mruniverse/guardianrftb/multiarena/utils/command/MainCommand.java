@@ -295,6 +295,7 @@ public class MainCommand implements CommandExecutor {
                 if(args[1].equalsIgnoreCase("reload")) {
                     if(hasPermission(sender,"grftb.admin.cmd.reload",true)) {
                         plugin.getGameManager().update();
+                        plugin.getListener().reloadListeners();
                         plugin.getStorage().reloadFile(SaveMode.ALL);
                         plugin.getGameManager().getGameMenu(GameType.CLASSIC).reloadMenu();
                         plugin.getGameManager().getGameMenu(GameType.ISLAND_OF_THE_BEAST_KILLER).reloadMenu();
