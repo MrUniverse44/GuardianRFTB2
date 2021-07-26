@@ -106,7 +106,7 @@ playing:
     spect:
       toggle: true
       item: COMPASS
-      name: '&aSpectate'
+      name: '&a&lSpectate &7(Right Click)'
       lore:
         - '&7Here your lore'
         - '&eplay.servername.net'

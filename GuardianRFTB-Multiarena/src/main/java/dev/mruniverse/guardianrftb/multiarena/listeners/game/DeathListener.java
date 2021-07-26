@@ -51,6 +51,8 @@ public class DeathListener implements Listener {
                         items.giveItem(player,plugin);
                     }
                     player.setGameMode(GameMode.ADVENTURE);
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
                 }
             } else {
                 player.spigot().respawn();
@@ -67,6 +69,8 @@ public class DeathListener implements Listener {
                             items.giveItem(player,plugin);
                         }
                         player.setGameMode(GameMode.ADVENTURE);
+                        player.setAllowFlight(true);
+                        player.setFlying(true);
                     }
                 }
             }

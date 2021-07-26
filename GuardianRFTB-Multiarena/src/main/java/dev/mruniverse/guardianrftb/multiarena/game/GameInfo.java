@@ -381,6 +381,8 @@ public class GameInfo implements Game {
                 if(player != player1) player1.hidePlayer(player);
             }
             player.setGameMode(GameMode.ADVENTURE);
+            player.setAllowFlight(true);
+            player.setFlying(true);
             for(SpectatorItems items : SpectatorItems.values()) {
                 items.giveItem(player,plugin);
             }
@@ -408,9 +410,11 @@ public class GameInfo implements Game {
                 items.giveItem(player,plugin);
             }
             player.setGameMode(GameMode.ADVENTURE);
+            player.setAllowFlight(true);
+            player.setFlying(true);
         }
-        player.setFlying(true);
         player.setAllowFlight(true);
+        player.setFlying(true);
         GameJoinEvent event = new GameJoinEvent(this,player);
         Bukkit.getPluginManager().callEvent(event);
         player.setHealth(20.0D);
@@ -734,6 +738,8 @@ public class GameInfo implements Game {
                         items.giveItem(player,plugin);
                     }
                     player.setGameMode(GameMode.ADVENTURE);
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
                 }
             }
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.RUNNERS);
@@ -803,7 +809,19 @@ public class GameInfo implements Game {
         plugin.getUser(beast.getUniqueId()).addDeaths();
         BeastDeathEvent event = new BeastDeathEvent(this,beast);
         Bukkit.getPluginManager().callEvent(event);
-        beast.setGameMode(GameMode.SPECTATOR);
+        if(!plugin.getSettings().isSecondSpectator()) {
+            beast.setGameMode(GameMode.SPECTATOR);
+        } else {
+            for(Player player1 : getPlayers()) {
+                if(beast != player1) player1.hidePlayer(beast);
+            }
+            for(SpectatorItems items : SpectatorItems.values()) {
+                items.giveItem(beast,plugin);
+            }
+            beast.setGameMode(GameMode.ADVENTURE);
+            beast.setAllowFlight(true);
+            beast.setFlying(true);
+        }
         if(beasts.size() == 0) {
             plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
             winRunners();
@@ -824,7 +842,19 @@ public class GameInfo implements Game {
         Bukkit.getPluginManager().callEvent(event);
         if(!gameType.equals(GameType.INFECTED)) {
             spectators.add(runner);
-            runner.setGameMode(GameMode.SPECTATOR);
+            if(!plugin.getSettings().isSecondSpectator()) {
+                runner.setGameMode(GameMode.SPECTATOR);
+            } else {
+                for(Player player1 : getPlayers()) {
+                    if(runner != player1) player1.hidePlayer(runner);
+                }
+                for(SpectatorItems items : SpectatorItems.values()) {
+                    items.giveItem(runner,plugin);
+                }
+                runner.setGameMode(GameMode.ADVENTURE);
+                runner.setAllowFlight(true);
+                runner.setFlying(true);
+            }
         } else {
             beasts.add(runner);
             runner.getInventory().clear();

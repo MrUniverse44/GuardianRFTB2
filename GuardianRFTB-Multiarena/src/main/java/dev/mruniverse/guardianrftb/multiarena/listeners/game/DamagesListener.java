@@ -108,6 +108,8 @@ public class DamagesListener implements Listener {
                         items.giveItem(player,plugin);
                     }
                     player.setGameMode(GameMode.ADVENTURE);
+                    player.setAllowFlight(true);
+                    player.setFlying(true);
                 }
                 game.deathBeast(player);
                 player.teleport(game.getBeastSpawn());
@@ -124,6 +126,8 @@ public class DamagesListener implements Listener {
                             items.giveItem(player,plugin);
                         }
                         player.setGameMode(GameMode.ADVENTURE);
+                        player.setAllowFlight(true);
+                        player.setFlying(true);
                     }
                     player.teleport(game.getRunnerSpawn());
                 }
