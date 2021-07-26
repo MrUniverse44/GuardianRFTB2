@@ -128,6 +128,7 @@ playing:
         - '&eplay.servername.net'
       slot: 7
     leave:
+      toggle: true
       item: RED_BED
       name: '&c&lReturn to the lobby &7(Right Click)'
       lore:
