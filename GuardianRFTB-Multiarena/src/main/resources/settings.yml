@@ -12,6 +12,7 @@
 #
 settings:
   # Enable this option to prevent-chunk-unloading (only enable this option if your server is only dedicated for this minigame or you have some users in games
+  # This option will cancel unload of chunks of your lobby world & games world.
   cancel-chunk-unload: true
   # Enable Check update when the plugin load
   update-check: true
