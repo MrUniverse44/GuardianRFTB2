@@ -61,14 +61,12 @@ public class ChatListener implements Listener {
         Game game = playerManagerImpl.getGame();
         if(game.getSpectators().contains(player)) {
             for(Player spectator : game.getSpectators()) {
-                plugin.getUtils().sendMessage(spectator,spectatorChat.replace("<player_name>",player.getName())
-                        .replace("%message%",event.getMessage()));
+                plugin.getUtils().sendMessage(spectator, spectatorChat.replace("<player_name>", player.getName()),event.getPlayer(),event.getMessage());
             }
             return;
         }
         for(Player spectator : game.getPlayers()) {
-            plugin.getUtils().sendMessage(spectator,gameChat.replace("<player_name>",player.getName())
-                    .replace("%message%",event.getMessage()).replace("%player_role%", playerManagerImpl.getCurrentRole()));
+            plugin.getUtils().sendMessage(spectator, gameChat.replace("<player_name>", player.getName()),event.getPlayer(),event.getMessage());
         }
     }
 
