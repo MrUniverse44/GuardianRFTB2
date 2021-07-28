@@ -265,6 +265,12 @@ public class InteractListener implements Listener {
         if(game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.RESTARTING) {
             e.setCancelled(true);
         }
+
+        if(e.getAction() == Action.PHYSICAL && game.getSpectators().contains(e.getPlayer())) {
+            e.setCancelled(true);
+            return;
+        }
+
         Block b = e.getClickedBlock();
         if (b == null) { return; }
         if(falseChest(b.getType())) { return; }
