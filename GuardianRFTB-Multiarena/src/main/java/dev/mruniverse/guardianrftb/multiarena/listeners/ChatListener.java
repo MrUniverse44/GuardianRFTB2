@@ -17,30 +17,29 @@ public class ChatListener implements Listener {
 
     private String lobbyChat;
     private String gameChat;
+    private String console;
     private String spectatorChat;
 
     public ChatListener(GuardianRFTB plugin) {
         this.plugin = plugin;
 
-        lobbyChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.lobby");
-        if(lobbyChat == null) lobbyChat = "&7<player_name>&8: &f%message%";
+        lobbyChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.lobby","&7<player_name>&8: &f%message%");
 
-        spectatorChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.spectator");
-        if(spectatorChat == null) spectatorChat = "&8[SPECTATOR] &7<player_name>&8: &f%message%";
+        spectatorChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.spectator","&8[SPECTATOR] &7<player_name>&8: &f%message%");
 
-        gameChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.inGame");
-        if(gameChat == null) gameChat = "&a[%player_role%&a] &7<player_name>&8: &f%message%";
+        gameChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.inGame","&a[%player_role%&a] &7<player_name>&8: &f%message%");
+
+        console = plugin.getSettings().getSettings().getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
     }
 
     public void updateAll() {
-        lobbyChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.lobby");
-        if(lobbyChat == null) lobbyChat = "&7<player_name>&8: &f%message%";
+        lobbyChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.lobby","&7<player_name>&8: &f%message%");
 
-        spectatorChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.spectator");
-        if(spectatorChat == null) spectatorChat = "&8[SPECTATOR] &7<player_name>&8: &f%message%";
+        spectatorChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.spectator","&8[SPECTATOR] &7<player_name>&8: &f%message%");
 
-        gameChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.inGame");
-        if(gameChat == null) gameChat = "&a[%player_role%&a] &7<player_name>&8: &f%message%";
+        gameChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.inGame","&a[%player_role%&a] &7<player_name>&8: &f%message%");
+
+        console = plugin.getSettings().getSettings().getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
 
     }
 
@@ -50,8 +49,7 @@ public class ChatListener implements Listener {
         if(!plugin.getSettings().getSettings().getBoolean("settings.lobby.chat")) return;
         Player player = event.getPlayer();
         plugin.getLogs().debug("&3CHAT | &f" + player.getName() + ": " + event.getMessage());
-        String message = plugin.getSettings().getSettings().getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
-        plugin.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',message.replace("%player%",player.getName()).replace("%message%",event.getMessage())));
+        plugin.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',console.replace("%player%",player.getName()).replace("%message%",event.getMessage())));
         PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
         if(playerManagerImpl == null || playerManagerImpl.getGame() == null) {
             if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
