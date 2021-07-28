@@ -38,7 +38,6 @@ public class DeathListener implements Listener {
             }
             if(game.getBeasts().contains(player)) {
                 player.spigot().respawn();
-                player.setGameMode(GameMode.SPECTATOR);
                 game.deathBeast(player);
                 player.teleport(game.getBeastSpawn());
                 if(!plugin.getSettings().isSecondSpectator()) {
@@ -74,7 +73,6 @@ public class DeathListener implements Listener {
                     }
                 }
             }
-            player.setGameMode(GameMode.SPECTATOR);
         }
     }
     @EventHandler(priority = EventPriority.HIGH)

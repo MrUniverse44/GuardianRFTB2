@@ -435,6 +435,8 @@ public class GameInfo implements Game {
         String prefix = messages.getString("messages.prefix");
         player.getInventory().clear();
         player.setGameMode(GameMode.ADVENTURE);
+        player.setFlying(false);
+        player.setAllowFlight(false);
         player.teleport(this.waiting);
         currentData.setBoard(GuardianBoard.WAITING);
         if (gameStatus.equals(GameStatus.SELECTING)) {
@@ -583,6 +585,8 @@ public class GameInfo implements Game {
             currentData.setGame(null);
             currentData.setBoard(GuardianBoard.LOBBY);
             currentData.setLastCheckpoint(null);
+            player.setFlying(false);
+            player.setAllowFlight(false);
             currentData.setCurrentRole(GameTeam.RUNNERS);
             player.getInventory().clear();
             for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {

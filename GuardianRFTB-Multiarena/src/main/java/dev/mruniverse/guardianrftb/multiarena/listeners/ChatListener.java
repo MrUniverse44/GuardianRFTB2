@@ -9,6 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.ArrayList;
+
 public class ChatListener implements Listener {
     private final GuardianRFTB plugin;
 
@@ -65,7 +67,8 @@ public class ChatListener implements Listener {
             }
             return;
         }
-        for(Player spectator : game.getPlayers()) {
+        ArrayList<Player> players = new ArrayList<>(game.getPlayers());
+        for(Player spectator : players) {
             plugin.getUtils().sendMessage(spectator, gameChat.replace("<player_name>", player.getName()).replace("%player_role%", playerManagerImpl.getCurrentRole()),event.getPlayer(),event.getMessage());
         }
     }

@@ -136,6 +136,16 @@ public class DamagesListener implements Listener {
     }
 
     @EventHandler
+    public void removeFire(EntityDamageEvent event) {
+        if(event.getEntity() instanceof Player
+                && event.isCancelled()
+                && plugin.getUser(event.getEntity().getUniqueId()) != null
+                && plugin.getUser(event.getEntity().getUniqueId()).getGame() != null){
+            event.getEntity().setFireTicks(0);
+        }
+    }
+
+    @EventHandler
     public void GameProjectile(EntityDamageByEntityEvent event) {
         if(event.getEntity().getType().equals(EntityType.PLAYER)) {
             Player victim = (Player)event.getEntity();
@@ -314,9 +324,13 @@ public class DamagesListener implements Listener {
 
                 if((victim.getHealth() - event.getFinalDamage()) <= 0) {
                     String deathMessage;
-                    Player attacker = (Player) event.getDamager();
-                    deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", attacker.getName());
-                    plugin.getUser(attacker.getUniqueId()).addKills();
+                    if(event.getDamager() instanceof Player) {
+                        Player attacker = (Player) event.getDamager();
+                        deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", attacker.getName());
+                        plugin.getUser(attacker.getUniqueId()).addKills();
+                    } else {
+                        deathMessage = byDefault.replace("%victim%", victim.getName());
+                    }
                     for (Player inGamePlayer : game.getPlayers()) {
                         plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
                     }
