@@ -4,6 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -49,6 +50,8 @@ public class ChatListener implements Listener {
         if(!plugin.getSettings().getSettings().getBoolean("settings.lobby.chat")) return;
         Player player = event.getPlayer();
         plugin.getLogs().debug("&3CHAT | &f" + player.getName() + ": " + event.getMessage());
+        String message = plugin.getSettings().getSettings().getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
+        plugin.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',message.replace("%player%",player.getName()).replace("%message%",event.getMessage())));
         PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
         if(playerManagerImpl == null || playerManagerImpl.getGame() == null) {
             if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {

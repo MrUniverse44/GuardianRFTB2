@@ -20,6 +20,8 @@ settings:
   # messages_en.yml | code: en | language: en
   # messages_es.yml | code: es | language: es
   language: en
+  # Console chat-log format: (this format doesn't support PlaceholderAPI)
+  chat-log-format: "&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%"
   # Give default kits on first join
   default-kits:
     # Toggle
