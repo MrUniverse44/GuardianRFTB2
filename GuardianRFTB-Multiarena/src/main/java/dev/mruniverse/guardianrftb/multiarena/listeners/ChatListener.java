@@ -48,7 +48,6 @@ public class ChatListener implements Listener {
         if(event.isCancelled()) return;
         if(!plugin.getSettings().getSettings().getBoolean("settings.lobby.chat")) return;
         Player player = event.getPlayer();
-        plugin.getLogs().debug("&3CHAT | &f" + player.getName() + ": " + event.getMessage());
         plugin.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',console.replace("%player%",player.getName()).replace("%message%",event.getMessage())));
         PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
         if(playerManagerImpl == null || playerManagerImpl.getGame() == null) {
