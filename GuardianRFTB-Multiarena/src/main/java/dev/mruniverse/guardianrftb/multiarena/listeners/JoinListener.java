@@ -102,6 +102,8 @@ public class JoinListener implements Listener {
                         player.getInventory().setChestplate(null);
                         player.getInventory().setLeggings(null);
                         player.getInventory().setBoots(null);
+                        player.setFlying(false);
+                        player.setAllowFlight(false);
                     }
                     for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
                         player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);

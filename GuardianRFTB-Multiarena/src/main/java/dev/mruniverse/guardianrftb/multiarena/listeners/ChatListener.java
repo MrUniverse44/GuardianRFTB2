@@ -29,7 +29,7 @@ public class ChatListener implements Listener {
 
         gameChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.inGame","&a[%player_role%&a] &7<player_name>&8: &f%message%");
 
-        console = plugin.getSettings().getSettings().getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
+        console = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
     }
 
     public void updateAll() {
@@ -39,7 +39,7 @@ public class ChatListener implements Listener {
 
         gameChat = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.customChat.inGame","&a[%player_role%&a] &7<player_name>&8: &f%message%");
 
-        console = plugin.getSettings().getSettings().getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
+        console = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.chat-log-format","&f[&9DEBUG &f| GuardianRFTB] &bCHAT | &f%player%: %message%");
 
     }
 
