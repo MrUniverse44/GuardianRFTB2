@@ -99,14 +99,14 @@ public class ExtrasListener implements Listener {
     public void giveLobbyItems(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
+            player.setFlying(false);
+            player.setAllowFlight(false);
             if (plugin.getSettings().getSettings().getBoolean("settings.lobby.join.clearInventory")) {
                 player.getInventory().clear();
                 player.getInventory().setHelmet(null);
                 player.getInventory().setChestplate(null);
                 player.getInventory().setLeggings(null);
                 player.getInventory().setBoots(null);
-                player.setFlying(false);
-                player.setAllowFlight(false);
             }
             for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
                 player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);

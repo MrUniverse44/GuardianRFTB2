@@ -81,6 +81,8 @@ public class JoinListener implements Listener {
         }
         player.setGameMode(joinGamemode);
         if(!onlyItemsLobby) {
+            player.setFlying(false);
+            player.setAllowFlight(false);
             if (joinInventory) {
                 player.getInventory().clear();
                 player.getInventory().setHelmet(null);
@@ -96,14 +98,14 @@ public class JoinListener implements Listener {
         try {
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, () -> {
                 if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
+                    player.setFlying(false);
+                    player.setAllowFlight(false);
                     if (joinInventory) {
                         player.getInventory().clear();
                         player.getInventory().setHelmet(null);
                         player.getInventory().setChestplate(null);
                         player.getInventory().setLeggings(null);
                         player.getInventory().setBoots(null);
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
                     }
                     for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
                         player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
