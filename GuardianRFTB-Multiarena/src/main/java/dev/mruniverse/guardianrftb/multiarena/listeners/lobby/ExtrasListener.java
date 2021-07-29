@@ -179,6 +179,9 @@ public class ExtrasListener implements Listener {
         if(plugin.getSettings().getSettings().getBoolean("settings.game.commands.toggle")) {
             Player p = e.getPlayer();
             if (plugin.getUser(p.getUniqueId()).getGame() != null) {
+                if(plugin.getUser(p.getUniqueId()).getGame().getSpectators().contains(p) && p.hasPermission("grftb.admin.mod")) {
+                    return;
+                }
                 String[] args = e.getMessage().split(" ");
                 String type = plugin.getSettings().getSettings().getString("settings.game.commands.type");
                 if (type == null) type = "WHITELIST";

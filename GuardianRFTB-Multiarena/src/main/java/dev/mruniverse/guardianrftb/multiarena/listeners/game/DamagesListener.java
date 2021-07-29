@@ -197,11 +197,8 @@ public class DamagesListener implements Listener {
                     return;
                 }
                 if ((player.getHealth() - event.getFinalDamage()) <= 0) {
-                    String deathMessage;
-                    deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", player.getName());
-                    plugin.getUser(player.getUniqueId()).addKills();
-                    for (Player inGamePlayer : game.getPlayers()) {
-                        plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
+                    if(game.getRunners().contains(player) && game.getRunners().contains(victim) || game.getBeasts().contains(player) && game.getBeasts().contains(victim)) {
+                        event.setCancelled(true);
                     }
                 }
             }
