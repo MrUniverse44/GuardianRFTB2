@@ -304,7 +304,7 @@ public class InteractListener implements Listener {
                     if(game.isChestLimited(chests) && plugin.getGameManager().isChestLimitEnabled()) {
                         if(!game.isChestLimitParsed(chests) || game.isChestOf(chests,player)) {
                             openGameChest(player,chests);
-                            if(player.getGameMode() != GameMode.SPECTATOR) game.addChestLimit(chests,player);
+                            if(game.getSpectators().contains(player) || player.getGameMode() != GameMode.SPECTATOR) game.addChestLimit(chests,player);
                             return;
                         }
                         String prefix = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.prefix", "&3&lG&b&lRFTB &8| ");
