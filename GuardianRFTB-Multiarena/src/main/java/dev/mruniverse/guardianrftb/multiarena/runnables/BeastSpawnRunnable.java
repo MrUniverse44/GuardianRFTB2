@@ -83,8 +83,8 @@ public class BeastSpawnRunnable extends BukkitRunnable {
             if(currentGame.getBeasts().size() == 0) {
                 currentGame.setGameStatus(GameStatus.RESTARTING);
                 currentGame.updateSignsBlocks();
-                currentGame.setWinner(GameTeam.RUNNERS);
                 currentGame.cancelTask();
+                currentGame.setWinner(GameTeam.RUNNERS);
                 return;
             }
             currentGame.setGameStatus(GameStatus.RESTARTING);
