@@ -52,6 +52,16 @@ public class GuardianUtils {
      * @param player player to send
      * @param message current message
      * @param chatPlayer player from the player.
+     */
+    public void sendMessage(Player player,String message,Player chatPlayer) {
+        message = replaceVariables(message,chatPlayer);
+        utils.sendMessage(player, ChatColor.translateAlternateColorCodes('&',message));
+    }
+
+    /**
+     * @param player player to send
+     * @param message current message
+     * @param chatPlayer player from the player.
      * @param chatMessage message from the chat.
      */
     public void sendMessage(Player player,String message,Player chatPlayer,String chatMessage) {

@@ -381,8 +381,6 @@ public class GameInfo implements Game {
                 if(player != player1) player1.hidePlayer(player);
             }
             player.setGameMode(GameMode.ADVENTURE);
-            player.setAllowFlight(true);
-            player.setFlying(true);
             for(SpectatorItems items : SpectatorItems.values()) {
                 items.giveItem(player,plugin);
             }
@@ -394,6 +392,8 @@ public class GameInfo implements Game {
         currentData.setGame(this);
         currentData.setPointStatus(false);
         currentData.setLastCheckpoint(null);
+        player.setAllowFlight(true);
+        player.setFlying(true);
         if (currentData.getLeaveDelay() != 0) {
             plugin.getServer().getScheduler().cancelTask(currentData.getLeaveDelay());
             currentData.setLeaveDelay(0);
@@ -481,7 +481,7 @@ public class GameInfo implements Game {
             player.showPlayer(players);
             plugin.getUtils().sendMessage(players,prefix + joinMsg.replace("%player%",player.getName())
                     .replace("%game_online%",this.players.size()+"")
-                    .replace("%game_max%",this.max+""));
+                    .replace("%game_max%",this.max+""),player);
         }
     }
 
@@ -515,7 +515,7 @@ public class GameInfo implements Game {
         for(Player pl : this.players) {
             plugin.getUtils().sendMessage(pl,quitMsg.replace("%player%",player.getName())
                     .replace("%game_online%",this.players.size()+"")
-                    .replace("%game_max%",this.max+""));
+                    .replace("%game_max%",this.max+""),player);
         }
         updateSigns();
     }
@@ -577,7 +577,7 @@ public class GameInfo implements Game {
         for(Player pl : this.players) {
             plugin.getUtils().sendMessage(pl,quitMsg.replace("%player%",player.getName())
                     .replace("%game_online%",this.players.size()+"")
-                    .replace("%game_max%",this.max+""));
+                    .replace("%game_max%",this.max+""),player);
         }
         if(player.isOnline()) {
             PlayerManager currentData = plugin.getUser(player.getUniqueId());

@@ -100,7 +100,7 @@ public class SelectingRunnable extends BukkitRunnable {
         GameSelectedBeastEvent event = new GameSelectedBeastEvent(currentGame,player);
         Bukkit.getPluginManager().callEvent(event);
         for(Player game : currentGame.getPlayers()) {
-            guardianUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()));
+            guardianUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()),player);
         }
         player.getInventory().clear();
         player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
