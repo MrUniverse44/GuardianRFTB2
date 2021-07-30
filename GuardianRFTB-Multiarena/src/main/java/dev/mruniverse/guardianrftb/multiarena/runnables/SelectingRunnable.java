@@ -22,7 +22,7 @@ public class SelectingRunnable extends BukkitRunnable {
     private String second;
     private String seconds;
     private String chosenBeast;
-    private String forcedBeast;
+    private final String forcedBeast;
     public SelectingRunnable(GuardianRFTB plugin, Game game) {
         this.plugin = plugin;
         this.currentGame = game;

@@ -3,6 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -128,10 +129,76 @@ public class GuardianPlaceholders extends PlaceholderExpansion {
             return currentData.getKits().size() + "";
         }
 
-        if(identifier.equals("currentGame")){
+        if(identifier.equals("currentGame") || identifier.equals("game_name") || identifier.equals("game")){
             if(currentData.getGame() != null) return currentData.getGame().getName();
             return "none";
         }
+
+        if(identifier.equals("game_players_online") || identifier.equals("game_players")) {
+            if(currentData.getGame() != null) return currentData.getGame().getPlayers().size() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_players_max") || identifier.equals("game_max")) {
+            if(currentData.getGame() != null) return currentData.getGame().getMax() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_beasts") || identifier.equals("game_players_beasts")) {
+            if(currentData.getGame() != null) return currentData.getGame().getBeasts().size() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_runners") || identifier.equals("game_players_runners")) {
+            if(currentData.getGame() != null) return currentData.getGame().getRunners().size() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_killers") || identifier.equals("game_players_killers")) {
+            if(currentData.getGame() != null) return currentData.getGame().getKillers().size() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_spectators") || identifier.equals("game_players_spectators")) {
+            if(currentData.getGame() != null) return currentData.getGame().getSpectators().size() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_need") || identifier.equals("game_players_need")) {
+            if(currentData.getGame() != null) return currentData.getGame().getNeedPlayers() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_status") || identifier.equals("game_status_name")) {
+            if(currentData.getGame() != null) return ChatColor.translateAlternateColorCodes('&',currentData.getGame().getStatus().getStatusName());
+            return "none";
+        }
+
+        if(identifier.equals("game_status_colored")) {
+            if(currentData.getGame() != null) return ChatColor.translateAlternateColorCodes('&',currentData.getGame().getStatus().getStatus());
+            return "none";
+        }
+
+        if(identifier.equals("game_type")) {
+            if(currentData.getGame() != null) return ChatColor.translateAlternateColorCodes('&',currentData.getGame().getType().getType());
+            return "none";
+        }
+
+        if(identifier.equals("game_timer")) {
+            if(currentData.getGame() != null) return currentData.getGame().getLastTimer() + "";
+            return "none";
+        }
+
+        if(identifier.equals("game_config_name")) {
+            if(currentData.getGame() != null) return ChatColor.translateAlternateColorCodes('&',currentData.getGame().getConfigName());
+            return "none";
+        }
+
+        if(identifier.equals("game_max_time")) {
+            if(currentData.getGame() != null) return currentData.getGame().getGameMaxTime() + "";
+            return "none";
+        }
+
 
         return null;
     }
