@@ -603,7 +603,8 @@ public class GameInfo implements Game {
         if (players.size() == min && !gameStatus.equals(GameStatus.STARTING) && !gameStatus.equals(GameStatus.SELECTING) && !doubleCountPrevent) {
             gameStatus = GameStatus.SELECTING;
             updateSignsBlocks();
-            lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new SelectingRunnable(plugin,this), 0L, 20L);
+            SelectingRunnable select = new SelectingRunnable(plugin,this);
+            lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
             lastTimer = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.game.start-countdown",30);
             doubleCountPrevent = true;
             for(Player player : players) {
@@ -622,7 +623,8 @@ public class GameInfo implements Game {
         this.gameStatus = GameStatus.STARTING;
         updateSignsBlocks();
         this.lastTimer = 10;
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new StartRunnable(plugin,this), 0L, 20L);
+        StartRunnable select = new StartRunnable(plugin,this);
+        lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
         for(Player player : players) {
             plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
         }
@@ -639,7 +641,8 @@ public class GameInfo implements Game {
         for(Player player : beasts) {
             plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
         }
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new BeastSpawnRunnable(plugin,this), 0L, 20L);
+        BeastSpawnRunnable select = new BeastSpawnRunnable(plugin,this);
+        lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
     }
 
     @Override
@@ -649,7 +652,8 @@ public class GameInfo implements Game {
         this.lastTimer = getGameMaxTime();
         GameStartEvent event = new GameStartEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new PlayingRunnable(this), 0L, 20L);
+        PlayingRunnable select = new PlayingRunnable(this);
+        lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
     }
 
     @Override
@@ -662,7 +666,8 @@ public class GameInfo implements Game {
         updateSignsBlocks();
         GameEndEvent event = new GameEndEvent(this);
         Bukkit.getPluginManager().callEvent(event);
-        lastListener = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new EndingRunnable(plugin,this,gameTeam), 0L, 20L);
+        EndingRunnable select = new EndingRunnable(plugin,this,gameTeam);
+        lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
     }
 
     @Override

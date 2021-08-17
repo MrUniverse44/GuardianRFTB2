@@ -14,6 +14,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -360,7 +361,7 @@ public class GuardianUtils {
 
     public void sendLeaveCountdown(final Player player, final int delay) {
         PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
-        int delayValue = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+        int delayValue = new BukkitRunnable() {
             int countdown = delay;
             public void run() {
                 if (this.countdown == 0) {
@@ -377,7 +378,7 @@ public class GuardianUtils {
                     this.countdown--;
                 }
             }
-        }, 0L, 20L);
+        }.runTaskTimerAsynchronously(plugin, 0L, 20L).getTaskId();
         plugin.getUser(player.getUniqueId()).setLeaveDelay(delayValue);
     }
 
