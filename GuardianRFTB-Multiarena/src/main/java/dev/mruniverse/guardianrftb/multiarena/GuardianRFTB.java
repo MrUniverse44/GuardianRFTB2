@@ -213,23 +213,28 @@ public final class GuardianRFTB extends JavaPlugin {
             for(GameItems currentItem : GameItems.values()) {
                 String path = currentItem.getItemPath();
                 ItemStack currentIStack;
-                if (items.get(path + "enchantments") == null) {
-                    currentIStack = getItemWithData(
-                            items.getString(path + "item"),
-                            items.getString(path + "name"),
-                            items.getStringList(path + "lore")
-                    );
+                if (items.getBoolean(path + "toggle",true)) {
+                    if (items.get(path + "enchantments") == null) {
+                        currentIStack = getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore")
+                        );
+                    } else {
+                        currentIStack = getItemWithData(
+                                items.getString(path + "item"),
+                                items.getString(path + "name"),
+                                items.getStringList(path + "lore"),
+                                items.getStringList(path + "enchantments")
+                        );
+                    }
+                    itemsInfo.getCurrentItem().put(currentIStack, currentItem.getItemFunction());
+                    currentItem.set(this, currentIStack);
+                    currentItem.slot(this, items.getInt(path + "slot"));
                 } else {
-                    currentIStack = getItemWithData(
-                            items.getString(path + "item"),
-                            items.getString(path + "name"),
-                            items.getStringList(path + "lore"),
-                            items.getStringList(path + "enchantments")
-                    );
+                    currentItem.set(this,null);
+                    currentItem.slot(this,11);
                 }
-                itemsInfo.getCurrentItem().put(currentIStack,currentItem.getItemFunction());
-                currentItem.set(this,currentIStack);
-                currentItem.slot(this,items.getInt(path + "slot"));
             }
         } catch (Throwable throwable) {
             getLogs().error("Can't get game items on startup");

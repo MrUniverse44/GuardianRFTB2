@@ -63,18 +63,22 @@ public enum GameItems {
         switch (this) {
             case BEAST_KIT:
                 main.getItemsInfo().setKitBeast(item);
+                if(item == null) main.getItemsInfo().setKitBeastStatus(false);
             case CHECKPOINT:
                 main.getItemsInfo().setCheckPoint(item);
                 break;
             case LEAVE_ITEM:
                 main.getItemsInfo().setExit(item);
+                if(item == null) main.getItemsInfo().setExitStatus(false);
                 break;
             case KILLER_KIT:
                 main.getItemsInfo().setKitKiller(item);
+                if(item == null) main.getItemsInfo().setKitKillerStatus(false);
                 break;
             default:
             case RUNNER_KIT:
                 main.getItemsInfo().setKitRunner(item);
+                if(item == null) main.getItemsInfo().setKitRunnerStatus(false);
                 break;
         }
     }

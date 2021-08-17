@@ -76,10 +76,12 @@ public class InteractListener implements Listener {
             }
             PlayerManager pm = plugin.getUser(player.getUniqueId());
             HashMap<ItemStack, Integer> itemToChecks = new HashMap<>(plugin.getItemsInfo().getLobbyItems());
-            itemToChecks.put(plugin.getItemsInfo().getKitBeast(), 0);
-            itemToChecks.put(plugin.getItemsInfo().getKitRunner(),0);
+
+            if(plugin.getItemsInfo().getKitBeastStatus()) itemToChecks.put(plugin.getItemsInfo().getKitBeast(), 0);
+            if(plugin.getItemsInfo().getKitRunnerStatus()) itemToChecks.put(plugin.getItemsInfo().getKitRunner(),0);
+            if(plugin.getItemsInfo().getExitStatus()) itemToChecks.put(plugin.getItemsInfo().getExit(), 8);
             itemToChecks.put(plugin.getItemsInfo().getCheckPoint(), 0);
-            itemToChecks.put(plugin.getItemsInfo().getExit(), 8);
+
             for(ItemStack item : itemToChecks.keySet()) {
                 if(event.getItem().getType().equals(item.getType()) && event.getItem().getItemMeta().equals(item.getItemMeta())) {
                     ItemFunction itemAction = plugin.getItemsInfo().getCurrentItem().get(item);

@@ -168,6 +168,12 @@ settings:
       ending: Restarting
   # Game Options
   game:
+    # Extra ActionBar, this action bar will appear: On Game waiting,On Game Selecting,On Game End.
+    extra-actionbar: true
+    # Extra BossBar, this boss bar will appear: On Game waiting,On Game Selecting,On Game End.
+    extra-bossbar: true
+    # Countdown on Experience bar
+    xp-countdown: true
     # Do not use the Spectator GameMode and use CUSTOM-ADVENTURE to spectate games.
     use-second-spectator-system: false
     # Allow players can join as spectator while the game is in-game

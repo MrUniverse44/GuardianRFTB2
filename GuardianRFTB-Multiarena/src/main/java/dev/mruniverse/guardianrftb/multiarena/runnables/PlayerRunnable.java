@@ -21,9 +21,9 @@ public class PlayerRunnable extends BukkitRunnable {
     private final FloatConverter floatConverter;
     private final Utils utils;
 
-    private boolean bossLb,bossGm,actionLb;
+    private boolean bossLb,bossGm,actionLb,extraBb,extraAb;
 
-    private String bossLobby,actionLobby,bossGameBeast,bossGameRunners;
+    private String bossLobby,actionLobby,bossGameBeast,bossGameRunners,extraA,extraB;
 
     private GameBossFormat gameBossFormat;
 
@@ -31,15 +31,20 @@ public class PlayerRunnable extends BukkitRunnable {
         plugin = main;
         floatConverter = new FloatConverter();
         utils = main.getLib().getUtils();
-        bossLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.bossBar");
+        FileConfiguration config = plugin.getSettings().getSettings();
+        bossLb = config.getBoolean("settings.lobby.bossBar");
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         bossLobby = messages.getString("messages.lobby.bossBar");
-        actionLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.actionBar");
+        actionLb = config.getBoolean("settings.lobby.actionBar");
         actionLobby = messages.getString("messages.lobby.actionBar");
-        bossGm = plugin.getSettings().getSettings().getBoolean("settings.game.beastDistance.toggle");
+        extraBb = config.getBoolean("settings.game.extra-bossbar",false);
+        extraAb = config.getBoolean("settings.game.extra-actionbar",true);
+        extraA = messages.getString("messages.game.extra-actionbar","&eYou are playing with &fGRFTB&e.");
+        extraB = messages.getString("messages.game.extra-bossbar","&6This is a &lBETA");
+        bossGm = config.getBoolean("settings.game.beastDistance.toggle");
         bossGameRunners = messages.getString("messages.game.others.beastDistance.toRunners");
         bossGameBeast = messages.getString("messages.game.others.beastDistance.toBeasts");
-        String format = plugin.getSettings().getSettings().getString("settings.game.beastDistance.Format");
+        String format = config.getString("settings.game.beastDistance.Format");
         if(format == null) format = "BOSSBAR";
         if(format.equalsIgnoreCase("ACTIONBAR") || format.equalsIgnoreCase("ACTION BAR") || format.equalsIgnoreCase("ACTION_BAR")) {
             gameBossFormat = GameBossFormat.ACTIONBAR;
@@ -48,15 +53,20 @@ public class PlayerRunnable extends BukkitRunnable {
         }
     }
     public void update() {
-        bossLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.bossBar");
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+        FileConfiguration config = plugin.getSettings().getSettings();
+        bossLb = config.getBoolean("settings.lobby.bossBar");
         bossLobby = messages.getString("messages.lobby.bossBar");
-        actionLb = plugin.getSettings().getSettings().getBoolean("settings.lobby.actionBar");
+        actionLb = config.getBoolean("settings.lobby.actionBar");
         actionLobby = messages.getString("messages.lobby.actionBar");
-        bossGm = plugin.getSettings().getSettings().getBoolean("settings.game.beastDistance.toggle");
+        bossGm = config.getBoolean("settings.game.beastDistance.toggle");
+        extraBb = config.getBoolean("settings.game.extra-bossbar",false);
+        extraAb = config.getBoolean("settings.game.extra-actionbar",true);
+        extraA = messages.getString("messages.game.extra-actionbar","&eYou are playing with &fGRFTB&e.");
+        extraB = messages.getString("messages.game.extra-bossbar","&6This is a &lBETA");
         bossGameRunners = messages.getString("messages.game.others.beastDistance.toRunners");
         bossGameBeast = messages.getString("messages.game.others.beastDistance.toBeasts");
-        String format = plugin.getSettings().getSettings().getString("settings.game.beastDistance.Format");
+        String format = config.getString("settings.game.beastDistance.Format");
         if(format == null) format = "BOSSBAR";
         if(format.equalsIgnoreCase("ACTIONBAR") || format.equalsIgnoreCase("ACTION BAR") || format.equalsIgnoreCase("ACTION_BAR")) {
             gameBossFormat = GameBossFormat.ACTIONBAR;
@@ -80,8 +90,11 @@ public class PlayerRunnable extends BukkitRunnable {
                 }
             } else {
                 if(playerManagerImpl.getBoard().equals(GuardianBoard.WAITING) || playerManagerImpl.getBoard().equals(GuardianBoard.STARTING) || playerManagerImpl.getBoard().equals(GuardianBoard.SELECTING) || playerManagerImpl.getBoard().equals(GuardianBoard.BEAST_SPAWN) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_BEAST) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_RUNNERS) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_BEAST)    ) {
-                    if(bossLb) {
-                        utils.sendBossBar(player, bossLobby);
+                    if(extraAb) {
+                        utils.sendActionbar(player,extraA);
+                    }
+                    if(extraBb) {
+                        utils.sendBossBar(player,extraB);
                     }
                 } else {
                     if(bossGm) {

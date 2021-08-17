@@ -440,8 +440,8 @@ public class GameCommand {
             utils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()));
         }
         player.getInventory().clear();
-        player.getInventory().setItem(main.getItemsInfo().getBeastSlot(), main.getItemsInfo().getKitBeast());
-        player.getInventory().setItem(main.getItemsInfo().getExitSlot(), main.getItemsInfo().getExit());
+        if(main.getItemsInfo().getKitBeastStatus()) player.getInventory().setItem(main.getItemsInfo().getBeastSlot(), main.getItemsInfo().getKitBeast());
+        if(main.getItemsInfo().getExitStatus()) player.getInventory().setItem(main.getItemsInfo().getExitSlot(), main.getItemsInfo().getExit());
         player.teleport(currentGame.getSelecting());
         main.getUser(player.getUniqueId()).setCurrentRole(GameTeam.BEASTS);
     }

@@ -68,6 +68,7 @@ lobby:
     slot: 8
 InGame:
   RunnerKit:
+    toggle: true
     item: PAPER
     name: '&aKit Selector (&lRunners&a)'
     lore:
@@ -75,6 +76,7 @@ InGame:
       - '&eplay.servername.net'
     slot: 0
   BeastKit:
+    toggle: true
     item: PAPER
     name: '&aKit Selector (&lBeast&a)'
     lore:
@@ -82,6 +84,7 @@ InGame:
       - '&eplay.servername.net'
     slot: 0
   KillerKit:
+    toggle: true
     item: PAPER
     name: '&aKit Selector (&lKiller&a)'
     lore:
@@ -89,6 +92,7 @@ InGame:
       - '&eplay.servername.net'
     slot: 0
   Exit:
+    toggle: true
     item: RED_BED
     name: '&aLeave'
     lore:

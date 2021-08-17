@@ -12,6 +12,8 @@
 messages:
   prefix: '&3&lG&b&lRFTB &8| '
   game:
+    extra-bossbar: '&6This is a &lBETA'
+    extra-actionbar: '&eYou are playing with &fGRFTB&e.'
     join-game: '&b%player% &7has joined the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game: '&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!'
     leave-game-in-game: '&b%player% &7has left the game!'

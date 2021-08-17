@@ -23,9 +23,12 @@ public class SelectingRunnable extends BukkitRunnable {
     private String seconds;
     private String chosenBeast;
     private final String forcedBeast;
+    private final boolean xp;
+    private final int max;
     public SelectingRunnable(GuardianRFTB plugin, Game game) {
         this.plugin = plugin;
         this.currentGame = game;
+        max = game.getLastTimer();
         guardianUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
@@ -35,6 +38,7 @@ public class SelectingRunnable extends BukkitRunnable {
         forcedBeast = configuration.getString("messages.game.forcedBeast");
         prefix = configuration.getString("messages.prefix");
         second = secondConfiguration.getString("settings.timer.second");
+        xp = secondConfiguration.getBoolean("settings.game.xp-countdown",true);
         seconds = secondConfiguration.getString("settings.timer.seconds");
         if(selecting == null) selecting = "&eThe beast will be chosen in &c%current_time% &e%current_time_letter%";
         if(enough == null) enough = "&cThis game can't start, not enough players";
@@ -46,6 +50,8 @@ public class SelectingRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
+        boolean sendMessage = false;
+        String message = "";
         if(currentGame.getPlayers().size() >= currentGame.getMin()) {
             if(currentGame.getBeasts().size() > 0 && currentGame.getType() == GameType.CLASSIC) {
                 currentGame.cancelTask();
@@ -58,17 +64,33 @@ public class SelectingRunnable extends BukkitRunnable {
             if(time != 0) {
                 SoundsInfo sounds = plugin.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
-                    for(Player player : currentGame.getPlayers()) {
-                        guardianUtils.sendMessage(player,prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
-                        if(sounds.getStatus(GuardianSounds.GAME_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.GAME_COUNT),sounds.getVolume(GuardianSounds.GAME_COUNT),sounds.getPitch(GuardianSounds.GAME_COUNT));
-                    }
+                    sendMessage = true;
+                    message = prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds);
                 }
                 if(time == 1) {
-                    for(Player player : currentGame.getPlayers()) {
-                        guardianUtils.sendMessage(player,prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",second));
-                        if(sounds.getStatus(GuardianSounds.GAME_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.GAME_COUNT),sounds.getVolume(GuardianSounds.GAME_COUNT),sounds.getPitch(GuardianSounds.GAME_COUNT));
+                    sendMessage = true;
+                    message = prefix + selecting.replace("%current_time%",time + "").replace("%current_time_letter%",second);
+                }
+                if(xp) {
+                    for (Player player : currentGame.getPlayers()) {
+                        float division = (float)time/max;
+                        player.setExp(division);
+                        if (sendMessage) {
+                            guardianUtils.sendMessage(player, message);
+                            if (sounds.getStatus(GuardianSounds.GAME_COUNT))
+                                player.playSound(player.getLocation(), sounds.getSound(GuardianSounds.GAME_COUNT), sounds.getVolume(GuardianSounds.GAME_COUNT), sounds.getPitch(GuardianSounds.GAME_COUNT));
+                        }
+                    }
+                } else {
+                    if(sendMessage) {
+                        for (Player player : currentGame.getPlayers()) {
+                            guardianUtils.sendMessage(player, message);
+                            if (sounds.getStatus(GuardianSounds.GAME_COUNT))
+                                player.playSound(player.getLocation(), sounds.getSound(GuardianSounds.GAME_COUNT), sounds.getVolume(GuardianSounds.GAME_COUNT), sounds.getPitch(GuardianSounds.GAME_COUNT));
+                        }
                     }
                 }
+
                 currentGame.setLastTimer(time - 1);
             } else {
                 int player = currentGame.getRandom().nextInt(currentGame.getRunners().size());
@@ -103,8 +125,8 @@ public class SelectingRunnable extends BukkitRunnable {
             guardianUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()),player);
         }
         player.getInventory().clear();
-        player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
-        player.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
+        if(plugin.getItemsInfo().getKitBeastStatus()) player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());
+        if(plugin.getItemsInfo().getExitStatus()) player.getInventory().setItem(plugin.getItemsInfo().getExitSlot(), plugin.getItemsInfo().getExit());
         player.teleport(currentGame.getSelecting());
         plugin.getUser(player.getUniqueId()).setCurrentRole(GameTeam.BEASTS);
     }

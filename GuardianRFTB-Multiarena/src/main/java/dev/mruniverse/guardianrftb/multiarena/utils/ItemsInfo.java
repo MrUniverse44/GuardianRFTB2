@@ -36,6 +36,11 @@ public class ItemsInfo {
     private boolean playAgainItem;
     private boolean leaveItem;
 
+    private boolean exitItem = true;
+    private boolean kitRunnerToggle = true;
+    private boolean kitBeastToggle = true;
+    private boolean kitKillerToggle = true;
+
     private final HashMap<ItemStack, Integer> lobbyItems = new HashMap<>();
     private final HashMap<ItemStack, Integer> beastInventory = new HashMap<>();
     private final HashMap<ItemStack, ItemFunction> currentItem = new HashMap<>();
@@ -54,6 +59,16 @@ public class ItemsInfo {
     public void setBeastChestplate(ItemStack itemStack) { beastChestplate = itemStack; }
     public void setBeastLeggings(ItemStack itemStack) { beastLeggings = itemStack; }
     public void setBeastBoots(ItemStack itemStack) { beastBoots = itemStack; }
+
+    public void setExitStatus(boolean toggle) { exitItem = toggle; }
+    public void setKitRunnerStatus(boolean toggle) { kitRunnerToggle = toggle; }
+    public void setKitBeastStatus(boolean toggle) { kitBeastToggle = toggle; }
+    public void setKitKillerStatus(boolean toggle) { kitKillerToggle = toggle; }
+
+    public boolean getExitStatus() { return exitItem; }
+    public boolean getKitRunnerStatus() { return  kitRunnerToggle; }
+    public boolean getKitBeastStatus() { return kitBeastToggle; }
+    public boolean getKitKillerStatus() { return kitKillerToggle; }
 
 
     public void setSpectatorSlot(int slot) { spectatorSlot = slot; }
