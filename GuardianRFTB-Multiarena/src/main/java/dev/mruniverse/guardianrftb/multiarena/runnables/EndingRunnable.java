@@ -10,6 +10,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameRestartEvent;
+import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameWinEvent;
 import dev.mruniverse.guardianrftb.multiarena.utils.GuardianText;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -39,6 +40,8 @@ public class EndingRunnable extends BukkitRunnable {
         this.plugin = plugin;
         game.setLastTimer(15);
         time = 15;
+        GameWinEvent event = new GameWinEvent(game);
+        Bukkit.getPluginManager().callEvent(event);
         buttons = new HashMap<>();
         if(plugin.getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.game.show-game-buttons-on-end")) {
             loadOptions();

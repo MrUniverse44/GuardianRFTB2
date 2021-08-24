@@ -6,6 +6,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianSounds;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -17,6 +18,14 @@ public class SoundsInfo {
     private final HashMap<GuardianSounds,Sound> sounds = new HashMap<>();
     private final HashMap<GuardianSounds,Float> pitch = new HashMap<>();
     private final HashMap<GuardianSounds,Float> volume = new HashMap<>();
+
+    public static void playSound(ExternalLogger logs,Player player,String sound) {
+        try {
+            player.playSound(player.getLocation(),Sound.valueOf(sound),2.0F,1.0F);
+        }catch (Throwable ignored) {
+            logs.error("The sound: " + sound + " doesn't exists.");
+        }
+    }
 
     public SoundsInfo(GuardianRFTB plugin) {
         this.plugin = plugin;

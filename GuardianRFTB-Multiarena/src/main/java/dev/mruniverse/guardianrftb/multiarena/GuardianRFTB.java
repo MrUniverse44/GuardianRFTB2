@@ -21,6 +21,7 @@ import dev.mruniverse.guardianrftb.multiarena.storage.FileStorageImpl;
 import dev.mruniverse.guardianrftb.multiarena.storage.PlayerManagerImpl;
 import dev.mruniverse.guardianrftb.multiarena.utils.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -57,6 +58,8 @@ public final class GuardianRFTB extends JavaPlugin {
     private SoundsInfo soundsInfo;
     private GuardianPlaceholders guardianPlaceholders;
     private DataStorage dataStorageImpl;
+    private final HashMap<CommandType,Boolean> toggle = new HashMap<>();
+    private final HashMap<CommandType,List<String>> hash = new HashMap<>();
 
     public String getServerVersion() { return serverVersion; }
     public ExternalLogger getLogs() { return logger; }
@@ -171,6 +174,8 @@ public final class GuardianRFTB extends JavaPlugin {
                 dataStorageImpl.loadDatabase();
                 guardianUtils = new GuardianUtils(instance);
 
+                loadCommands();
+
                 getLib().getNMS().loadChunkListener();
 
                 if (getStorage().getControl(GuardianFiles.SETTINGS).getBoolean("settings.update-check")) {
@@ -203,6 +208,53 @@ public final class GuardianRFTB extends JavaPlugin {
             }
         };
         runnable.runTaskLater(this, 1L);
+    }
+
+    public void loadCommands() {
+        FileConfiguration config = getStorage().getControl(GuardianFiles.SETTINGS);
+        for(CommandType type : CommandType.values()) {
+            hash.put(type,config.getStringList(type.getPath() + ".values"));
+            toggle.put(type,config.getBoolean(type.getPath() + ".toggle"));
+        }
+    }
+
+    public void executeCommands(final CommandType type,final Player[] player) {
+        for(Player p : player) {
+            execute(type,p);
+        }
+    }
+
+    public boolean hasAction(CommandType type) {
+        return toggle.get(type);
+    }
+
+    public void execute(CommandType type,Player player) {
+        Utils utils = getLib().getUtils();
+        if(player != null) {
+            for (String action : hash.get(type)) {
+                ActionType actionType = ActionType.getAction(action);
+                if (actionType == ActionType.ACTION_BAR) {
+                    utils.sendActionbar(player, ChatColor.translateAlternateColorCodes('&', actionType.getMsg(player.getName(), true)));
+                } else if (actionType == ActionType.BOSS_BAR) {
+                    utils.sendBossBar(player, ChatColor.translateAlternateColorCodes('&', actionType.getMsg(player.getName(), true)));
+                } else if (actionType == ActionType.CONSOLE_COMMAND) {
+                    Bukkit.dispatchCommand(getServer().getConsoleSender(), actionType.getMsg(player.getName(), true));
+                } else if (actionType == ActionType.USER_COMMAND) {
+                    player.performCommand(actionType.getMsg(player.getName(), true));
+                } else if (actionType == ActionType.MESSAGE) {
+                    utils.sendMessage(player, ChatColor.translateAlternateColorCodes('&', actionType.getMsg(player.getName(), true)));
+                } else {
+                    SoundsInfo.playSound(getLogs(), player, actionType.getMsg(player.getName(), true));
+                }
+            }
+        } else {
+            for (String action : hash.get(type)) {
+                ActionType actionType = ActionType.getAction(action);
+                if(actionType.isForConsole()) {
+                    Bukkit.dispatchCommand(getServer().getConsoleSender(), actionType.getMsg(true));
+                }
+            }
+        }
     }
 
     public void loadGameItems() {
