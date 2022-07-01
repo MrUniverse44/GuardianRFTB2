@@ -1,45 +1,57 @@
-## GUARDIAN RUN FROM THE BEAST
-
+GUARDIAN RUN FROM THE BEAST
 ---
 
-# FEATURES:
+<img align="center" alt="Features Image" src="https://i.imgur.com/wrhacot.png">
 
-* Spigot 1.8 - 1.16
+* Spigot 1.8 - 1.19
+* MultiArena Support
+* BungeeCord Support
 * PlaceholderAPI Support
 * Developer API
 * Customizable
-```YAML
-  Scoreboards: With Animation System & Condition System for lines.
-  Messages: With Condition System, Permissions & with a language System.
-  Sounds: With support for all plugin names, thanks to XSounds.
-  Game Names: 
-    - If you are using the same arena for different modes
-      you can use this to use the same name and dont show game1,
-      game2,game3 (something like this).
-```
-* BossBar,Titles,ActionBar System
+* BossBar
+* Game Titles on Death/Kill/Win/Start
+* ActionBar System
 * Free & Open-Source
 * Maven-Support
 * Different GameModes
 * MySQL Support
-* BungeeMode Support (With GuardianRFTB-Bungee-Lobby.jar & GuardianRFTB-Bungee-Game.jar)
-* Multiarena Support
-* More optimized than the 1.0.6-RELEASE
-
----
-Config files:
-- games.yml
-- items.yml
-- menus.yml
-- messages.yml
-- mysql.yml
-- scoreboards.yml
-- settings.yml
 
 ---
 
-# Support:
 
-* Link: https://discord.gg/GnStU5Ecr2
+<img align="center" alt="Features Image" src="https://cdn.discordapp.com/attachments/987409771302883341/987454795906433054/DownloadLink.png">
+
+- You can download the plugin releases from our [Spigot MC](https://www.spigotmc.org/resources/88817/) page!
+> - Bleeding edge releases are available through the [GitHub Actions page](https://github.com/MrUniverse44/GuardianRFTB2/actions)  |  *This build can be unstable! Please report any issue!*
 
 ---
+
+<img align="center" src="https://i.imgur.com/7dNuZ9H.png">
+
+# Files
+
+> - translations/messages_en.yml
+> - translations/messages_es.yml
+> - settings/game/chests.yml
+> - settings/game/holograms.yml
+> - settings/game/scoreboards.yml
+> - settings/commands.yml
+> - settings/menus.yml
+> - settings/mysql.yml
+> - settings/items.yml
+> - settings/settings.yml
+> - local/games.yml
+
+# Developer API
+
+> We are working
+> in a developer api,
+> please wait for it.
+
+---
+
+Presented by:
+
+<img align="left" alt="BlueSlime Image" src="https://i.imgur.com/jUBJjHy.png" />
+
