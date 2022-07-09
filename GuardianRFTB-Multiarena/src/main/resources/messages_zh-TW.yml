@@ -1,0 +1,170 @@
+#   _____                     _ _               _____  ______ _______ ____
+#  / ____|                   | (_)             |  __ \|  ____|__   __|  _ \
+# | |  __ _   _  __ _ _ __ __| |_  __ _ _ __   | |__) | |__     | |  | |_) |
+# | | |_ | | | |/ _` | '__/ _` | |/ _` | '_ \  |  _  /|  __|    | |  |  _ <
+# | |__| | |_| | (_| | | | (_| | | (_| | | | | | | \ \| |       | |  | |_) |
+#  \_____|\__,_|\__,_|_|  \__,_|_|\__,_|_| |_| |_|  \_\_|       |_|  |____/
+#
+# Created by: MrUniverse44
+# Sponsor: WHost.es
+# SpigotMC Link: https://www.spigotmc.org/resources/88817
+#
+# 創建者：MrUniverse44
+# 贊助商：WHost.es
+# SpigotMC 連結：https://www.spigotmc.org/resources/88817
+#
+# Default translations provided by YoMonNPC.
+# 由 YoMonNPC 提供默認翻譯。
+#
+messages:
+  prefix: '&3&lG&b&lRFTB &8| '
+  game:
+    extra-bossbar: '&6此插件仍處於 &lBETA &6階段'
+    extra-actionbar: '&e你正在遊玩 &fGRFTB&e'
+    join-game: '&b%player% &7已加入遊戲！&3(&b%game_online%&3/&b%game_max%&3)&7'
+    leave-game: '&b%player% &7已退出遊戲！&3(&b%game_online%&3/&b%game_max%&3)&7'
+    leave-game-in-game: '&b%player% &7已退出遊戲！'
+    no-kits: '&c此伺服器尚未創建套件。'
+    spectating: '&a&l現在你是一個旁觀者。使用「&b&l/rftb leave&a&l」離開。'
+    chosenBeast: '&e玩家 &b%player% &e現在是一頭野獸！'
+    forcedBeast: '&e管理員已強制選擇了一頭野獸。'
+    limited-chest: '&a這個寶箱對於其他玩家來說已經空了。'
+    game-count:
+      selecting: '&e野獸將在 &c%current_time% &e%current_time_letter% 後被選出！'
+      start: '&e遊戲將在 &c%current_time% &e%current_time_letter% 後開始！'
+      beast: '&e野獸在 &c%current_time% &e%current_time_letter% 後生成！'
+      enough-players: '&c遊戲無法開始，玩家數量不足。'
+    gameInfo:
+      startGame:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - '<center>&e&l模式：%gameType% - %map_name%'
+        - ' '
+        - '<isBeast>&e&l殺死所有逃生者！'
+        - '<isRunner>&e&l活下去並殺死野獸！'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      endInfo:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - '<center>&e&l%gameType% - %map_name%'
+        - ' '
+        - '<center>&a%winner_team% &e&l勝利者 &c%looser_team%'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      playAgain:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - ' '
+        - ' &a<playAgainButton>'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+      rewardSummary:
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+        - '<center>&e&l%gameType% - %map_name%'
+        - ' '
+        - ' &7你賺取了：'
+        - '  &f[px] &3%game% 遊戲經驗'
+        - '  &f[px] &a%coins% 硬幣'
+        - ' '
+        - '&a[bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx][bx]'
+    playAgainButton:
+      value:
+        - '&b[px] <button_play>'
+        - '&b[px] <button_auto>'
+        - '&b[px] <button_leave>'
+      play:
+        value: '&b想要再玩一次？&a&l點擊這裡&e再玩一次。'
+        hover: '&b&l點擊再玩一次'
+      auto:
+        value: '&b想要切換「自動再玩一次」？&a&l點擊這裡&e切換。'
+        hover: '&b&l點擊切換「自動再玩一次」'
+      leave:
+        value: '&b想要離開？&a&l點擊這裡&e離開。'
+        hover: '&b&l點擊離開'
+      customOptions:
+        custom1:
+          value: '&a這是一條自訂消息。'
+          hover: '&b這是一條自訂懸浮消息。'
+          customAction: 'URL'
+          customResult: 'https://spigotmc.org'
+    deathMessages:
+      pvp: '&7%victim% 被 %attacker% 殺死了。'
+      void: '&7%victim% 正在尋找鑽石。'
+      lava: '&7%victim% 著火了。'
+      bow: '&7%attacker% 的箭術比 %victim% 更加精湛。'
+      otherCause: '&7%victim% 死了。'
+    kits:
+      enought: '&e你需要 &6%price% &e才能購買。'
+      purchase: '&a現在你擁有了套件 &b%kit_name% &a。(&3-%price%&a)'
+      select: '&a現在你選擇了套件 &b%kit_name%。'
+      reset: '&a現在你沒有選擇套件。'
+    others:
+      winCoins: '&6+%winCoins% 硬幣！（勝利）'
+      playAgainWin: '&a&l你贏了！&e&l想要再玩一次嗎？<clickText>'
+      playAgainLoose: '&c&l你輸了！&e&l想要再玩一次嗎？<clickText>'
+      playAgainClickText: '&6&l點擊這裡'
+      titles:
+        gameStart:
+          title: '&a'
+          subtitle: '&a遊戲開始！'
+        runnersGo:
+          toRunners:
+            title: '&a'
+            subtitle: '&a你已被釋放，上吧！'
+          toBeasts:
+            title: '&a'
+            subtitle: '&a逃生者已被釋放！'
+        beastsGo:
+          toRunners:
+            title: '&a'
+            subtitle: '&c野獸已被釋放！'
+          toBeasts:
+            title: '&a'
+            subtitle: '&a你已被釋放，上吧！'
+        Winner:
+          title: '&6&l勝利！'
+          subtitle: '&b%winner_name%&f 贏得了這局遊戲！'
+        Looser:
+          title: '&c&l遊戲結束！'
+          subtitle: '&8%attacker_name%&f 殺死了你！'
+      beastDistance:
+        toRunners: '&b你與&e&l野獸 &f%beastName% &b之間的距離'
+        toBeasts: '&b存活的逃生者：&e&l%runners%'
+      checkpoint:
+        use: '&a你已被傳送到最後一個檢查點。'
+        already: '&7你已有一個正在使用的檢查點。'
+  lobby:
+    actionBar: '&b你正在使用 &e&lGuardianRFTB &b遊玩 &e&lRFTB'
+    bossBar: '&b你正在&e&n[伺服器名稱]&b上遊玩'
+  others:
+    buttons:
+      autoPlay:
+        on: '&a現在你&l啟用&a了「自動再玩一次」選項。'
+        off: '&c現在你&l禁用&c了「自動再玩一次」選項。'
+      playAgain:
+        searching: '&a正在搜索遊戲…'
+        sending: '&a將你送至遊戲 &b%game_name%&a。'
+    already: '&c你已在遊玩！'
+    leave:
+      confirm: '&a&l<leaveCancelTime> 秒後將你傳送到大廳…[new line]&a&l再次右鍵點擊取消傳送！'
+      cancelled: '&c&l傳送取消！'
+    no-perms: '&c你需要權限「&7%permission%&c」來執行此操作。'
+    full: '&c此遊戲已滿！'
+    gamePlaying: '&c此競技場正在比賽中。'
+    restarting: '&c此遊戲處於重新啟動模式！'
+    playerError: '&7%player% &c離線。'
+    customChat:
+      inGame: '&a[%player_role%&a]&7<player_name>&8：&f%message%'
+      spectator: '&8[旁觀者]&7<player_name>&8：&f%message%'
+      lobby: '&7<player_name>&8：&f%message%'
+  admin:
+    create: '&a競技場「&b%arena_id%&a」正確創建！'
+    delete: '&a競技場「&b%arena_id%&a」正確刪除！'
+    arenaError: '&7%arena_id% &c不存在。'
+    setWaiting: '&a等候大廳現在位於 &b%location%。'
+    setSpawn: '&a出生點-%spawnType% 現在位於 &b%location%。'
+    setCenter: '&a競技場大廳現在位於 &b%location%。'
+    setChestArea: '&a競技場寶箱區域現在位於 &b%location%。'
+    setMode: '&a競技場模式現在是 &b%arena_mode%。'
+    setCreator: '&a競技場創建者現在是 &b%arena_creator%。'
+    setName: '&a競技場編號：&b%arena_id% &a現在名字為：&b%arena_name%。'
+    saveArena: '&a競技場「&b%arena_name%&a(&b%arena_id%&a)」已正確保存並啟用！'
+    editArena: '&a現在你可以編輯競技場「&b%arena_name%&a(&b%arena_id%&a)」。'
