@@ -20,7 +20,7 @@ messages:
   prefix: '&3&lG&b&lRFTB &8| '
   game:
     extra-bossbar: '&6此插件仍處於 &lBETA &6階段'
-    extra-actionbar: '&e你正在遊玩 &fGRFTB&e'
+    extra-actionbar: '&e你正在遊玩&fG逃離野獸&e'
     join-game: '&b%player% &7已加入遊戲！&3(&b%game_online%&3/&b%game_max%&3)&7'
     leave-game: '&b%player% &7已退出遊戲！&3(&b%game_online%&3/&b%game_max%&3)&7'
     leave-game-in-game: '&b%player% &7已退出遊戲！'
@@ -132,7 +132,7 @@ messages:
         use: '&a你已被傳送到最後一個檢查點。'
         already: '&7你已有一個正在使用的檢查點。'
   lobby:
-    actionBar: '&b你正在使用 &e&lGuardianRFTB &b遊玩 &e&lRFTB'
+    actionBar: '&b你正在使用 &e&lGuardianRFTB &b遊玩&e&l逃離野獸'
     bossBar: '&b你正在&e&n[伺服器名稱]&b上遊玩'
   others:
     buttons:
