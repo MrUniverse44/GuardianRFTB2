@@ -30,9 +30,6 @@ import java.util.*;
 public class GameInfo implements Game {
 
     private final GuardianRFTB plugin;
-    private final Utils utils = GuardianLIB.getControl().getUtils();
-
-    private final Random random = new Random();
 
     private final ArrayList<Player> players = new ArrayList<>();
     private final ArrayList<Player> runners = new ArrayList<>();
@@ -1065,9 +1062,6 @@ public class GameInfo implements Game {
 
     @Override
     public Location getKillerSpawn() { return killerSpawn; }
-
-    @Override
-    public Random getRandom() { return random; }
 
     @Override
     public HashMap<String,List<Location>> getChestLocations() { return chestLocations; }

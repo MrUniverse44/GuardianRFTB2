@@ -11,9 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings("unused")
-public interface Game {
-    void setup();
+public abstract class Game {
+
+    private static final Random RANDOM = new Random();
+
+    public Random getRandom() {
+        return RANDOM;
+    }
+
+    public abstract void setup();
 
     void loadStatus();
 
@@ -106,8 +112,6 @@ public interface Game {
     Location getBeastSpawn();
     Location getRunnerSpawn();
     Location getKillerSpawn();
-
-    Random getRandom();
 
     HashMap<String, List<Location>> getChestLocations();
 

@@ -1,36 +1,36 @@
 package me.blueslime.guardianrftb.multiarena.game;
 
+import dev.mruniverse.slimelib.control.Control;
 import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
+import me.blueslime.guardianrftb.multiarena.SlimeFile;
 import me.blueslime.guardianrftb.multiarena.enums.GameType;
 import me.blueslime.guardianrftb.multiarena.enums.GuardianFiles;
 import me.blueslime.guardianrftb.multiarena.enums.SaveMode;
 import me.blueslime.guardianrftb.multiarena.interfaces.Game;
+import me.blueslime.guardianrftb.multiarena.storage.StorageManager;
+import me.blueslime.guardianrftb.multiarena.storage.players.PluginStorage;
+import me.blueslime.guardianrftb.multiarena.utils.MessageHandler;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
-@SuppressWarnings("unused")
 public class GameManager {
     private final ArrayList<Game> games = new ArrayList<>();
-    private final HashMap<World, Game> gamesWorlds = new HashMap<>();
-
-    public HashMap<String,GameChests> gameChests = new HashMap<>();
-    public HashMap<GameType,GameMenu> gameMenu = new HashMap<>();
-
-    private final GameMainMenu gameMainMenu;
-    private final GuardianRFTB plugin;
 
     private String gameSwitchChest = "swords";
 
-    private boolean chestLimit;
+    private GameMainMenu gameMainMenu;
+
+    private final GuardianRFTB plugin;
 
     private boolean chestChange;
+
+    private boolean chestLimit;
 
     public GameChests getSwitchChest() {
         return getGameChest(gameSwitchChest);
@@ -38,133 +38,235 @@ public class GameManager {
 
     public GameManager(GuardianRFTB plugin) {
         this.plugin = plugin;
-        gameMainMenu = new GameMainMenu(plugin);
-        FileConfiguration config = plugin.getStorage().getControl(GuardianFiles.SETTINGS);
-        chestLimit = config.getBoolean("settings.game.chest-limit-settings.toggle",true);
-        chestChange = config.getBoolean("settings.game.chest-limit-settings.change-chest.toggle",false);
-        if(chestLimit && chestChange) {
-            gameSwitchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
+    }
+
+    /**
+     * Initialize this class with this method
+     */
+    public void initialize() {
+        this.gameMainMenu = new GameMainMenu(plugin);
+
+        Control settings = plugin.getConfigurationHandler(SlimeFile.SETTINGS);
+
+        String path = "settings.game.chest-limit-settings.";
+
+        this.chestChange     = settings.getStatus(path + "toggle", true);
+        this.chestLimit      = settings.getStatus(path + "change-chest.toggle", true);
+
+        if (!(chestLimit && chestChange)) {
+            return;
         }
+
+        this.gameSwitchChest = settings.getString(path + "change-chest.chest", "swords");
+
+        unload();
+
+        loadChests();
+        loadGames();
+
+        loadGameWorlds();
     }
 
-    public boolean isChestLimitEnabled() {
-        return chestLimit;
-    }
-
-    public boolean hasChestChangeEnabled() {
-        return chestChange;
-    }
-
+    /**
+     * With this method you refresh all your game data,
+     * including arenas, chests, configurations, and more.
+     */
     public void update() {
-        FileConfiguration config = plugin.getStorage().getControl(GuardianFiles.SETTINGS);
-        chestLimit = config.getBoolean("settings.game.chest-limit-settings.toggle",true);
-        chestChange = config.getBoolean("settings.game.chest-limit-settings.change-chest.toggle",false);
-        if(getSwitchChest() != null) {
-            String switchChest = config.getString("settings.game.chest-limit-settings.change-chest.chest", "swords");
-            if(!getSwitchChest().getChestID().equalsIgnoreCase(switchChest)) {
-                gameSwitchChest = switchChest;
-            }
-        }
+        initialize();
     }
 
     public void loadChests() {
-        ConfigurationSection section = plugin.getStorage().getControl(GuardianFiles.CHESTS).getConfigurationSection("chests");
-        if(section == null) return;
+
+        Control section = plugin.getConfigurationHandler(SlimeFile.CHESTS).getSection("chests");
+
+        if(section == null) {
+            return;
+        }
+
+        plugin.getStorageManager().getChestStorage().clear();
+
         for(String chest : section.getKeys(false)) {
-            gameChests.put(chest,new GameChests(plugin,chest));
+            plugin.getStorageManager().getChestStorage().add(
+                    chest,
+                    new GameChests(plugin, chest)
+            );
         }
     }
+
+
     public void unload() {
-        for(GameChests chests : gameChests.values()) {
+        StorageManager storage = plugin.getStorageManager();
+
+        for(GameChests chests : storage.getChestStorage().getValues()) {
             chests.unload();
         }
-        gamesWorlds.clear();
-        gameChests.clear();
-        gameMenu.clear();
+
+        storage.getGameWorldStorage().clear();
+        storage.getChestStorage().clear();
+        storage.getMenuStorage().clear();
+
         games.clear();
     }
+
+
     public GameChests getGameChest(String chestName) {
-        return gameChests.get(chestName);
+        return plugin.getStorageManager().getChestStorage().get(chestName);
     }
-    public Game getGame(String gameName) {
+
+    /**
+     * Get a game using the configuration name of that game
+     * @param name The name to get the game
+     * @return Game
+     * Returns null if the game doesn't exists!
+     */
+    public Game getGame(String name) {
         if (this.games.size() < 1)
             return null;
         for (Game game : this.games) {
-            if (game.getConfigName().equalsIgnoreCase(gameName))
+            if (game.getConfigName().equalsIgnoreCase(name))
                 return game;
         }
         return null;
     }
 
     public void loadGames() {
+
+        PluginStorage<GameType, GameMenu> menuStorage = plugin.getStorageManager().getMenuStorage();
+
         try {
-            for(GameType currentGameType : GameType.values()) {
-                gameMenu.put(currentGameType,new GameMenu(plugin,currentGameType));
+            for (GameType gameType : GameType.values()) {
+                menuStorage.add(
+                        gameType,
+                        new GameMenu(
+                                plugin,
+                                gameType
+                        )
+                );
             }
-            if(plugin.getStorage().getControl(GuardianFiles.GAMES).contains("games")) {
-                for (String gameName : Objects.requireNonNull(plugin.getStorage().getControl(GuardianFiles.GAMES).getConfigurationSection("games")).getKeys(false)) {
-                    if(plugin.getStorage().getControl(GuardianFiles.GAMES).getBoolean("games." + gameName + ".enabled")) {
-                        String mapName = plugin.getStorage().getControl(GuardianFiles.GAMES).getString("games." + gameName + ".gameName");
-                        if(mapName == null) {
-                            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".gameName",gameName);
-                            mapName = gameName;
-                            plugin.getStorage().save(SaveMode.GAMES_FILES);
-                        }
-                        Game game = new GameInfo(plugin, gameName, mapName);
-                        this.games.add(game);
-                        plugin.getLogs().debug("Game " + gameName + " loaded!");
-                    } else {
-                        plugin.getLogs().debug("Game " + gameName + " is not enabled in games.yml, this game wasn't loaded.");
-                    }
+
+            Control gameSettings = plugin.getConfigurationHandler(SlimeFile.GAMES);
+
+            if (!gameSettings.contains("games")) {
+                plugin.getLogs().info("The plugin doesn't have games created yet!");
+                return;
+            }
+
+            for (String name : gameSettings.getContent("games", false)) {
+
+                String path = "games." + name + ".";
+
+                if (gameSettings.getStatus(path + "enabled")) {
+
+                    String customName = gameSettings.getString(path + "gameName", name);
+
+                    this.games.add(
+                            new GameInfo(
+                                    plugin,
+                                    name,
+                                    customName
+                            )
+                    );
+
+                    plugin.getLogs().info("Game " + name + " loaded, using a custom name: '" + customName + "'.");
+
+                } else {
+
+                    plugin.getLogs().info("Game " + name + " is not enabled in the games.yml, this game was not loaded by the plugin");
+
                 }
-                plugin.getLogs().info(this.games.size() + " game(s) loaded!");
-            } else {
-                plugin.getLogs().info("You don't have games created yet.");
             }
-            loadGameWorlds();
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't load games plugin games :(");
-            plugin.getLogs().error(throwable);
+
+            plugin.getLogs().info(
+                    games.size() + " game(s) loaded!"
+            );
+
+        } catch (Exception exception) {
+            plugin.getLogs().error("Can't load plugin games, an error occurred", exception);
         }
     }
+
     public void loadGameWorlds() {
-        for(Game game : getGames()) {
-            gamesWorlds.put(game.getRunnerSpawn().getWorld(),game);
+
+        PluginStorage<World, Game> storage = plugin.getStorageManager().getGameWorldStorage();
+
+        for (Game game : getGames()) {
+
+            Location location = game.getRunnerSpawn();
+
+            World gameWorld = location.getWorld();
+
+            if (gameWorld == null) {
+                plugin.getLogs().error("Error detected with game-id: " + game.getConfigName() + " (" + game.getName() + ") ");
+                plugin.getLogs().error("The plugin disabled this game, reason: Runner-Spawn-Location doesn't exist");
+
+                game.cancelTask();
+
+                game.unload();
+
+                games.remove(game);
+
+                continue;
+            }
+
+            storage.add(
+                    gameWorld,
+                    game
+            );
         }
     }
+
+
     public GameMainMenu getGameMainMenu() { return gameMainMenu; }
+
     public GameMenu getGameMenu(GameType gameType) {
-        if(!gameMenu.containsKey(gameType)) {
-            gameMenu.put(gameType,new GameMenu(plugin,gameType));
-        }
-        return gameMenu.get(gameType);
+        return plugin.getStorageManager().getMenuStorage().get(
+                gameType,
+                new GameMenu(
+                        plugin,
+                        gameType
+                )
+        );
     }
-    public void addGame(String configName,String gameName) {
-        if(getConfigGame(configName) != null) {
+
+    public void addGame(String name, String customName) {
+
+        if(getConfigGame(name) != null) {
             return;
         }
-        if(gameName == null) {
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + configName + ".gameName",configName);
-            gameName = configName;
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
+
+        if (customName == null) {
+            customName = name;
         }
-        GameInfo game = new GameInfo(plugin,configName,gameName);
+
+        GameInfo game = new GameInfo(
+                plugin,
+                name,
+                customName
+        );
         this.games.add(game);
-        plugin.getLogs().debug("Game " + gameName + " loaded!");
+
+        plugin.getLogs().debug("Game " + customName + " loaded!");
+
     }
-    public void delGame(String gameName) {
-        if(getGame(gameName) != null) {
-            this.games.remove(getGame(gameName));
+    public void removeGame(String name) {
+
+        Game game = getGame(name);
+
+        if(game != null) {
+            this.games.remove(game);
+
+            plugin.getLogs().debug("Game " + name + " unloaded!");
+            return;
         }
-        plugin.getLogs().debug("Game " + gameName + " unloaded!");
+        plugin.getLogs().debug("Game " + name + " is not loaded or doesn't exists!");
     }
+
+    public Map<World,Game> getWorlds() {
+        return plugin.getStorageManager().getGameWorldStorage().toMap();
+    }
+
     public ArrayList<Game> getGames() {
         return games;
-    }
-    public HashMap<World,Game> getGameWorlds() { return gamesWorlds; }
-
-    public Game getGame(Player player) {
-        return plugin.getUser(player.getUniqueId()).getGame();
     }
 
     public Game getConfigGame(String name) {
@@ -181,100 +283,110 @@ public class GameManager {
         return getConfigGame(name) != null;
     }
 
-    public void joinGame(Player player,String gameName) {
-        if(!existGame(gameName)) {
-            plugin.getLib().getUtils().sendMessage(player, Objects.requireNonNull(plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.admin.arenaError")).replace("%arena_id%",gameName));
+    public void joinGame(Player player, String name) {
+
+        if(!existGame(name)) {
+            MessageHandler.sendMessage(
+                    player,
+                    plugin.getConfigurationHandler(SlimeFile.MESSAGES).getString(
+                            "messages.admin.arenaError",
+                            ""
+                    ).replace("%arena_id%", name)
+            );
             return;
         }
-        Game game = getGame(gameName);
+
+        Game game = getGame(name);
+
         game.join(player);
     }
-    public void createGameFiles(String gameName) {
-        FileConfiguration gameFiles = plugin.getStorage().getControl(GuardianFiles.GAMES);
-        gameFiles.set("games." + gameName + ".enabled", false);
-        gameFiles.set("games." + gameName + ".time", 500);
-        gameFiles.set("games." + gameName + ".gameName", gameName);
-        gameFiles.set("games." + gameName + ".disableRain", true);
-        gameFiles.set("games." + gameName + ".max", 10);
-        gameFiles.set("games." + gameName + ".min", 2);
-        gameFiles.set("games." + gameName + ".worldTime", 0);
-        gameFiles.set("games." + gameName + ".gameType","CLASSIC");
-        gameFiles.set("games." + gameName + ".locations.waiting", "notSet");
-        gameFiles.set("games." + gameName + ".locations.selected-beast", "notSet");
-        gameFiles.set("games." + gameName + ".locations.beast", "notSet");
-        gameFiles.set("games." + gameName + ".locations.runners", "notSet");
-        gameFiles.set("games." + gameName + ".signs", new ArrayList<>());
-        plugin.getStorage().save(SaveMode.GAMES_FILES);
+    public void createGameData(String name) {
+
+        Control file = plugin.getConfigurationHandler(SlimeFile.GAMES);
+
+        String path = "games." + name + ".";
+
+        file.set(path + "enabled", false);
+        file.set(path + "time", 500);
+        file.set(path + "disableRain", true);
+        file.set(path + "max" , 10);
+        file.set(path + "min", 2);
+        file.set(path + "worldTime", 0);
+        file.set(path + "gameType", "CLASSIC");
+        file.set(path + "locations.selected-beast", "notSet");
+        file.set(path + "locations.waiting", "notSet");
+        file.set(path + "locations.runners", "notSet");
+        file.set(path + "locations.beast", "notSet");
+
+        file.save();
+
     }
-    public void setWaiting(String gameName, Location location) {
-        try {
-            String gameLoc = Objects.requireNonNull(location.getWorld()).getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch();
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".locations.waiting", gameLoc);
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't set waiting lobby for game: " + gameName);
-            plugin.getLogs().error(throwable);
+
+    public void setWaiting(String name, Location location) {
+        setLocation(name, location, "waiting");
+    }
+
+    public void setChestLimiter(String name, String chest, String limit) {
+        plugin.getConfigurationHandler(SlimeFile.GAMES).set(
+                "games." + name + ".chest-limits." + chest,
+                limit
+        );
+
+        plugin.getConfigurationHandler(SlimeFile.GAMES).save();
+    }
+
+    public void setGameName(String name, String customName) {
+
+        plugin.getConfigurationHandler(SlimeFile.GAMES).set(
+                "games." + name + ".gameName",
+                customName
+        );
+
+        plugin.getConfigurationHandler(SlimeFile.GAMES).save();
+    }
+
+    public void setSelectedBeast(String name, Location location) {
+        setLocation(name, location, "selected-beast");
+    }
+
+    private void setLocation(String name, Location location, String path) {
+        World world = location.getWorld();
+
+        if (world == null) {
+            plugin.getLogs().error("This location doesn't exists! The world is not loaded or doesn't exists");
+            return;
         }
+
+        plugin.getConfigurationHandler(SlimeFile.GAMES).set(
+                "games." + name + ".locations." + path,
+                world.getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," +
+                        location.getYaw() + "," + location.getPitch()
+        );
+
+        plugin.getConfigurationHandler(SlimeFile.GAMES).save();
     }
-    public void setChestLimiter(String game,String chest,String limit) {
-        try {
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + game + ".chest-limits." + chest, limit);
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't set chest limit for game: " + game);
-            plugin.getLogs().error(throwable);
-        }
+
+    public void setBeast(String name, Location location) {
+        setLocation(name, location, "beast");
     }
-    public void setGameName(String configName, String gameName) {
-        try {
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + configName + ".gameName", gameName);
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't set game name for game: " + configName);
-            plugin.getLogs().error(throwable);
-        }
+
+    public void setRunners(String name, Location location) {
+        setLocation(name, location, "runners");
     }
-    public void setSelectedBeast(String gameName, Location location) {
-        try {
-            String gameLoc = Objects.requireNonNull(location.getWorld()).getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch();
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".locations.selected-beast", gameLoc);
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't set selected beast location for game: " + gameName);
-            plugin.getLogs().error(throwable);
-        }
+
+    public void setMax(String gameName, int max) {
+        plugin.getConfigurationHandler(SlimeFile.GAMES).set("games." + gameName + ".max", max);
+        plugin.getConfigurationHandler(SlimeFile.GAMES).save();
     }
-    public void setBeast(String gameName, Location location) {
-        try {
-            String gameLoc = Objects.requireNonNull(location.getWorld()).getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch();
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".locations.beast", gameLoc);
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't set beast spawn location for game: " + gameName);
-            plugin.getLogs().error(throwable);
-        }
+
+    public void setMin(String gameName, int min) {
+        plugin.getConfigurationHandler(SlimeFile.GAMES).set("games." + gameName + ".min", min);
+        plugin.getConfigurationHandler(SlimeFile.GAMES).save();
     }
-    public void setRunners(String gameName, Location location) {
-        try {
-            String gameLoc = Objects.requireNonNull(location.getWorld()).getName() + "," + location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch();
-            plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".locations.runners", gameLoc);
-            plugin.getStorage().save(SaveMode.GAMES_FILES);
-        }catch (Throwable throwable) {
-            plugin.getLogs().error("Can't set runners spawn location for game: " + gameName);
-            plugin.getLogs().error(throwable);
-        }
-    }
-    public void setMax(String gameName,Integer max) {
-        plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".max", max);
-        plugin.getStorage().save(SaveMode.GAMES_FILES);
-    }
-    public void setMin(String gameName,Integer min) {
-        plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".min", min);
-        plugin.getStorage().save(SaveMode.GAMES_FILES);
-    }
-    public void setMode(String gameName,GameType type) {
-        plugin.getStorage().getControl(GuardianFiles.GAMES).set("games." + gameName + ".gameType", type.toString().toUpperCase());
-        plugin.getStorage().save(SaveMode.GAMES_FILES);
+
+    public void setMode(String gameName, GameType type) {
+        plugin.getConfigurationHandler(SlimeFile.GAMES).set("games." + gameName + ".gameType", type.toUpper());
+        plugin.getConfigurationHandler(SlimeFile.GAMES).save();
     }
 
 

@@ -1,28 +1,31 @@
 package me.blueslime.guardianrftb.multiarena;
 
+import dev.mruniverse.slimelib.logs.SlimeLoggerProperties;
+import dev.mruniverse.slimelib.storage.FileStorage;
+import me.blueslime.guardianrftb.multiarena.game.GameManager;
 import me.blueslime.guardianrftb.multiarena.storage.StorageManager;
 import dev.mruniverse.slimelib.SlimePlatform;
 import dev.mruniverse.slimelib.SlimePlugin;
 import dev.mruniverse.slimelib.SlimePluginInformation;
 import dev.mruniverse.slimelib.control.Control;
 import dev.mruniverse.slimelib.input.InputManager;
-import dev.mruniverse.slimelib.loader.BaseSlimeLoader;
 import dev.mruniverse.slimelib.logs.SlimeLogger;
 import dev.mruniverse.slimelib.logs.SlimeLogs;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings("unused")
 public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPlugin> {
 
-    private final StorageManager storageManager = new StorageManager();
+    private static FileStorage FILE_STORAGE;
 
-    private PluginLoader loader;
+    private final StorageManager storageManager = new StorageManager();
 
     private SlimePluginInformation information;
 
     private boolean hasPAPI = false;
 
     private SlimePlatform platform;
+
+    private PluginLoader loader;
 
     private SlimeLogs logger;
 
@@ -36,6 +39,15 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
                 this,
                 "GuardianRFTB"
         );
+
+        SlimeLoggerProperties properties = logger.getProperties();
+
+        properties.getPrefixes().getDebug().setPrefix("&9GUARDIAN RFTB | &f");
+        properties.getPrefixes().getInfo().setPrefix("&bGUARDIAN RFTB | &f");
+        properties.getPrefixes().getIssue().setPrefix("&6GUARDIAN RFTB | &f");
+        properties.getPrefixes().getWarn().setPrefix("&eGUARDIAN RFTB | &f");
+
+        this.logger.getSlimeLogger().setProperties(properties);
 
         this.information = new SlimePluginInformation(platform, this);
 
@@ -52,8 +64,14 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
 
         this.loader.init();
 
+        FILE_STORAGE = loader.getFiles();
+
         this.hasPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
 
+    }
+
+    public GameManager getGameManager() {
+        return loader.getGameManager();
     }
 
 
@@ -67,7 +85,7 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
     }
 
     @Override
-    public BaseSlimeLoader<JavaPlugin> getLoader() {
+    public PluginLoader getLoader() {
         return loader;
     }
 
@@ -92,6 +110,10 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
 
     public boolean hasPAPI() {
         return hasPAPI;
+    }
+
+    public static FileStorage getFileStorage() {
+        return FILE_STORAGE;
     }
 
     @Override

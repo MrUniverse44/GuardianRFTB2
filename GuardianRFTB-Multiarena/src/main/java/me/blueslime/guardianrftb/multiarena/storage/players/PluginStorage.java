@@ -1,5 +1,7 @@
 package me.blueslime.guardianrftb.multiarena.storage.players;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PluginStorage<K, V> {
@@ -24,6 +26,14 @@ public class PluginStorage<K, V> {
     public V get(K key, V value) {
         add(key, value);
         return map.get(key);
+    }
+
+    public List<V> getValues() {
+        return new ArrayList<>(map.values());
+    }
+
+    public Map<K, V> toMap() {
+        return map;
     }
 
     public void clear() {

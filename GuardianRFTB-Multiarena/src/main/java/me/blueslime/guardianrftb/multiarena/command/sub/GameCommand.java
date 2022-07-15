@@ -32,7 +32,7 @@ public class GameCommand {
                 String game = arguments[1];
                 if (main.getGameManager().getGame(game) == null) {
                     if (!main.getStorage().getControl(GuardianFiles.GAMES).contains("games." + game)) {
-                        main.getGameManager().createGameFiles(game);
+                        main.getLoader().getGameManager().createGameData(game);
                         String message = main.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.admin.create");
                         if (message == null) message = "&aArena &b%arena_id% &acreated correctly!";
                         utils.sendMessage(sender, message.replace("%arena_id%", game));
