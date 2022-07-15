@@ -1,12 +1,5 @@
 name: GuardianRFTB
 version: ${project.version}
-main: dev.mruniverse.guardianrftb.multiarena.GuardianRFTB
-authors: [ MrUniverse44, Sebastnchan ]
-description: Run From the Beast Minigame but with new Features and Original systems.
-depend:
-  - GuardianLIB
-commands:
-  grftb:
-    description: Main command of the plugin
-  rftb:
-    description: Main command of the plugin
+main: me.blueslime.guardianrftb.multiarena.GuardianRFTB
+authors: [ JustJustin ]
+description: ${project.description}

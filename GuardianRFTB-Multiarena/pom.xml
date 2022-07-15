@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>dev.mruniverse.guardianrftb</groupId>
+        <groupId>me.blueslime.guardianrftb</groupId>
         <artifactId>GuardianRFTB</artifactId>
-        <version>1.0.7-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>GuardianRFTB-Multiarena</artifactId>
