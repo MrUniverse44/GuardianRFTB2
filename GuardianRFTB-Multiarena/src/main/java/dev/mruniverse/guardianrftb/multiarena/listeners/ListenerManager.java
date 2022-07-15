@@ -7,13 +7,13 @@ import dev.mruniverse.guardianrftb.multiarena.listeners.game.DeathListener;
 import dev.mruniverse.guardianrftb.multiarena.listeners.lobby.DamageListener;
 import dev.mruniverse.guardianrftb.multiarena.listeners.lobby.ExtrasListener;
 import dev.mruniverse.guardianrftb.multiarena.listeners.lobby.SignListener;
-import dev.mruniverse.guardianrftb.multiarena.utils.command.MainCommand;
+import dev.mruniverse.guardianrftb.multiarena.command.MainCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 
 @SuppressWarnings("unused")
-public class ListenerController {
+public class ListenerManager {
     private final GuardianRFTB plugin;
     private final BlocksListener blocksListener;
     private final DamagesListener damagesListener;
@@ -26,7 +26,7 @@ public class ListenerController {
     private final ChatListener chatListener;
     private final ChunkListener chunkListener;
     private final InteractListener interactListener;
-    public ListenerController(GuardianRFTB plugin) {
+    public ListenerManager(GuardianRFTB plugin) {
         this.plugin = plugin;
         chunkListener = new ChunkListener(plugin);
         extrasListener = new ExtrasListener(plugin);

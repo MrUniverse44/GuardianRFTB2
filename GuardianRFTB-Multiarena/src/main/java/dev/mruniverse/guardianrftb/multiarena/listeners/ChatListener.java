@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -49,8 +49,8 @@ public class ChatListener implements Listener {
         if(!plugin.getSettings().getSettings().getBoolean("settings.lobby.chat")) return;
         Player player = event.getPlayer();
         plugin.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',console.replace("%player%",player.getName()).replace("%message%",event.getMessage())));
-        PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
-        if(playerManagerImpl == null || playerManagerImpl.getGame() == null) {
+        GamePlayer gamePlayerImpl = plugin.getUser(player.getUniqueId());
+        if(gamePlayerImpl == null || gamePlayerImpl.getGame() == null) {
             if(player.getWorld() == plugin.getSettings().getLocation().getWorld()) {
                 event.setCancelled(true);
                 for (Player lobby : plugin.getSettings().getLocation().getWorld().getPlayers()) {
@@ -60,16 +60,16 @@ public class ChatListener implements Listener {
             return;
         }
         event.setCancelled(true);
-        Game game = playerManagerImpl.getGame();
+        Game game = gamePlayerImpl.getGame();
         if(game.getSpectators().contains(player)) {
             for(Player spectator : game.getSpectators()) {
-                plugin.getUtils().sendMessage(spectator, spectatorChat.replace("<player_name>", player.getName()).replace("%player_role%", playerManagerImpl.getCurrentRole()),event.getPlayer(),event.getMessage());
+                plugin.getUtils().sendMessage(spectator, spectatorChat.replace("<player_name>", player.getName()).replace("%player_role%", gamePlayerImpl.getCurrentRole()),event.getPlayer(),event.getMessage());
             }
             return;
         }
         ArrayList<Player> players = new ArrayList<>(game.getPlayers());
         for(Player spectator : players) {
-            plugin.getUtils().sendMessage(spectator, gameChat.replace("<player_name>", player.getName()).replace("%player_role%", playerManagerImpl.getCurrentRole()),event.getPlayer(),event.getMessage());
+            plugin.getUtils().sendMessage(spectator, gameChat.replace("<player_name>", player.getName()).replace("%player_role%", gamePlayerImpl.getCurrentRole()),event.getPlayer(),event.getMessage());
         }
     }
 

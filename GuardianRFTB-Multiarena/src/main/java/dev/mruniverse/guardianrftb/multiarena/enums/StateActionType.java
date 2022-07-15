@@ -1,6 +1,6 @@
 package dev.mruniverse.guardianrftb.multiarena.enums;
 
-public enum CommandType {
+public enum StateActionType {
     WIN,
     START,
     END,

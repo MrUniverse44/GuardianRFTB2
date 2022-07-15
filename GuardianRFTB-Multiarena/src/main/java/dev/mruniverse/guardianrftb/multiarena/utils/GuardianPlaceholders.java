@@ -1,7 +1,7 @@
 package dev.mruniverse.guardianrftb.multiarena.utils;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -107,7 +107,7 @@ public class GuardianPlaceholders extends PlaceholderExpansion {
         if(player == null){
             return "";
         }
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getUser(player.getUniqueId());
 
         if(identifier.equals("coins")) {
             return currentData.getCoins() + "";

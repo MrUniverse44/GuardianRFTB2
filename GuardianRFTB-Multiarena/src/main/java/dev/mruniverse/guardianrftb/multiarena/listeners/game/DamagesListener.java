@@ -6,7 +6,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SpectatorItems;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -47,7 +47,7 @@ public class DamagesListener implements Listener {
             if (event.getDamager().getType().equals(EntityType.PLAYER)) {
                 Player victim = (Player) event.getEntity();
                 Player attacker = (Player) event.getDamager();
-                PlayerManager mng = plugin.getUser(victim.getUniqueId());
+                GamePlayer mng = plugin.getUser(victim.getUniqueId());
                 if (mng == null) return;
                 if (mng.getGame() != null) {
                     Game game = mng.getGame();
@@ -208,7 +208,7 @@ public class DamagesListener implements Listener {
     @EventHandler
     public void spectatorInventoryClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        PlayerManager manager = plugin.getUser(player.getUniqueId());
+        GamePlayer manager = plugin.getUser(player.getUniqueId());
         if(manager != null && manager.getGame() != null && manager.getGame().getSpectators().contains(player)) {
             event.setCancelled(true);
         }

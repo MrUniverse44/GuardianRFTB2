@@ -5,7 +5,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
-import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
+import dev.mruniverse.guardianrftb.multiarena.utils.GameUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -20,7 +20,7 @@ import java.util.List;
 public class StartRunnable  extends BukkitRunnable {
     private final Game currentGame;
     private final GuardianRFTB plugin;
-    private final GuardianUtils guardianUtils;
+    private final GameUtils gameUtils;
     private String enough;
     private String prefix;
     private String starting;
@@ -29,7 +29,7 @@ public class StartRunnable  extends BukkitRunnable {
     public StartRunnable(GuardianRFTB plugin, Game game) {
         this.plugin = plugin;
         this.currentGame = game;
-        guardianUtils = plugin.getUtils();
+        gameUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
         enough = configuration.getString("messages.game.game-count.enough-players");
@@ -51,13 +51,13 @@ public class StartRunnable  extends BukkitRunnable {
                 SoundsInfo sounds = plugin.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
                     for(Player player : currentGame.getPlayers()) {
-                        guardianUtils.sendMessage(player,prefix + starting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
+                        gameUtils.sendMessage(player,prefix + starting.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
                         if(sounds.getStatus(GuardianSounds.STARTING_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.STARTING_COUNT),sounds.getVolume(GuardianSounds.STARTING_COUNT),sounds.getPitch(GuardianSounds.STARTING_COUNT));
                     }
                 }
                 if(time == 1) {
                     for(Player player : currentGame.getPlayers()) {
-                        guardianUtils.sendMessage(player,prefix + starting.replace("%current_time%",time + "").replace("%current_time_letter%",second));
+                        gameUtils.sendMessage(player,prefix + starting.replace("%current_time%",time + "").replace("%current_time_letter%",second));
                         if(sounds.getStatus(GuardianSounds.STARTING_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.STARTING_COUNT),sounds.getVolume(GuardianSounds.STARTING_COUNT),sounds.getPitch(GuardianSounds.STARTING_COUNT));
                     }
                 }
@@ -76,7 +76,7 @@ public class StartRunnable  extends BukkitRunnable {
                     if(player.getFireTicks() > 0) player.setFireTicks(0);
                     player.getInventory().clear();
                     plugin.getItems(GameEquip.RUNNER_KIT,player);
-                    guardianUtils.sendList(player,startInfo);
+                    gameUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);
 
                 }
@@ -96,7 +96,7 @@ public class StartRunnable  extends BukkitRunnable {
             GameResetCountEvent event = new GameResetCountEvent(currentGame);
             Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
-                guardianUtils.sendMessage(player,prefix + enough);
+                gameUtils.sendMessage(player,prefix + enough);
                 player.setGameMode(GameMode.ADVENTURE);
                 plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }

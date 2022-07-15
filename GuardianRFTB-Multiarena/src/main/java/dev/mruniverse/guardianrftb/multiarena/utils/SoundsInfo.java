@@ -73,7 +73,7 @@ public class SoundsInfo {
     public void checkForNull(GuardianSounds sound) {
 
         if(sounds.get(sound) == null) {
-            Sound sd = GuardianUtils.randomEnum(Sound.class);
+            Sound sd = GameUtils.randomEnum(Sound.class);
             plugin.getLogs().info("Sound of '" + sound.getName() + "' has been changed to " + sd.toString());
             plugin.getLogs().info("Because the sound doesn't exists, if you want change this sound");
             plugin.getLogs().info("Use the command &b/rftb admin changeSound " + sound.toString().toUpperCase() + " <your sound>&f.");

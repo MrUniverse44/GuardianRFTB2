@@ -6,7 +6,7 @@ import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.*;
 import dev.mruniverse.guardianrftb.multiarena.runnables.*;
 import org.bukkit.*;
@@ -176,7 +176,7 @@ public class GameInfo implements Game {
             gameStatus = GameStatus.STARTING;
             updateSignsBlocks();
             for(Player player : players) {
-                PlayerManager playerData = plugin.getUser(player.getUniqueId());
+                GamePlayer playerData = plugin.getUser(player.getUniqueId());
                 playerData.setBoard(GuardianBoard.STARTING);
             }
         }
@@ -318,7 +318,7 @@ public class GameInfo implements Game {
      */
     @Override
     public void join(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getUser(player.getUniqueId());
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         if (currentData.getGame() != null) {
@@ -369,7 +369,7 @@ public class GameInfo implements Game {
     }
 
     private void spectatorJoin(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getUser(player.getUniqueId());
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         String nowSpectating = messages.getString("messages.spectating");
@@ -430,7 +430,7 @@ public class GameInfo implements Game {
     }
 
     private void fastJoin(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getUser(player.getUniqueId());
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         player.getInventory().clear();
@@ -497,7 +497,7 @@ public class GameInfo implements Game {
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
-            PlayerManager currentData = plugin.getUser(player.getUniqueId());
+            GamePlayer currentData = plugin.getUser(player.getUniqueId());
             currentData.setGame(null);
             currentData.setLastCheckpoint(null);
             currentData.setCurrentRole(GameTeam.RUNNERS);
@@ -580,7 +580,7 @@ public class GameInfo implements Game {
                     .replace("%game_max%",this.max+""),player);
         }
         if(player.isOnline()) {
-            PlayerManager currentData = plugin.getUser(player.getUniqueId());
+            GamePlayer currentData = plugin.getUser(player.getUniqueId());
             currentData.setStatus(PlayerStatus.IN_LOBBY);
             currentData.setGame(null);
             currentData.setBoard(GuardianBoard.LOBBY);

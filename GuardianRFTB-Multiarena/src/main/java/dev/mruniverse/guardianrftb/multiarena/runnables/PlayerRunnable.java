@@ -6,7 +6,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameBossFormat;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import dev.mruniverse.guardianrftb.multiarena.utils.FloatConverter;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -77,10 +77,10 @@ public class PlayerRunnable extends BukkitRunnable {
     @Override
     public void run() {
         for (UUID uuid : plugin.getRigoxPlayers().keySet()) {
-            PlayerManager playerManagerImpl = plugin.getUser(uuid);
-            PlayerStatus playerStatus = playerManagerImpl.getStatus();
-            Player player = playerManagerImpl.getPlayer();
-            plugin.getScoreboards().setScoreboard(playerManagerImpl.getBoard(), playerManagerImpl.getPlayer());
+            GamePlayer gamePlayerImpl = plugin.getUser(uuid);
+            PlayerStatus playerStatus = gamePlayerImpl.getStatus();
+            Player player = gamePlayerImpl.getPlayer();
+            plugin.getScoreboards().setScoreboard(gamePlayerImpl.getBoard(), gamePlayerImpl.getPlayer());
             if (playerStatus.equals(PlayerStatus.IN_LOBBY)) {
                 if(bossLb) {
                     utils.sendBossBar(player, bossLobby);
@@ -89,7 +89,7 @@ public class PlayerRunnable extends BukkitRunnable {
                     utils.sendActionbar(player, actionLobby);
                 }
             } else {
-                if(playerManagerImpl.getBoard().equals(GuardianBoard.WAITING) || playerManagerImpl.getBoard().equals(GuardianBoard.STARTING) || playerManagerImpl.getBoard().equals(GuardianBoard.SELECTING) || playerManagerImpl.getBoard().equals(GuardianBoard.BEAST_SPAWN) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_BEAST) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_RUNNERS) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_BEAST)    ) {
+                if(gamePlayerImpl.getBoard().equals(GuardianBoard.WAITING) || gamePlayerImpl.getBoard().equals(GuardianBoard.STARTING) || gamePlayerImpl.getBoard().equals(GuardianBoard.SELECTING) || gamePlayerImpl.getBoard().equals(GuardianBoard.BEAST_SPAWN) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_BEAST) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_RUNNERS) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_BEAST)    ) {
                     if(extraAb) {
                         utils.sendActionbar(player,extraA);
                     }
@@ -114,7 +114,7 @@ public class PlayerRunnable extends BukkitRunnable {
                             if(beastWorld.equals(playerWorld)) {
                                 double mainDistance = player.getLocation().distance(beast.getLocation());
                                 float distance = floatConverter.converter(mainDistance);
-                                message = message.replace("%runners%", playerManagerImpl.getGame().getRunners().size() + "")
+                                message = message.replace("%runners%", gamePlayerImpl.getGame().getRunners().size() + "")
                                         .replace("%beastName%", beast.getName())
                                         .replace("%beastDistance%", floatConverter.meters(mainDistance) + "m");
                                 if (!changeLife) {
@@ -132,7 +132,7 @@ public class PlayerRunnable extends BukkitRunnable {
                             if(beastWorld.equals(playerWorld)) {
                                 double mainDistance = player.getLocation().distance(beast.getLocation());
                                 float distance = floatConverter.meters(mainDistance);
-                                message = message.replace("%runners%", playerManagerImpl.getGame().getRunners().size() + "")
+                                message = message.replace("%runners%", gamePlayerImpl.getGame().getRunners().size() + "")
                                         .replace("%beastName%", beast.getName())
                                         .replace("%beastDistance%", distance + "m");
                                 utils.sendActionbar(player, message);

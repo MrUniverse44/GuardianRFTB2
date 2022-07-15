@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.kits;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class KitLoader {
         }
     }
     public void getToSelect(KitType kitType, Player player,String kitName) {
-        PlayerManager data = plugin.getUser(player.getUniqueId());
+        GamePlayer data = plugin.getUser(player.getUniqueId());
         KitInfo kitInfo = getKits(kitType).get(kitName);
         if(kitInfo == null) return;
         String kitID = kitInfo.getID();

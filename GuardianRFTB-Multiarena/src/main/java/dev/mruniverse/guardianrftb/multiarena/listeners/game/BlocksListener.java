@@ -4,7 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianSounds;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,7 +36,7 @@ public class BlocksListener implements Listener {
     @EventHandler
     public void checkpointAdd(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        PlayerManager data = plugin.getUser(player.getUniqueId());
+        GamePlayer data = plugin.getUser(player.getUniqueId());
         if(data.getGame() == null) return;
         if(event.getBlockPlaced().getType() == Material.BEACON) {
             if(!data.getPointStatus()) {

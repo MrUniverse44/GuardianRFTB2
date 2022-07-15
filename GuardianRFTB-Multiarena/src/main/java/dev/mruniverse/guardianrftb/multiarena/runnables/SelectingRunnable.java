@@ -5,7 +5,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameSelectedBeastEvent;
-import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
+import dev.mruniverse.guardianrftb.multiarena.utils.GameUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class SelectingRunnable extends BukkitRunnable {
     private final Game currentGame;
     private final GuardianRFTB plugin;
-    private final GuardianUtils guardianUtils;
+    private final GameUtils gameUtils;
     private String enough;
     private String prefix;
     private String selecting;
@@ -29,7 +29,7 @@ public class SelectingRunnable extends BukkitRunnable {
         this.plugin = plugin;
         this.currentGame = game;
         max = game.getLastTimer();
-        guardianUtils = plugin.getUtils();
+        gameUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
         enough = configuration.getString("messages.game.game-count.enough-players");
@@ -57,7 +57,7 @@ public class SelectingRunnable extends BukkitRunnable {
                 currentGame.cancelTask();
                 currentGame.startCount();
                 for(Player player : currentGame.getPlayers()) {
-                    guardianUtils.sendMessage(player,prefix + forcedBeast);
+                    gameUtils.sendMessage(player,prefix + forcedBeast);
                 }
             }
             int time = currentGame.getLastTimer();
@@ -76,7 +76,7 @@ public class SelectingRunnable extends BukkitRunnable {
                         float division = (float)time/max;
                         player.setExp(division);
                         if (sendMessage) {
-                            guardianUtils.sendMessage(player, message);
+                            gameUtils.sendMessage(player, message);
                             if (sounds.getStatus(GuardianSounds.GAME_COUNT))
                                 player.playSound(player.getLocation(), sounds.getSound(GuardianSounds.GAME_COUNT), sounds.getVolume(GuardianSounds.GAME_COUNT), sounds.getPitch(GuardianSounds.GAME_COUNT));
                         }
@@ -84,7 +84,7 @@ public class SelectingRunnable extends BukkitRunnable {
                 } else {
                     if(sendMessage) {
                         for (Player player : currentGame.getPlayers()) {
-                            guardianUtils.sendMessage(player, message);
+                            gameUtils.sendMessage(player, message);
                             if (sounds.getStatus(GuardianSounds.GAME_COUNT))
                                 player.playSound(player.getLocation(), sounds.getSound(GuardianSounds.GAME_COUNT), sounds.getVolume(GuardianSounds.GAME_COUNT), sounds.getPitch(GuardianSounds.GAME_COUNT));
                         }
@@ -109,7 +109,7 @@ public class SelectingRunnable extends BukkitRunnable {
             GameResetCountEvent event = new GameResetCountEvent(currentGame);
             Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
-                guardianUtils.sendMessage(player,prefix + enough);
+                gameUtils.sendMessage(player,prefix + enough);
                 plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
             }
             currentGame.cancelTask();
@@ -122,7 +122,7 @@ public class SelectingRunnable extends BukkitRunnable {
         GameSelectedBeastEvent event = new GameSelectedBeastEvent(currentGame,player);
         Bukkit.getPluginManager().callEvent(event);
         for(Player game : currentGame.getPlayers()) {
-            guardianUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()),player);
+            gameUtils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()),player);
         }
         player.getInventory().clear();
         if(plugin.getItemsInfo().getKitBeastStatus()) player.getInventory().setItem(plugin.getItemsInfo().getBeastSlot(), plugin.getItemsInfo().getKitBeast());

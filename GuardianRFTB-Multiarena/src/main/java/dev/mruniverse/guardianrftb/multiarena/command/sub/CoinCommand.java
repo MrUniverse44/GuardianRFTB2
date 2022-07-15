@@ -1,8 +1,8 @@
-package dev.mruniverse.guardianrftb.multiarena.utils.command.sub;
+package dev.mruniverse.guardianrftb.multiarena.command.sub;
 
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getUser(player.getUniqueId());
+                    GamePlayer manager = main.getUser(player.getUniqueId());
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
                         manager.setCoins(number);
@@ -42,7 +42,7 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getUser(player.getUniqueId());
+                    GamePlayer manager = main.getUser(player.getUniqueId());
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
                         manager.addCoins(number);
@@ -63,7 +63,7 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getUser(player.getUniqueId());
+                    GamePlayer manager = main.getUser(player.getUniqueId());
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
                         manager.removeCoins(number);

@@ -1,4 +1,4 @@
-package dev.mruniverse.guardianrftb.multiarena.utils.command.sub;
+package dev.mruniverse.guardianrftb.multiarena.command.sub;
 
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;

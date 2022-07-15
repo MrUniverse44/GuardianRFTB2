@@ -4,7 +4,7 @@ import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.utils.GuardianUtils;
+import dev.mruniverse.guardianrftb.multiarena.utils.GameUtils;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,7 +16,7 @@ import java.util.List;
 public class BeastSpawnRunnable extends BukkitRunnable {
     private final Game currentGame;
     private final GuardianRFTB plugin;
-    private final GuardianUtils guardianUtils;
+    private final GameUtils gameUtils;
     private String prefix;
     private String spawn;
     private String second;
@@ -24,7 +24,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
     public BeastSpawnRunnable(GuardianRFTB plugin,Game game) {
         this.currentGame = game;
         this.plugin = plugin;
-        guardianUtils = plugin.getUtils();
+        gameUtils = plugin.getUtils();
         FileConfiguration configuration = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         FileConfiguration secondConfiguration = plugin.getSettings().getSettings();
         spawn = configuration.getString("messages.game.game-count.beast");
@@ -44,13 +44,13 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                 SoundsInfo sounds = plugin.getSoundsInfo();
                 if(time == 30 || time == 25 || time == 20 || time == 15 || time == 10 || time == 5 || time == 4 || time == 3 || time == 2) {
                     for(Player player : currentGame.getPlayers()) {
-                        guardianUtils.sendMessage(player,prefix + spawn.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
+                        gameUtils.sendMessage(player,prefix + spawn.replace("%current_time%",time + "").replace("%current_time_letter%",seconds));
                         if(sounds.getStatus(GuardianSounds.BEAST_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.BEAST_COUNT),sounds.getVolume(GuardianSounds.BEAST_COUNT),sounds.getPitch(GuardianSounds.BEAST_COUNT));
                     }
                 }
                 if(time == 1) {
                     for(Player player : currentGame.getPlayers()) {
-                        guardianUtils.sendMessage(player,prefix + spawn.replace("%current_time%",time + "").replace("%current_time_letter%",second));
+                        gameUtils.sendMessage(player,prefix + spawn.replace("%current_time%",time + "").replace("%current_time_letter%",second));
                         if(sounds.getStatus(GuardianSounds.BEAST_COUNT)) player.playSound(player.getLocation(),sounds.getSound(GuardianSounds.BEAST_COUNT),sounds.getVolume(GuardianSounds.BEAST_COUNT),sounds.getPitch(GuardianSounds.BEAST_COUNT));
                     }
                 }
@@ -69,7 +69,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                     if(player.getFireTicks() > 0) player.setFireTicks(0);
                     player.setGameMode(GameMode.SURVIVAL);
                     plugin.getItems(GameEquip.BEAST_KIT,player);
-                    guardianUtils.sendList(player,startInfo);
+                    gameUtils.sendList(player,startInfo);
                     GuardianLIB.getControl().getUtils().sendTitle(player, 0, 20, 10, title, subtitle);
                 }
                 for(Player player : currentGame.getRunners()) {

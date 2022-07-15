@@ -4,7 +4,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -272,7 +272,7 @@ public class ScoreInfo {
                 .replace("<server_online>",plugin.getServer().getOnlinePlayers().size() + "")
                 .replace("<timeFormat>",getDateFormat());
 
-        PlayerManager manager = plugin.getUser(player.getUniqueId());
+        GamePlayer manager = plugin.getUser(player.getUniqueId());
         if(manager != null) {
             if (manager.getGame() != null) {
                 String arenaTimeText;

@@ -1,7 +1,7 @@
 package dev.mruniverse.guardianrftb.multiarena.listeners;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.player.GamePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -16,7 +16,7 @@ public class QuitListener implements Listener {
     @EventHandler
     public void onDisconnect(PlayerQuitEvent event) {
         plugin.getScoreboards().removeScore(event.getPlayer());
-        PlayerManager manager = plugin.getUser(event.getPlayer().getUniqueId());
+        GamePlayer manager = plugin.getUser(event.getPlayer().getUniqueId());
         if(manager.getGame() != null) {
             manager.getGame().leave(event.getPlayer());
         }

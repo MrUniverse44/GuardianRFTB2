@@ -1,7 +1,7 @@
 package dev.mruniverse.guardianrftb.multiarena.listeners.lobby;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.CommandType;
+import dev.mruniverse.guardianrftb.multiarena.enums.StateActionType;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.*;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -224,57 +224,57 @@ public class ExtrasListener implements Listener {
     }
     @EventHandler
     public void onGameStart(GameStartEvent event) {
-        if(plugin.hasAction(CommandType.START)) {
+        if(plugin.hasAction(StateActionType.START)) {
             ArrayList<Player> array = new ArrayList<>(event.getCurrentGame().getPlayers());
             for (Player player : array) {
-                plugin.execute(CommandType.START, player);
+                plugin.execute(StateActionType.START, player);
             }
-            plugin.execute(CommandType.START,null);
+            plugin.execute(StateActionType.START,null);
         }
     }
 
 
     @EventHandler
     public void onGameEnd(GameEndEvent event) {
-        if(plugin.hasAction(CommandType.END)) {
+        if(plugin.hasAction(StateActionType.END)) {
             ArrayList<Player> array = new ArrayList<>(event.getCurrentGame().getPlayers());
             for (Player player : array) {
-                plugin.execute(CommandType.END, player);
+                plugin.execute(StateActionType.END, player);
             }
-            plugin.execute(CommandType.END,null);
+            plugin.execute(StateActionType.END,null);
         }
     }
 
     @EventHandler
     public void onGameRestart(GameRestartEvent event) {
-        if(plugin.hasAction(CommandType.RESTART)) {
+        if(plugin.hasAction(StateActionType.RESTART)) {
             ArrayList<Player> array = new ArrayList<>(event.getCurrentGame().getPlayers());
             for (Player player : array) {
-                plugin.execute(CommandType.RESTART, player);
+                plugin.execute(StateActionType.RESTART, player);
             }
-            plugin.execute(CommandType.RESTART,null);
+            plugin.execute(StateActionType.RESTART,null);
         }
     }
 
     @EventHandler
     public void onGameBeastSelect(GameSelectedBeastEvent event) {
-        if(plugin.hasAction(CommandType.BEAST_SELECTION)) {
+        if(plugin.hasAction(StateActionType.BEAST_SELECTION)) {
             ArrayList<Player> array = new ArrayList<>(event.getCurrentGame().getPlayers());
             for (Player player : array) {
-                plugin.execute(CommandType.BEAST_SELECTION, player);
+                plugin.execute(StateActionType.BEAST_SELECTION, player);
             }
-            plugin.execute(CommandType.BEAST_SELECTION,null);
+            plugin.execute(StateActionType.BEAST_SELECTION,null);
         }
     }
 
     @EventHandler
     public void onGameWin(GameWinEvent event) {
-        if(plugin.hasAction(CommandType.WIN)) {
+        if(plugin.hasAction(StateActionType.WIN)) {
             ArrayList<Player> array = new ArrayList<>(event.getCurrentGame().getPlayers());
             for (Player player : array) {
-                plugin.execute(CommandType.WIN, player);
+                plugin.execute(StateActionType.WIN, player);
             }
-            plugin.execute(CommandType.WIN,null);
+            plugin.execute(StateActionType.WIN,null);
         }
     }
 
