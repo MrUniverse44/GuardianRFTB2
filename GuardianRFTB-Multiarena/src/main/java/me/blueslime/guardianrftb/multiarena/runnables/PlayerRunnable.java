@@ -3,7 +3,7 @@ package me.blueslime.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
 import me.blueslime.guardianrftb.multiarena.enums.GameBossFormat;
-import me.blueslime.guardianrftb.multiarena.enums.GuardianBoard;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import me.blueslime.guardianrftb.multiarena.enums.GuardianFiles;
 import me.blueslime.guardianrftb.multiarena.enums.PlayerStatus;
 import me.blueslime.guardianrftb.multiarena.player.GamePlayer;
@@ -89,7 +89,7 @@ public class PlayerRunnable extends BukkitRunnable {
                     utils.sendActionbar(player, actionLobby);
                 }
             } else {
-                if(gamePlayerImpl.getBoard().equals(GuardianBoard.WAITING) || gamePlayerImpl.getBoard().equals(GuardianBoard.STARTING) || gamePlayerImpl.getBoard().equals(GuardianBoard.SELECTING) || gamePlayerImpl.getBoard().equals(GuardianBoard.BEAST_SPAWN) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_BEAST) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_RUNNERS) || gamePlayerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_BEAST)    ) {
+                if(gamePlayerImpl.getBoard().equals(PluginScoreboard.WAITING) || gamePlayerImpl.getBoard().equals(PluginScoreboard.STARTING) || gamePlayerImpl.getBoard().equals(PluginScoreboard.SELECTING) || gamePlayerImpl.getBoard().equals(PluginScoreboard.BEAST_SPAWN) || gamePlayerImpl.getBoard().equals(PluginScoreboard.WIN_RUNNERS_FOR_RUNNERS) || gamePlayerImpl.getBoard().equals(PluginScoreboard.WIN_RUNNERS_FOR_BEAST) || gamePlayerImpl.getBoard().equals(PluginScoreboard.WIN_BEAST_FOR_RUNNERS) || gamePlayerImpl.getBoard().equals(PluginScoreboard.WIN_BEAST_FOR_BEAST)    ) {
                     if(extraAb) {
                         utils.sendActionbar(player,extraA);
                     }

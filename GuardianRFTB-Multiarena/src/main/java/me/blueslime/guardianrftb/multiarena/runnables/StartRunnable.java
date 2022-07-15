@@ -5,6 +5,7 @@ import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import me.blueslime.guardianrftb.multiarena.interfaces.Game;
 import me.blueslime.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import me.blueslime.guardianrftb.multiarena.utils.GameUtils;
 import me.blueslime.guardianrftb.multiarena.utils.SoundsInfo;
 import me.blueslime.guardianrftb.multiarena.enums.*;
@@ -99,7 +100,7 @@ public class StartRunnable  extends BukkitRunnable {
             for(Player player : currentGame.getPlayers()) {
                 gameUtils.sendMessage(player,prefix + enough);
                 player.setGameMode(GameMode.ADVENTURE);
-                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
+                plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.WAITING);
             }
             for(Player beasts : currentGame.getBeasts()) {
                 currentGame.getRunners().add(beasts);

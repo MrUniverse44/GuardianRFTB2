@@ -1,6 +1,6 @@
-package me.blueslime.guardianrftb.multiarena.enums;
+package me.blueslime.guardianrftb.multiarena.scoreboard;
 
-public enum GuardianBoard {
+public enum PluginScoreboard {
     LOBBY,
     WAITING,
     SELECTING,

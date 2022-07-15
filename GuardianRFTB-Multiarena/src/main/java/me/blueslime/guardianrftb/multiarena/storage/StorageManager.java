@@ -13,13 +13,13 @@ import java.util.UUID;
 
 public class StorageManager {
 
-    private final PluginStorage<String, GameChests> chestStorage = new PluginStorage<>(new HashMap<>());
+    private final PluginStorage<String, GameChests> chestStorage = PluginStorage.initAsHash();;
 
-    private final PluginStorage<GameType, GameMenu> menuStorage = new PluginStorage<>(new HashMap<>());
+    private final PluginStorage<GameType, GameMenu> menuStorage = PluginStorage.initAsEnum(GameType.class);;
 
-    private final PluginStorage<UUID, GamePlayer> playerStorage = new PluginStorage<>(new HashMap<>());
+    private final PluginStorage<UUID, GamePlayer> playerStorage = PluginStorage.initAsHash();;
 
-    private final PluginStorage<World, Game> gameWorldStorage = new PluginStorage<>(new HashMap<>());
+    private final PluginStorage<World, Game> gameWorldStorage = PluginStorage.initAsHash();;
 
 
     public PluginStorage<UUID, GamePlayer> getPlayerStorage() {

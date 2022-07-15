@@ -1,29 +1,31 @@
 package me.blueslime.guardianrftb.multiarena.scoreboard;
 
+import dev.mruniverse.slimelib.control.Control;
 import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
-import me.blueslime.guardianrftb.multiarena.enums.GuardianBoard;
-import me.blueslime.guardianrftb.multiarena.enums.GuardianFiles;
-import me.blueslime.guardianrftb.multiarena.interfaces.Game;
+import me.blueslime.guardianrftb.multiarena.SlimeFile;
+import me.blueslime.guardianrftb.multiarena.game.Game;
 import me.blueslime.guardianrftb.multiarena.player.GamePlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
-public class ScoreInfo {
+public class ScoreboardInformation {
     private final GuardianRFTB plugin;
 
-    public ScoreInfo(GuardianRFTB plugin) { this.plugin = plugin; }
+    public ScoreboardInformation(GuardianRFTB plugin) { this.plugin = plugin; }
 
-    public List<String> getLines(GuardianBoard board, Player player) {
+    public List<String> getLines(PluginScoreboard board, Player player) {
         List<String> lines = new ArrayList<>();
-        FileConfiguration scoreboard = plugin.getStorage().getControl(GuardianFiles.SCOREBOARD);
+
+        Control scoreboard = plugin.getConfigurationHandler(SlimeFile.SCOREBOARDS);
         StringBuilder white = new StringBuilder("&f");
+
         switch(board) {
             case LOBBY:
             default:
@@ -202,17 +204,22 @@ public class ScoreInfo {
     }
 
     public boolean size(String line) {
+
         line = ChatColor.translateAlternateColorCodes('&',line);
+
         if(39 <= line.length()) {
             plugin.getLogs().error("&fLine: '" + line + "&f' has more than 39 characters, String length is longer than maximum allowed (" + line.length() + " > 39)");
             plugin.getLogs().error("This issue can kick users showing an error.");
             return true;
         }
+
         return false;
     }
 
-    public String getTitle(GuardianBoard board) {
-        FileConfiguration scoreboard = plugin.getStorage().getControl(GuardianFiles.SCOREBOARD);
+    public String getTitle(PluginScoreboard board) {
+
+        Control scoreboard = plugin.getConfigurationHandler(SlimeFile.SCOREBOARDS);
+
         switch (board) {
             case LOBBY:
                 if (scoreboard.getString("scoreboards.lobby.title") != null) {
@@ -257,55 +264,68 @@ public class ScoreInfo {
     }
 
     public String replaceVariables(String text,Player player) {
+
         text = text.replace("<player_name>",player.getName());
-        if(plugin.getUser(player.getUniqueId()) != null) {
-            text = text.replace("<player_coins>", "" + plugin.getUser(player.getUniqueId()).getCoins())
-                    .replace("<player_kits>","" + plugin.getUser(player.getUniqueId()).getKits().size())
-                    .replace("<player_wins>","" + plugin.getUser(player.getUniqueId()).getWins());
-        } else {
-            text = text.replace("<player_coins>", "0")
-                    .replace("<player_kits>", "1")
-                    .replace("<player_wins>", "0");
-        }
-        text = text.replace("<player_beast_kit>","Not selected")
+
+        GamePlayer gamePlayer = plugin.getStorageManager().getPlayerStorage().get(
+                player.getUniqueId(),
+                new GamePlayer(player)
+        );
+
+        text = text.replace("<player_coins>", "" + gamePlayer.getData().getCoins())
+                .replace("<player_kits>","" + gamePlayer.getData().getKits().size())
+                .replace("<player_wins>","" + gamePlayer.getData().getWins())
+                .replace("<player_beast_kit>","Not selected")
                 .replace("<player_runner_kit>","Not selected")
                 .replace("<server_online>",plugin.getServer().getOnlinePlayers().size() + "")
                 .replace("<timeFormat>",getDateFormat());
 
-        GamePlayer manager = plugin.getUser(player.getUniqueId());
-        if(manager != null) {
-            if (manager.getGame() != null) {
-                String arenaTimeText;
-                Game playerGame = manager.getGame();
-                if(playerGame.getLastTimer() >= 2) {
-                    arenaTimeText = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");
-                } else {
-                    arenaTimeText = plugin.getSettings().getSettings().getString("settings.timer.second","second");
-                }
-                text = text.replace("<arena_name>",playerGame.getName())
-                        .replace("<arena_online>","" + playerGame.getPlayers().size())
-                        .replace("<arena_max>","" + playerGame.getMax())
-                        .replace("<arena_need>","" + playerGame.getNeedPlayers())
-                        .replace("<arena_time_text>",arenaTimeText)
-                        .replace("<arena_beast>",plugin.getUtils().getRandomBeast(player).getDisplayName())
-                        .replace("<arena_runners>","" + playerGame.getRunners().size())
-                        .replace("<arena_mode>",playerGame.getType().getType())
-                        .replace("<arena_timeLeft>",playerGame.getLastTimer() + "")
-                        .replace("<arena_status>",playerGame.getStatus().getStatus())
-                        .replace("<player_role>",manager.getCurrentRole())
-                        .replace("<arena_timeLeft>", playerGame.getLastTimer() + "")
-                        .replace("<arena_time_number>", playerGame.getLastTimer() + "");
 
+        if (gamePlayer.getGame() != null) {
+            String timer;
+
+            Game game = gamePlayer.getGame();
+
+            if(game.getRunnable().getTimer() >= 2) {
+                timer = plugin.getConfigurationHandler(SlimeFile.SETTINGS).getString("settings.timer.seconds", "seconds");
+            } else {
+                timer = plugin.getConfigurationHandler(SlimeFile.SETTINGS).getString("settings.timer.second", "second");
             }
+            text = text.replace("<arena_name>", game.getName())
+                    .replace("<arena_online>","" +  game.getPlayerList().size())
+                    .replace("<arena_max>", "" + game.getMax())
+                    .replace("<arena_need>", "" + game.getNeedPlayers())
+                    .replace("<arena_time_text>", timer)
+                    .replace("<arena_beast>", plugin.getGameUtils().getRandomBeast(player).getDisplayName())
+                    .replace("<arena_runners>","" + game.getRunnerList().size())
+                    .replace("<arena_mode>", game.getGameType().getType())
+                    .replace("<arena_timeLeft>", "" + game.getRunnable().getTimer())
+                    .replace("<arena_time_number>", "" + game.getRunnable().getTimer())
+                    .replace("<arena_time_left>", game.getRunnable().getTimer() + " " + timer)
+                    .replace("<arena_status>", game.getStatus().getStatus())
+                    .replace("<player_role>", gamePlayer.getTeam().getRole());
         }
-        if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }
+        if (GuardianRFTB.hasPAPI()) {
+            text = PlaceholderAPI.setPlaceholders(player,text);
+        }
         return ChatColor.translateAlternateColorCodes('&',text);
     }
 
     public String getDateFormat() {
-        String dateFormat = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.dateFormat");
-        if(dateFormat == null) dateFormat = "dd/MM/yyyy";
-        return "" + (new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime()));
+
+        String dateFormat = plugin.getConfigurationHandler(SlimeFile.SETTINGS).getString("settings.dateFormat", "dd/MM/yyyy");
+
+        Calendar calendar = Calendar.getInstance(
+                TimeZone.getTimeZone(
+                        plugin.getConfigurationHandler(SlimeFile.SETTINGS).getString("settings.timeZone", "GMT-5")
+                )
+        );
+
+        return "" + (
+                new SimpleDateFormat(dateFormat).format(
+                        calendar.getTime()
+                )
+        );
 
     }
 

@@ -11,6 +11,7 @@ import me.blueslime.guardianrftb.multiarena.interfaces.Game;
 import me.blueslime.guardianrftb.multiarena.player.GamePlayer;
 import me.blueslime.guardianrftb.multiarena.listeners.api.GameRestartEvent;
 import me.blueslime.guardianrftb.multiarena.listeners.api.GameWinEvent;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import me.blueslime.guardianrftb.multiarena.utils.GuardianText;
 import me.blueslime.guardianrftb.multiarena.enums.*;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -121,7 +122,7 @@ public class EndingRunnable extends BukkitRunnable {
         gamePlayerImpl.setGame(null);
         gamePlayerImpl.setPointStatus(false);
         gamePlayerImpl.setLastCheckpoint(null);
-        gamePlayerImpl.setBoard(GuardianBoard.LOBBY);
+        gamePlayerImpl.setBoard(PluginScoreboard.LOBBY);
         player.getInventory().clear();
         for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
             player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);

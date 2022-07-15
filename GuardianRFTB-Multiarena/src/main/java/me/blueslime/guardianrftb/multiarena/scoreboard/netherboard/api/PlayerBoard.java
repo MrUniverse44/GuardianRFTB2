@@ -1,4 +1,4 @@
-package me.blueslime.guardianrftb.multiarena.netherboard.api;
+package me.blueslime.guardianrftb.multiarena.scoreboard.netherboard.api;
 
 import java.util.Map;
 

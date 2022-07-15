@@ -1,5 +1,6 @@
 package me.blueslime.guardianrftb.multiarena.game;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.mruniverse.guardianlib.core.GuardianLIB;
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
@@ -12,6 +13,7 @@ import dev.mruniverse.guardianrftb.multiarena.listeners.api.*;
 import dev.mruniverse.guardianrftb.multiarena.runnables.*;
 import me.blueslime.guardianrftb.multiarena.enums.*;
 import me.blueslime.guardianrftb.multiarena.runnables.*;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -177,7 +179,7 @@ public class GameInfo implements Game {
             updateSignsBlocks();
             for(Player player : players) {
                 GamePlayer playerData = plugin.getUser(player.getUniqueId());
-                playerData.setBoard(GuardianBoard.STARTING);
+                playerData.setBoard(PluginScoreboard.STARTING);
             }
         }
         if(players.size() < RealMin) {
@@ -386,7 +388,7 @@ public class GameInfo implements Game {
             }
         }
         player.teleport(this.runnerSpawn);
-        currentData.setBoard(GuardianBoard.PLAYING);
+        currentData.setBoard(PluginScoreboard.PLAYING);
         players.add(player);
         spectators.add(player);
         currentData.setGame(this);
@@ -438,11 +440,11 @@ public class GameInfo implements Game {
         player.setFlying(false);
         player.setAllowFlight(false);
         player.teleport(this.waiting);
-        currentData.setBoard(GuardianBoard.WAITING);
+        currentData.setBoard(PluginScoreboard.WAITING);
         if (gameStatus.equals(GameStatus.SELECTING)) {
-            currentData.setBoard(GuardianBoard.SELECTING);
+            currentData.setBoard(PluginScoreboard.SELECTING);
         } else if(!gameStatus.equals(GameStatus.WAITING)) {
-            currentData.setBoard(GuardianBoard.STARTING);
+            currentData.setBoard(PluginScoreboard.STARTING);
         }
         players.add(player);
         runners.add(player);
@@ -583,7 +585,7 @@ public class GameInfo implements Game {
             GamePlayer currentData = plugin.getUser(player.getUniqueId());
             currentData.setStatus(PlayerStatus.IN_LOBBY);
             currentData.setGame(null);
-            currentData.setBoard(GuardianBoard.LOBBY);
+            currentData.setBoard(PluginScoreboard.LOBBY);
             currentData.setLastCheckpoint(null);
             player.setFlying(false);
             player.setAllowFlight(false);
@@ -608,7 +610,7 @@ public class GameInfo implements Game {
             lastTimer = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.game.start-countdown",30);
             doubleCountPrevent = true;
             for(Player player : players) {
-                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.SELECTING);
+                plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.SELECTING);
             }
         }
     }
@@ -626,7 +628,7 @@ public class GameInfo implements Game {
         StartRunnable select = new StartRunnable(plugin,this);
         lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
         for(Player player : players) {
-            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
+            plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.STARTING);
         }
     }
 
@@ -636,10 +638,10 @@ public class GameInfo implements Game {
         updateSignsBlocks();
         this.lastTimer = 15;
         for(Player player : runners) {
-            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
+            plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.PLAYING);
         }
         for(Player player : beasts) {
-            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
+            plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.BEAST_SPAWN);
         }
         BeastSpawnRunnable select = new BeastSpawnRunnable(plugin,this);
         lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
@@ -756,14 +758,14 @@ public class GameInfo implements Game {
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.RUNNERS);
         }
         for(Player runner : this.runners) {
-            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS);
+            plugin.getUser(runner.getUniqueId()).setBoard(PluginScoreboard.WIN_RUNNERS_FOR_RUNNERS);
             plugin.getUser(runner.getUniqueId()).addWins();
         }
         for(Player beast : this.beasts) {
-            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+            plugin.getUser(beast.getUniqueId()).setBoard(PluginScoreboard.WIN_RUNNERS_FOR_BEAST);
         }
         for(Player spectator : this.spectators) {
-            plugin.getUser(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+            plugin.getUser(spectator.getUniqueId()).setBoard(PluginScoreboard.WIN_RUNNERS_FOR_BEAST);
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -778,14 +780,14 @@ public class GameInfo implements Game {
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.BEASTS);
         }
         for(Player beast : this.beasts) {
-            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_BEAST);
+            plugin.getUser(beast.getUniqueId()).setBoard(PluginScoreboard.WIN_BEAST_FOR_BEAST);
             plugin.getUser(beast.getUniqueId()).addWins();
         }
         for(Player runner : this.runners) {
-            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+            plugin.getUser(runner.getUniqueId()).setBoard(PluginScoreboard.WIN_BEAST_FOR_RUNNERS);
         }
         for(Player spectator : this.spectators) {
-            plugin.getUser(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+            plugin.getUser(spectator.getUniqueId()).setBoard(PluginScoreboard.WIN_BEAST_FOR_RUNNERS);
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -834,7 +836,7 @@ public class GameInfo implements Game {
             beast.setFlying(true);
         }
         if(beasts.size() == 0) {
-            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+            plugin.getUser(beast.getUniqueId()).setBoard(PluginScoreboard.WIN_RUNNERS_FOR_BEAST);
             winRunners();
         }
     }
@@ -875,7 +877,7 @@ public class GameInfo implements Game {
         }
         plugin.getUser(runner.getUniqueId()).addDeaths();
         if(runners.size() == 0) {
-            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+            plugin.getUser(runner.getUniqueId()).setBoard(PluginScoreboard.WIN_BEAST_FOR_RUNNERS);
             winBeasts();
         }
     }
@@ -887,7 +889,9 @@ public class GameInfo implements Game {
      */
     @Override
     public void updateSignsBlocks() {
+
         Optional<XMaterial> optionalXMaterial = XMaterial.matchXMaterial(gameStatus.getBlock());
+
         if(optionalXMaterial.isPresent()) {
             XMaterial material = optionalXMaterial.get();
             for (Location signLocation : this.signs) {

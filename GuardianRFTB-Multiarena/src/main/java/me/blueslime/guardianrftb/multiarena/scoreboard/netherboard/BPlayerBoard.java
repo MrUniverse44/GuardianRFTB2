@@ -1,7 +1,7 @@
-package me.blueslime.guardianrftb.multiarena.netherboard;
+package me.blueslime.guardianrftb.multiarena.scoreboard.netherboard;
 
-import me.blueslime.guardianrftb.multiarena.netherboard.api.PlayerBoard;
-import me.blueslime.guardianrftb.multiarena.netherboard.util.NMS;
+import me.blueslime.guardianrftb.multiarena.scoreboard.netherboard.api.PlayerBoard;
+import me.blueslime.guardianrftb.multiarena.scoreboard.netherboard.util.NMS;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

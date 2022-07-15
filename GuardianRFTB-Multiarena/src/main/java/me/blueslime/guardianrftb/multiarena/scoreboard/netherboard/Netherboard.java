@@ -1,4 +1,4 @@
-package me.blueslime.guardianrftb.multiarena.netherboard;
+package me.blueslime.guardianrftb.multiarena.scoreboard.netherboard;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;

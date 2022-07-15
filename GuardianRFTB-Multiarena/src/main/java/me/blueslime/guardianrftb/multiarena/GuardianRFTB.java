@@ -11,6 +11,7 @@ import dev.mruniverse.slimelib.control.Control;
 import dev.mruniverse.slimelib.input.InputManager;
 import dev.mruniverse.slimelib.logs.SlimeLogger;
 import dev.mruniverse.slimelib.logs.SlimeLogs;
+import me.blueslime.guardianrftb.multiarena.utils.GameUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPlugin> {
@@ -19,9 +20,11 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
 
     private final StorageManager storageManager = new StorageManager();
 
+    private static boolean PLACE_HOLDER_SUPPORT = false;
+
     private SlimePluginInformation information;
 
-    private boolean hasPAPI = false;
+    private GameUtils gameUtils;
 
     private SlimePlatform platform;
 
@@ -64,9 +67,11 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
 
         this.loader.init();
 
+        this.gameUtils = new GameUtils(this);
+
         FILE_STORAGE = loader.getFiles();
 
-        this.hasPAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
+        PLACE_HOLDER_SUPPORT = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
 
     }
 
@@ -74,6 +79,9 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
         return loader.getGameManager();
     }
 
+    public GameUtils getGameUtils() {
+        return gameUtils;
+    }
 
     @Override
     public SlimePluginInformation getPluginInformation() {
@@ -108,8 +116,8 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
         return logger;
     }
 
-    public boolean hasPAPI() {
-        return hasPAPI;
+    public static boolean hasPAPI() {
+        return PLACE_HOLDER_SUPPORT;
     }
 
     public static FileStorage getFileStorage() {

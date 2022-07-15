@@ -1,13 +1,9 @@
 package me.blueslime.guardianrftb.multiarena.utils;
 
-import dev.mruniverse.guardianlib.core.GuardianLIB;
-import dev.mruniverse.guardianlib.core.utils.CenterText;
-import dev.mruniverse.guardianlib.core.utils.Utils;
 import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
 import me.blueslime.guardianrftb.multiarena.enums.GameType;
 import me.blueslime.guardianrftb.multiarena.interfaces.Game;
 import me.blueslime.guardianrftb.multiarena.player.GamePlayer;
-import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayerImpl;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -147,17 +143,16 @@ public class GameUtils {
     }
 
     public Player getRandomBeast(Player player) {
-        GamePlayer gamePlayer = plugin.getStorageManager().getPlayerMap().get(
+        GamePlayer gamePlayer = plugin.getStorageManager().getPlayerStorage().get(
                 player.getUniqueId(),
-                new GamePlayerImpl(
-                        plugin,
+                new GamePlayer(
                         player
                 )
         );
 
         if(gamePlayer.getGame() != null) {
-            if(gamePlayer.getGame().getBeasts().size() != 0) {
-                return gamePlayer.getGame().getBeasts().get(0);
+            if(gamePlayer.getGame().getBeastList().size() != 0) {
+                return gamePlayer.getGame().getBeastList().get(0);
             }
             return player;
         }

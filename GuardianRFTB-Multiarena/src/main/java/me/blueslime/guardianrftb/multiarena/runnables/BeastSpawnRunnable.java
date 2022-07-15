@@ -4,6 +4,7 @@ import dev.mruniverse.guardianlib.core.GuardianLIB;
 import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import me.blueslime.guardianrftb.multiarena.interfaces.Game;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import me.blueslime.guardianrftb.multiarena.utils.GameUtils;
 import me.blueslime.guardianrftb.multiarena.utils.SoundsInfo;
 import me.blueslime.guardianrftb.multiarena.enums.*;
@@ -64,7 +65,7 @@ public class BeastSpawnRunnable extends BukkitRunnable {
                 String rSubtitle = messages.getString("messages.game.others.titles.beastsGo.toRunners.subtitle");
                 List<String> startInfo = messages.getStringList("messages.game.gameInfo.startGame");
                 for(Player player : currentGame.getBeasts()) {
-                    plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
+                    plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.PLAYING);
                     player.teleport(currentGame.getBeastSpawn());
                     player.getInventory().clear();
                     if(player.getFireTicks() > 0) player.setFireTicks(0);

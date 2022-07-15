@@ -1,7 +1,7 @@
 package me.blueslime.guardianrftb.multiarena.listeners;
 
 import me.blueslime.guardianrftb.multiarena.GuardianRFTB;
-import me.blueslime.guardianrftb.multiarena.enums.GuardianBoard;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import me.blueslime.guardianrftb.multiarena.enums.GuardianFiles;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -54,12 +54,12 @@ public class JoinListener implements Listener {
             if(onlyLobbyScore) {
                 if (event.getPlayer().getWorld().equals(lobbyBoard.getWorld())) {
                     if(plugin.getStorage().getControl(GuardianFiles.SCOREBOARD).getBoolean("scoreboards.lobby.toggle")) {
-                        plugin.getScoreboards().setScoreboard(GuardianBoard.LOBBY,event.getPlayer());
+                        plugin.getScoreboards().setScoreboard(PluginScoreboard.LOBBY,event.getPlayer());
                     }
                 }
             } else {
                 if(plugin.getStorage().getControl(GuardianFiles.SCOREBOARD).getBoolean("scoreboards.lobby.toggle")) {
-                    plugin.getScoreboards().setScoreboard(GuardianBoard.LOBBY,event.getPlayer());
+                    plugin.getScoreboards().setScoreboard(PluginScoreboard.LOBBY,event.getPlayer());
                 }
             }
         } catch (Throwable throwable) {

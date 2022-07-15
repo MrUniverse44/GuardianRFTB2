@@ -5,6 +5,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import me.blueslime.guardianrftb.multiarena.interfaces.Game;
 import me.blueslime.guardianrftb.multiarena.listeners.api.GameResetCountEvent;
 import me.blueslime.guardianrftb.multiarena.listeners.api.GameSelectedBeastEvent;
+import me.blueslime.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import me.blueslime.guardianrftb.multiarena.utils.GameUtils;
 import me.blueslime.guardianrftb.multiarena.utils.SoundsInfo;
 import me.blueslime.guardianrftb.multiarena.enums.*;
@@ -111,7 +112,7 @@ public class SelectingRunnable extends BukkitRunnable {
             Bukkit.getPluginManager().callEvent(event);
             for(Player player : currentGame.getPlayers()) {
                 gameUtils.sendMessage(player,prefix + enough);
-                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.WAITING);
+                plugin.getUser(player.getUniqueId()).setBoard(PluginScoreboard.WAITING);
             }
             currentGame.cancelTask();
         }
