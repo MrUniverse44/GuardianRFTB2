@@ -11,6 +11,7 @@ import dev.mruniverse.slimelib.control.Control;
 import dev.mruniverse.slimelib.input.InputManager;
 import dev.mruniverse.slimelib.logs.SlimeLogger;
 import dev.mruniverse.slimelib.logs.SlimeLogs;
+import me.blueslime.guardianrftb.multiarena.utils.BukkitMetrics;
 import me.blueslime.guardianrftb.multiarena.utils.GameUtils;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -72,6 +73,10 @@ public final class GuardianRFTB extends JavaPlugin implements SlimePlugin<JavaPl
         FILE_STORAGE = loader.getFiles();
 
         PLACE_HOLDER_SUPPORT = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
+
+        new BukkitMetrics(this, 11302);
+
+
 
     }
 
