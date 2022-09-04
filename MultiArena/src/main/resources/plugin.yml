@@ -1,0 +1,6 @@
+name: StylizedRFTB
+version: ${project.version}
+main: me.blueslime.stylizedrftb.multiarena.StylizedRFTB
+authors: [ JustJustin ]
+author: JustJustin
+description: ${project.description}

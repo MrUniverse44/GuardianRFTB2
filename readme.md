@@ -1,21 +1,24 @@
-GUARDIAN RUN FROM THE BEAST
+STYLIZED RUN FROM THE BEAST
 ---
 
 <img align="center" alt="Features Image" src="https://i.imgur.com/wrhacot.png">
 
 * Spigot 1.8 - 1.19
 * MultiArena Support
-* BungeeCord Support
 * PlaceholderAPI Support
 * Developer API
-* Customizable
-* BossBar
-* Game Titles on Death/Kill/Win/Start
+* Customizable Messages
+* BossBar Support for 1.8 - 1.19
+* Game Titles on Death/Kill/Win/Start (Toggleable)
 * ActionBar System
 * Free & Open-Source
-* Maven-Support
-* Different GameModes
 * MySQL Support
+___
+**Different GameModes**
+* Classic
+* Infected
+* Double Beast
+___
 
 ---
 
@@ -31,17 +34,8 @@ GUARDIAN RUN FROM THE BEAST
 
 # Files
 
-> - translations/messages_en.yml
-> - translations/messages_es.yml
-> - settings/game/chests.yml
-> - settings/game/holograms.yml
-> - settings/game/scoreboards.yml
-> - settings/commands.yml
-> - settings/menus.yml
-> - settings/mysql.yml
-> - settings/items.yml
-> - settings/settings.yml
-> - local/games.yml
+> - lang/messages_en.yml
+> - lang/messages_es.yml
 
 # Developer API
 

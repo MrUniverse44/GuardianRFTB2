@@ -1,5 +1,0 @@
-name: GuardianRFTB
-version: ${project.version}
-main: me.blueslime.guardianrftb.multiarena.GuardianRFTB
-authors: [ JustJustin ]
-description: ${project.description}

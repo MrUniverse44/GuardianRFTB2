@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.blueslime.guardianrftb</groupId>
-    <artifactId>GuardianRFTB</artifactId>
+    <groupId>me.blueslime.stylizedrftb</groupId>
+    <artifactId>StylizedRFTB</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>GuardianRFTB</name>
+    <name>StylizedRFTB</name>
 
     <description>Run From The Beast plugin created by BlueSlime</description>
 
@@ -101,8 +101,6 @@
     </dependencies>
 
     <modules>
-        <module>GuardianRFTB-Multiarena</module>
-        <module>GuardianRFTB-Bungeemode-Lobby</module>
-        <module>GuardianRFTB-Bungeemode-Game</module>
+        <module>MultiArena</module>
     </modules>
 </project>

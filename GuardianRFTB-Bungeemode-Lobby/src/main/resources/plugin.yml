@@ -1,5 +1,0 @@
-name: GuardianRFTB
-version: ${project.version}
-main: me.blueslime.guardianrftb.bungee.lobby.GuardianRFTB
-description: ${project.description}
-authors: [ JustJustin ]
