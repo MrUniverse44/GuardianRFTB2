@@ -269,7 +269,7 @@ public class ScoreboardData {
             .replace("<player_runner_kit>", gamePlayer.getSelectedKit(KitType.RUNNER))
             .replace("<player_killer_kit", gamePlayer.getSelectedKit(KitType.KILLER))
             .replace("<server_online>", String.valueOf(plugin.getServer().getOnlinePlayers().size()))
-            .replace("<timeFormat>", getDateFormat());
+            .replace("<timeFormat>", getDateFormat()));
 
         if (gamePlayer.isPlaying()) {
             Game game = gamePlayer.getGame();
