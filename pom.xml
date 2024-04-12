@@ -43,6 +43,36 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.xism4.sternalboard</pattern>
+                            <shadedPattern>dev.mruniverse.guardianrftb.libs.sternalboard</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.blueslime.messagehandler</pattern>
+                            <shadedPattern>dev.mruniverse.guardianrftb.libs.messagehandler</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.blueslime.menuhandlerapi</pattern>
+                            <shadedPattern>dev.mruniverse.guardianrftb.libs.menuhandlerapi</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.blueslime.inventoryhandlerapi</pattern>
+                            <shadedPattern>dev.mruniverse.guardianrftb.libs.inventoryhandlerapi</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>me.blueslime.utilitiesapi</pattern>
+                            <shadedPattern>dev.mruniverse.guardianrftb.libs.utilitiesapi</shadedPattern>
+                        </relocation>
+                    </relocations>
+
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                        </filter>
+                    </filters>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
