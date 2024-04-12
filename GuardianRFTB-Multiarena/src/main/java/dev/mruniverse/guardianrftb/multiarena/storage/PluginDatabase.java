@@ -9,6 +9,7 @@ import dev.mruniverse.guardianrftb.multiarena.storage.types.YamlStorage;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @SuppressWarnings("unused")
@@ -26,7 +27,7 @@ public class PluginDatabase {
         );
 
         setCurrentDatabase(
-            plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("database", "yaml")
+            plugin.getStorage().getControl(GuardianFiles.MYSQL).getString("database", "yaml").toLowerCase(Locale.ENGLISH)
         );
     }
 
@@ -111,7 +112,7 @@ public class PluginDatabase {
 
     public void registerStorage(DataStorage... storages) {
         for (DataStorage storage : storages) {
-            idStorageMap.put(storage.getIdentifier(), storage.getClass());
+            idStorageMap.put(storage.getIdentifier().toLowerCase(Locale.ENGLISH), storage.getClass());
             storageMap.put(storage.getClass(), storage);
         }
     }
