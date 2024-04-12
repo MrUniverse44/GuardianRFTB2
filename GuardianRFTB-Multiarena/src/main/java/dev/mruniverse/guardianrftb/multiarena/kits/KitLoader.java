@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.kits;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -35,12 +35,12 @@ public class KitLoader {
     public boolean hasKits(KitType type) {
         switch (type) {
             case BEAST:
-                return (beastKits.size() >= 1);
+                return (!beastKits.isEmpty());
             case KILLER:
-                return (killerKits.size() >= 1);
+                return (!killerKits.isEmpty());
             default:
             case RUNNER:
-                return (runnerKits.size() >= 1);
+                return (!runnerKits.isEmpty());
         }
     }
     public void unload() {
@@ -70,39 +70,54 @@ public class KitLoader {
         }
     }
     public void getToSelect(KitType kitType, Player player,String kitName) {
-        PlayerManager data = plugin.getUser(player.getUniqueId());
+        GamePlayer data = plugin.getGamePlayer(player);
         KitInfo kitInfo = getKits(kitType).get(kitName);
-        if(kitInfo == null) return;
+        if (kitInfo == null) return;
         String kitID = kitInfo.getID();
         switch (kitType) {
             case BEAST:
-                if(data.getKits().contains(kitID)) {
-                    data.setSelectedKit(kitID);
+                if (data.getStatistics().getKits().contains(kitID)) {
+                    data.setSelectedKit(kitInfo.getType(), kitID);
+
                     String selected = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.select");
-                    if(selected == null) selected = "&aNow you selected kit &b%kit_name%";
+
+                    if (selected == null) {
+                        selected = "&aNow you selected kit &b%kit_name%";
+                    }
                     selected = selected.replace("%kit_name%",kitName)
                             .replace("%name%",kitName)
                             .replace("%price%",kitInfo.getPrice() + "")
                             .replace("%kit_price%",kitInfo.getPrice() + "");
                     plugin.getUtils().sendMessage(player,selected);
                 } else {
-                    if(data.getCoins() >= kitInfo.getPrice()) {
-                        int coins = data.getCoins() - kitInfo.getPrice();
-                        data.setCoins(coins);
-                        data.addKit(kitID);
-                        data.setSelectedKit(kitID);
+                    if (data.getStatistics().getCoins() >= kitInfo.getPrice()) {
+                        int coins = data.getStatistics().getCoins() - kitInfo.getPrice();
+                        data.getStatistics().setCoins(coins);
+                        data.getStatistics().addKit(kitID);
+                        data.setSelectedKit(kitInfo.getType(), kitID);
+
                         String buyKit = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.purchase");
-                        if(buyKit == null) buyKit = "&aNow you have the kit &b%kit_name% &a(&3-%price%&a)";
+
+                        if (buyKit == null) {
+                            buyKit = "&aNow you have the kit &b%kit_name% &a(&3-%price%&a)";
+                        }
+
                         buyKit = buyKit.replace("%kit_name%",kitName)
                                 .replace("%name%",kitName)
                                 .replace("%price%",kitInfo.getPrice() + "")
                                 .replace("%kit_price%",kitInfo.getPrice() + "");
+
                         String selected = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.select");
-                        if(selected == null) selected = "&aNow you selected kit &b%kit_name%";
+
+                        if (selected == null) {
+                            selected = "&aNow you selected kit &b%kit_name%";
+                        }
+
                         selected = selected.replace("%kit_name%",kitName)
                                 .replace("%name%",kitName)
                                 .replace("%price%",kitInfo.getPrice() + "")
                                 .replace("%kit_price%",kitInfo.getPrice() + "");
+
                         plugin.getUtils().sendMessage(player,buyKit);
                         plugin.getUtils().sendMessage(player,selected);
                         if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
@@ -118,22 +133,31 @@ public class KitLoader {
                 }
                 return;
             case KILLER:
-                if(data.getKits().contains(kitID)) {
-                    data.setSelectedKit(kitID);
+                if(data.getStatistics().getKits().contains(kitID)) {
+                    data.setSelectedKit(kitInfo.getType(), kitID);
+
                     String selected = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.select");
-                    if(selected == null) selected = "&aNow you selected kit &b%kit_name%";
+
+                    if(selected == null) {
+                        selected = "&aNow you selected kit &b%kit_name%";
+                    }
+
                     selected = selected.replace("%kit_name%",kitName)
                             .replace("%name%",kitName)
                             .replace("%price%",kitInfo.getPrice() + "")
                             .replace("%kit_price%",kitInfo.getPrice() + "");
+
                     plugin.getUtils().sendMessage(player,selected);
-                    if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
+
+                    if (player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) {
+                        player.closeInventory();
+                    }
                 } else {
-                    if(data.getCoins() >= kitInfo.getPrice()) {
-                        int coins = data.getCoins() - kitInfo.getPrice();
-                        data.setCoins(coins);
-                        data.addKit(kitID);
-                        data.setSelectedKit(kitID);
+                    if (data.getStatistics().getCoins() >= kitInfo.getPrice()) {
+                        int coins = data.getStatistics().getCoins() - kitInfo.getPrice();
+                        data.getStatistics().setCoins(coins);
+                        data.getStatistics().addKit(kitID);
+                        data.setSelectedKit(kitInfo.getType(), kitID);
                         String buyKit = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.purchase");
                         if(buyKit == null) buyKit = "&aNow you have the kit &b%kit_name% &a(&3-%price%&a)";
                         buyKit = buyKit.replace("%kit_name%",kitName)
@@ -162,9 +186,9 @@ public class KitLoader {
                 return;
             default:
             case RUNNER:
-                plugin.getLogs().debug(data.getKits().toString());
-                if(data.getKits().contains(kitID)) {
-                    data.setSelectedKit(kitID);
+                plugin.getLogs().debug(data.getStatistics().getKits().toString());
+                if(data.getStatistics().getKits().contains(kitID)) {
+                    data.setSelectedKit(kitInfo.getType(), kitID);
                     String selected = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.select");
                     if(selected == null) selected = "&aNow you selected kit &b%kit_name%";
                     selected = selected.replace("%kit_name%",kitName)
@@ -174,19 +198,23 @@ public class KitLoader {
                     plugin.getUtils().sendMessage(player,selected);
                     if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                 } else {
-                    if(data.getCoins() >= kitInfo.getPrice()) {
-                        int coins = data.getCoins() - kitInfo.getPrice();
-                        data.setCoins(coins);
-                        data.addKit(kitID);
-                        data.setSelectedKit(kitID);
+                    if(data.getStatistics().getCoins() >= kitInfo.getPrice()) {
+                        int coins = data.getStatistics().getCoins() - kitInfo.getPrice();
+                        data.getStatistics().setCoins(coins);
+                        data.getStatistics().addKit(kitID);
+                        data.setSelectedKit(kitType, kitID);
                         String buyKit = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.purchase");
-                        if(buyKit == null) buyKit = "&aNow you have the kit &b%kit_name% &a(&3-%price%&a)";
+                        if(buyKit == null) {
+                            buyKit = "&aNow you have the kit &b%kit_name% &a(&3-%price%&a)";
+                        }
                         buyKit = buyKit.replace("%kit_name%",kitName)
                                 .replace("%name%",kitName)
                                 .replace("%price%",kitInfo.getPrice() + "")
                                 .replace("%kit_price%",kitInfo.getPrice() + "");
                         String selected = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.select");
-                        if(selected == null) selected = "&aNow you selected kit &b%kit_name%";
+                        if(selected == null) {
+                            selected = "&aNow you selected kit &b%kit_name%";
+                        }
                         selected = selected.replace("%kit_name%",kitName)
                                 .replace("%name%",kitName)
                                 .replace("%price%",kitInfo.getPrice() + "")
@@ -196,7 +224,9 @@ public class KitLoader {
                         if(player.getInventory() == plugin.getUser(player.getUniqueId()).getKitMenu(kitType).getInventory()) player.closeInventory();
                     } else {
                         String cantBuy = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.kits.enought");
-                        if(cantBuy == null) cantBuy = "&eYou need &6%price% &eto buy this kit.";
+                        if(cantBuy == null) {
+                            cantBuy = "&eYou need &6%price% &eto buy this kit.";
+                        }
                         cantBuy = cantBuy.replace("%kit_name%",kitName)
                                 .replace("%name%",kitName)
                                 .replace("%price%",kitInfo.getPrice() + "")

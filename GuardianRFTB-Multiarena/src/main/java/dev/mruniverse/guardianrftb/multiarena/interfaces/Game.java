@@ -6,10 +6,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public interface Game {
@@ -90,11 +87,11 @@ public interface Game {
     String getConfigName();
     String getName();
 
-    ArrayList<Player> getPlayers();
-    ArrayList<Player> getRunners();
-    ArrayList<Player> getBeasts();
-    ArrayList<Player> getKillers();
-    ArrayList<Player> getSpectators();
+    ArrayList<UUID> getPlayers();
+    ArrayList<UUID> getRunners();
+    ArrayList<UUID> getBeasts();
+    ArrayList<UUID> getKillers();
+    ArrayList<UUID> getSpectators();
     ArrayList<Location> getSigns();
     ArrayList<String> getChestTypes();
 

@@ -3,10 +3,10 @@ package dev.mruniverse.guardianrftb.multiarena.runnables;
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameBossFormat;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
+import dev.mruniverse.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.PlayerStatus;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import dev.mruniverse.guardianrftb.multiarena.utils.FloatConverter;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -76,11 +76,17 @@ public class PlayerRunnable extends BukkitRunnable {
     }
     @Override
     public void run() {
-        for (UUID uuid : plugin.getRigoxPlayers().keySet()) {
-            PlayerManager playerManagerImpl = plugin.getUser(uuid);
+        for (UUID uuid : plugin.getPlayers().keySet()) {
+            GamePlayer playerManagerImpl = plugin.getGamePlayer(uuid);
+
+            if (playerManagerImpl == null) {
+                continue;
+            }
+
             PlayerStatus playerStatus = playerManagerImpl.getStatus();
             Player player = playerManagerImpl.getPlayer();
-            plugin.getScoreboards().setScoreboard(playerManagerImpl.getBoard(), playerManagerImpl.getPlayer());
+
+            plugin.getScoreboards().setScoreboard(playerManagerImpl.getScoreboard(), playerManagerImpl.getPlayer());
             if (playerStatus.equals(PlayerStatus.IN_LOBBY)) {
                 if(bossLb) {
                     utils.sendBossBar(player, bossLobby);
@@ -89,7 +95,16 @@ public class PlayerRunnable extends BukkitRunnable {
                     utils.sendActionbar(player, actionLobby);
                 }
             } else {
-                if(playerManagerImpl.getBoard().equals(GuardianBoard.WAITING) || playerManagerImpl.getBoard().equals(GuardianBoard.STARTING) || playerManagerImpl.getBoard().equals(GuardianBoard.SELECTING) || playerManagerImpl.getBoard().equals(GuardianBoard.BEAST_SPAWN) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_RUNNERS_FOR_BEAST) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_RUNNERS) || playerManagerImpl.getBoard().equals(GuardianBoard.WIN_BEAST_FOR_BEAST)    ) {
+                if(
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.WAITING) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.STARTING) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.SELECTING) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.BEAST_SPAWN) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.WIN_RUNNERS_FOR_RUNNERS) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.WIN_RUNNERS_FOR_BEAST) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.WIN_BEAST_FOR_RUNNERS) ||
+                        playerManagerImpl.getScoreboard().equals(PluginScoreboard.WIN_BEAST_FOR_BEAST)
+                ) {
                     if(extraAb) {
                         utils.sendActionbar(player,extraA);
                     }

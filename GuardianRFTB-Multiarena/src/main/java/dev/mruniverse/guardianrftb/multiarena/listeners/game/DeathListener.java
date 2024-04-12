@@ -5,6 +5,7 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameStatus;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.SpectatorItems;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
+import dev.mruniverse.guardianrftb.multiarena.utils.PlayerUtil;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,12 +24,15 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void inGameDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
-        if(plugin.getUser(player.getUniqueId()).getGame() != null) {
-            Game game = plugin.getUser(player.getUniqueId()).getGame();
+
+        if (plugin.getUser(player.getUniqueId()).getGame() != null) {
+
+            Game game = plugin.getGamePlayer(player).getGame();
+
             event.getDrops().clear();
             event.setDeathMessage(null);
             event.setDroppedExp(0);
-            if(game.getStatus().equals(GameStatus.WAITING) || game.getStatus().equals(GameStatus.STARTING)) {
+            if (game.getStatus().equals(GameStatus.WAITING) || game.getStatus().equals(GameStatus.STARTING)) {
                 player.spigot().respawn();
                 player.setGameMode(GameMode.ADVENTURE);
                 player.teleport(game.getWaiting());
@@ -36,17 +40,17 @@ public class DeathListener implements Listener {
                 player.setFoodLevel(20);
                 return;
             }
-            if(game.getBeasts().contains(player)) {
+            if (game.getBeasts().contains(player.getUniqueId())) {
                 player.spigot().respawn();
                 game.deathBeast(player);
                 player.teleport(game.getBeastSpawn());
                 if(!plugin.getSettings().isSecondSpectator()) {
                     player.setGameMode(GameMode.SPECTATOR);
                 } else {
-                    for(Player player1 : game.getPlayers()) {
+                    for (Player player1 : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
                         if(player != player1) player1.hidePlayer(player);
                     }
-                    for(SpectatorItems items : SpectatorItems.values()) {
+                    for (SpectatorItems items : SpectatorItems.values()) {
                         items.giveItem(player,plugin);
                     }
                     player.setGameMode(GameMode.ADVENTURE);
@@ -56,15 +60,15 @@ public class DeathListener implements Listener {
             } else {
                 player.spigot().respawn();
                 game.deathRunner(player);
-                if(!game.getType().equals(GameType.INFECTED)) {
+                if (!game.getType().equals(GameType.INFECTED)) {
                     player.teleport(game.getRunnerSpawn());
-                    if(!plugin.getSettings().isSecondSpectator()) {
+                    if (!plugin.getSettings().isSecondSpectator()) {
                         player.setGameMode(GameMode.SPECTATOR);
                     } else {
-                        for(Player player1 : game.getPlayers()) {
+                        for (Player player1 : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
                             if(player != player1) player1.hidePlayer(player);
                         }
-                        for(SpectatorItems items : SpectatorItems.values()) {
+                        for (SpectatorItems items : SpectatorItems.values()) {
                             items.giveItem(player,plugin);
                         }
                         player.setGameMode(GameMode.ADVENTURE);
@@ -78,9 +82,11 @@ public class DeathListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeathRespawn(PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
-        Game game = plugin.getUser(player.getUniqueId()).getGame();
+
+        Game game = plugin.getGamePlayer(player).getGame();
+
         if(game != null) {
-            if(game.getBeasts().contains(player)) {
+            if(game.getBeasts().contains(player.getUniqueId())) {
                 player.teleport(game.getBeastSpawn());
             } else {
                 player.teleport(game.getRunnerSpawn());

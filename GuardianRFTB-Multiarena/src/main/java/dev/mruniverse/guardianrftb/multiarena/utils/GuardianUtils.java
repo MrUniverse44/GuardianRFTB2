@@ -7,7 +7,7 @@ import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -106,9 +106,9 @@ public class GuardianUtils {
             lT = runnerRole;
         }
         Game game = plugin.getUser(player.getUniqueId()).getGame();
-        String gameType = game.getType().getType();
+        String gameType = plugin.getSettings().getSettings().getString(game.getType().toPath(), "");
         String gameName = game.getName();
-        boolean playerBeast = game.getBeasts().contains(player);
+        boolean playerBeast = game.getBeasts().contains(player.getUniqueId());
         for(String line : list) {
             if(playerBeast) line = line.replace("<isBeast>","");
             if(!playerBeast) line = line.replace("<isRunner>","");
@@ -139,9 +139,9 @@ public class GuardianUtils {
         if(list == null) list = new ArrayList<>();
         UUID uuid = player.getUniqueId();
         Game game = plugin.getUser(uuid).getGame();
-        String gameType = game.getType().getType();
+        String gameType = plugin.getSettings().getSettings().getString(game.getType().toPath(), "");
         String gameName = game.getName();
-        boolean playerBeast = game.getBeasts().contains(player);
+        boolean playerBeast = game.getBeasts().contains(player.getUniqueId());
         int winOrLoss;
         if(playerBeast) {
             if(winnerTeamIsRunners) {
@@ -156,7 +156,10 @@ public class GuardianUtils {
                 winOrLoss = plugin.getSettings().getSettings().getInt("settings.pointSystem.runners.death");
             }
         }
-        plugin.getUser(uuid).updateCoins(winOrLoss);
+        GamePlayer gamePlayer = plugin.getGamePlayer(uuid);
+        if (gamePlayer != null) {
+            gamePlayer.getStatistics().addCoins(winOrLoss);
+        }
         String coins;
         if(winOrLoss >= 0) {
             coins = "+" + winOrLoss;
@@ -237,13 +240,13 @@ public class GuardianUtils {
 
     public void sendList(Player player,List<String> list) {
         if(list == null) list = new ArrayList<>();
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getGamePlayer(player);
         if(currentData.getGame() != null) {
             UUID uuid = player.getUniqueId();
             Game game = currentData.getGame();
-            String gameType = game.getType().getType();
+            String gameType = plugin.getSettings().getSettings().getString(game.getType().toPath(), "");
             String gameName = game.getName();
-            boolean playerBeast = game.getBeasts().contains(player);
+            boolean playerBeast = game.getBeasts().contains(player.getUniqueId());
             for(String line : list) {
                 if(playerBeast) line = line.replace("<isBeast>","");
                 if(!playerBeast) line = line.replace("<isRunner>","");
@@ -270,22 +273,19 @@ public class GuardianUtils {
     }
 
     public String replaceVariables(String text,Player player) {
-        PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
-        if(playerManagerImpl == null) {
-            plugin.addPlayer(player);
-            playerManagerImpl = plugin.getUser(player.getUniqueId());
-        }
+        GamePlayer playerManagerImpl = plugin.getGamePlayer(player);
+
         text = text.replace("<player_name>",player.getName())
-                .replace("[new line]","\n")
-                .replace("<player_coins>", playerManagerImpl.getCoins() + "")
-                .replace("<player_wins>",playerManagerImpl.getWins() + "")
-                .replace("<player_kits>", playerManagerImpl.getKits().size() + "")
-                .replace("<player_kills>", playerManagerImpl.getKills() + "")
-                .replace("<player_deaths>", playerManagerImpl.getDeaths() + "")
-                .replace("<player_beast_kit>","Not selected")
-                .replace("<player_runner_kit>","Not selected")
-                .replace("<online>",plugin.getServer().getOnlinePlayers().size() + "")
-                .replace("<timeFormat>",getDateFormat());
+            .replace("[new line]","\n")
+            .replace("<player_coins>", playerManagerImpl.getStatistics().getCoins() + "")
+            .replace("<player_wins>",playerManagerImpl.getStatistics().getWins() + "")
+            .replace("<player_kits>", playerManagerImpl.getStatistics().getKits().size() + "")
+            .replace("<player_kills>", playerManagerImpl.getStatistics().getKills() + "")
+            .replace("<player_deaths>", playerManagerImpl.getStatistics().getDeaths() + "")
+            .replace("<player_beast_kit>","Not selected")
+            .replace("<player_runner_kit>","Not selected")
+            .replace("<online>",plugin.getServer().getOnlinePlayers().size() + "")
+            .replace("<timeFormat>",getDateFormat());
 
         if (playerManagerImpl.getGame() != null) {
             String second;
@@ -296,28 +296,32 @@ public class GuardianUtils {
             } else {
                 second = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");
             }
-            text = text.replace("<arena_name>",currentGame.getName())
-                    .replace("<arena_online>","" + currentGame.getPlayers().size())
-                    .replace("<arena_max>","" + currentGame.getMax())
-                    .replace("<arena_need>","" + currentGame.getNeedPlayers())
-                    .replace("<arena_beast>",getBeast(currentGame))
-                    .replace("<arena_runners>","" + currentGame.getRunners().size())
-                    .replace("<arena_mode>",currentGame.getType().getType())
-                    .replace("<arena_timeLeft>",currentGame.getLastTimer() + "")
-                    .replace("<arena_status>",currentGame.getStatus().getStatus())
-                    .replace("<player_role>", playerManagerImpl.getCurrentRole())
-                    .replace("<arena_time_number>", currentGame.getLastTimer() + "")
-                    .replace("<arena_time_text>",second);
+            text = text.replace("<arena_name>", currentGame.getName())
+                .replace("<arena_online>", "" + currentGame.getPlayers().size())
+                .replace("<arena_max>", "" + currentGame.getMax())
+                .replace("<arena_need>", "" + currentGame.getNeedPlayers())
+                .replace("<arena_beast>", getBeast(currentGame))
+                .replace("<arena_runners>", "" + currentGame.getRunners().size())
+                .replace("<arena_mode>", plugin.getSettings().getSettings().getString(currentGame.getType().toPath(), ""))
+                .replace("<arena_timeLeft>", currentGame.getLastTimer() + "")
+                .replace("<arena_status>", currentGame.getStatus().getStatus())
+                .replace("<player_role>", playerManagerImpl.getCurrentRole())
+                .replace("<arena_time_number>",  currentGame.getLastTimer() + "")
+                .replace("<arena_time_text>", second);
         }
         if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }
         return text;
     }
 
     public Player getRandomBeast(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
-        if(currentData.getGame() != null) {
-            if(currentData.getGame().getBeasts().size() != 0) {
-                return currentData.getGame().getBeasts().get(0);
+        GamePlayer currentData = plugin.getGamePlayer(player);
+        if (currentData.getGame() != null) {
+            if (!currentData.getGame().getBeasts().isEmpty()) {
+                Player usedPlayer = plugin.getServer().getPlayer(currentData.getGame().getBeasts().get(0));
+                if (usedPlayer != null) {
+                    return usedPlayer;
+                }
+                return player;
             }
             return player;
         }
@@ -325,27 +329,35 @@ public class GuardianUtils {
     }
 
     public boolean isBeast(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
-        if(currentData == null) return false;
-        if(currentData.getGame() != null) {
-            return currentData.getGame().getBeasts().contains(player);
+        GamePlayer currentData = plugin.getGamePlayer(player);
+        if (currentData == null) {
+            return false;
+        }
+        if (currentData.getGame() != null) {
+            return currentData.getGame().getBeasts().contains(player.getUniqueId());
         }
         return false;
     }
     private String getBeast(Game game) {
-        if(game.getType().equals(GameType.DOUBLE_BEAST)) {
-            return game.getBeasts().size()+"";
+        if (game.getType().equals(GameType.DOUBLE_BEAST)) {
+            return String.valueOf(game.getBeasts().size());
         }
-        if(game.getBeasts().size() != 0) {
-            return game.getBeasts().get(0).getName();
+        if (!game.getBeasts().isEmpty()) {
+            Player usedPlayer = plugin.getServer().getPlayer(game.getBeasts().get(0));
+            if (usedPlayer != null) {
+                return usedPlayer.getName();
+            }
+            return "none";
         }
         return "none";
     }
 
     public String getDateFormat() {
         String dateFormat = plugin.getSettings().getSettings().getString("settings.dateFormat");
-        if(dateFormat == null) dateFormat = "dd/MM/yyyy";
-        return "" + (new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime()));
+        if (dateFormat == null) {
+            dateFormat = "dd/MM/yyyy";
+        }
+        return new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime());
 
     }
 
@@ -360,7 +372,7 @@ public class GuardianUtils {
     }
 
     public void sendLeaveCountdown(final Player player, final int delay) {
-        PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
+        GamePlayer playerManagerImpl = plugin.getGamePlayer(player);
         int delayValue = new BukkitRunnable() {
             int countdown = delay;
             public void run() {

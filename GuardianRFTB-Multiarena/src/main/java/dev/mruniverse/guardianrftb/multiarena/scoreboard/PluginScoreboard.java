@@ -1,6 +1,6 @@
-package dev.mruniverse.guardianrftb.multiarena.enums;
+package dev.mruniverse.guardianrftb.multiarena.scoreboard;
 
-public enum GuardianBoard {
+public enum PluginScoreboard {
     LOBBY,
     WAITING,
     SELECTING,

@@ -4,6 +4,7 @@ import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -27,7 +28,9 @@ public class KitMenu {
     private void createInv() {
         String invName = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.kits.inventoryName");
 
-        if(invName == null) invName = "&8Kits";
+        if (invName == null) {
+            invName = "&8Kits";
+        }
 
         invName = ChatColor.translateAlternateColorCodes('&',invName);
 
@@ -45,13 +48,24 @@ public class KitMenu {
     }
     public HashMap<ItemStack,String> getItems() {
         HashMap<ItemStack,String> kits = new HashMap<>();
+
         String blockedMaterial = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.kits.blocked-item.item");
         String blockedName = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.kits.blocked-item.name");
+
         List<String> blockedLore = plugin.getStorage().getControl(GuardianFiles.MENUS).getStringList("menus.kits.blocked-item.lore");
-        if(blockedMaterial == null) blockedMaterial = "STAINED_GLASS_PANE:14";
-        if(blockedName == null) blockedName = "&c&nKit: %kit_name%";
+
+        if(blockedMaterial == null) {
+            blockedMaterial = "STAINED_GLASS_PANE:14";
+        }
+
+        if(blockedName == null) {
+            blockedName = "&c&nKit: %kit_name%";
+        }
+
+        GamePlayer gamePlayer = plugin.getGamePlayer(player);
+
         for(Map.Entry<String, KitInfo> kitData : plugin.getKitLoader().getKits(mode).entrySet()) {
-            if(plugin.getUser(player.getUniqueId()).getKits().contains(kitData.getValue().getID())) {
+            if (gamePlayer != null && gamePlayer.getStatistics().getKits().contains(kitData.getValue().getID())) {
                 ItemStack kitItem = kitData.getValue().getKitItem();
                 kits.put(kitItem,kitData.getKey());
             } else {
@@ -71,16 +85,27 @@ public class KitMenu {
     }
     private void pasteItems() {
         chestInventory.clear();
+
         int slot = 0;
         int maxSlot = chestInventory.getSize();
+
         String blockedMaterial = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.kits.blocked-item.item");
         String blockedName = plugin.getStorage().getControl(GuardianFiles.MENUS).getString("menus.kits.blocked-item.name");
         List<String> blockedLore = plugin.getStorage().getControl(GuardianFiles.MENUS).getStringList("menus.kits.blocked-item.lore");
-        if(blockedMaterial == null) blockedMaterial = "STAINED_GLASS_PANE:14";
-        if(blockedName == null) blockedName = "&c&nKit: %kit_name%";
+
+        if (blockedMaterial == null) {
+            blockedMaterial = "STAINED_GLASS_PANE:14";
+        }
+
+        if (blockedName == null) {
+            blockedName = "&c&nKit: %kit_name%";
+        }
+
+        GamePlayer gamePlayer = plugin.getGamePlayer(player);
+
         for(Map.Entry<String, KitInfo> kitData : plugin.getKitLoader().getKits(mode).entrySet()) {
             if(slot != maxSlot) {
-                if(plugin.getUser(player.getUniqueId()).getKits().contains(kitData.getValue().getID())) {
+                if (gamePlayer != null && gamePlayer.getStatistics().getKits().contains(kitData.getValue().getID())) {
                     ItemStack kitItem = kitData.getValue().getKitItem();
                     chestInventory.setItem(kitData.getValue().getKitSlot(), kitItem);
                 } else {

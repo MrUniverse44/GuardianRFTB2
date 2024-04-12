@@ -20,19 +20,19 @@ public enum GameStatus {
             case ERROR:
                 return "&cError";
             case WAITING:
-                return settings.getString("settings.status.blocks.waiting");
+                return settings.getString("settings.status.blocks.waiting", "");
             case IN_GAME:
-                return settings.getString("settings.status.blocks.InGame");
+                return settings.getString("settings.status.blocks.InGame", "");
             case SELECTING:
             case STARTING:
-                return settings.getString("settings.status.blocks.starting");
+                return settings.getString("settings.status.blocks.starting", "");
             case PREPARING:
-                return settings.getString("settings.status.blocks.preparing");
+                return settings.getString("settings.status.blocks.preparing", "");
             case PLAYING:
-                return settings.getString("settings.status.blocks.playing");
+                return settings.getString("settings.status.blocks.playing", "");
             case RESTARTING:
             default:
-                return settings.getString("settings.status.blocks.ending");
+                return settings.getString("settings.status.blocks.ending", "");
         }
     }
 
@@ -42,19 +42,19 @@ public enum GameStatus {
             case ERROR:
                 return "&cError";
             case WAITING:
-                return settings.getString("settings.status.color.waiting");
+                return settings.getString("settings.status.color.waiting", "");
             case IN_GAME:
-                return settings.getString("settings.status.color.InGame");
+                return settings.getString("settings.status.color.InGame", "");
             case SELECTING:
             case STARTING:
-                return settings.getString("settings.status.color.starting");
+                return settings.getString("settings.status.color.starting", "");
             case PREPARING:
-                return settings.getString("settings.status.color.preparing");
+                return settings.getString("settings.status.color.preparing", "");
             case PLAYING:
-                return settings.getString("settings.status.color.playing");
+                return settings.getString("settings.status.color.playing", "");
             case RESTARTING:
             default:
-                return settings.getString("settings.status.color.ending");
+                return settings.getString("settings.status.color.ending", "");
         }
     }
 
@@ -64,19 +64,19 @@ public enum GameStatus {
             case ERROR:
                 return "Setup-Error";
             case WAITING:
-                return settings.getString("settings.status.names.waiting");
+                return settings.getString("settings.status.names.waiting", "");
             case IN_GAME:
-                return settings.getString("settings.status.names.InGame");
+                return settings.getString("settings.status.names.InGame", "");
             case SELECTING:
             case STARTING:
-                return settings.getString("settings.status.names.starting");
+                return settings.getString("settings.status.names.starting", "");
             case PREPARING:
-                return settings.getString("settings.status.names.preparing");
+                return settings.getString("settings.status.names.preparing", "");
             case PLAYING:
-                return settings.getString("settings.status.names.playing");
+                return settings.getString("settings.status.names.playing", "");
             case RESTARTING:
             default:
-                return settings.getString("settings.status.names.ending");
+                return settings.getString("settings.status.names.ending", "");
         }
     }
 }

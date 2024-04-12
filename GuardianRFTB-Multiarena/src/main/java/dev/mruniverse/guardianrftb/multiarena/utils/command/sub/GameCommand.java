@@ -2,12 +2,12 @@ package dev.mruniverse.guardianrftb.multiarena.utils.command.sub;
 
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.GameTeam;
 import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SaveMode;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.GameSelectedBeastEvent;
+import dev.mruniverse.guardianrftb.multiarena.utils.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -95,7 +95,7 @@ public class GameCommand {
                 String game = arguments[1];
                 if (main.getStorage().getControl(GuardianFiles.GAMES).contains("games." + game)) {
                     List<String> chests = main.getStorage().getControl(GuardianFiles.GAMES).getStringList("games." + game + ".chests");
-                    if(chests.size() != 0) {
+                    if(!chests.isEmpty()) {
                         for (String chest : chests) {
                             utils.sendMessage(sender, "&b- &e" + chest);
                         }
@@ -196,7 +196,7 @@ public class GameCommand {
                 }
                 if(main.getGameManager().existGame(game)) {
                     Game currentGame = main.getGameManager().getGame(game);
-                    if(currentGame.getRunners().contains(player)) {
+                    if(currentGame.getRunners().contains(player.getUniqueId())) {
                         setBeast(currentGame,player,utils);
 
                     }
@@ -432,18 +432,17 @@ public class GameCommand {
         FileConfiguration configuration = main.getStorage().getControl(GuardianFiles.MESSAGES);
         String chosenBeast = configuration.getString("messages.game.chosenBeast","&eThe player &b%player% &enow is a beast!");
         String prefix = configuration.getString("messages.prefix","");
-        currentGame.getBeasts().add(player);
-        currentGame.getRunners().remove(player);
+        currentGame.getBeasts().add(player.getUniqueId());
+        currentGame.getRunners().remove(player.getUniqueId());
         GameSelectedBeastEvent event = new GameSelectedBeastEvent(currentGame,player);
         Bukkit.getPluginManager().callEvent(event);
-        for(Player game : currentGame.getPlayers()) {
+        for (Player game : PlayerUtil.getPlayers(main, currentGame.getPlayers())) {
             utils.sendMessage(game,prefix + chosenBeast.replace("%player%",player.getName()));
         }
         player.getInventory().clear();
         if(main.getItemsInfo().getKitBeastStatus()) player.getInventory().setItem(main.getItemsInfo().getBeastSlot(), main.getItemsInfo().getKitBeast());
         if(main.getItemsInfo().getExitStatus()) player.getInventory().setItem(main.getItemsInfo().getExitSlot(), main.getItemsInfo().getExit());
         player.teleport(currentGame.getSelecting());
-        main.getUser(player.getUniqueId()).setCurrentRole(GameTeam.BEASTS);
     }
 
     private boolean falseChest(Material evalMaterial) {

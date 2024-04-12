@@ -1,10 +1,10 @@
 package dev.mruniverse.guardianrftb.multiarena.scoreboard;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
+import dev.mruniverse.guardianrftb.multiarena.enums.KitType;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,13 +14,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
-public class ScoreInfo {
+public class ScoreboardData {
     private final GuardianRFTB plugin;
 
-    public ScoreInfo(GuardianRFTB plugin) { this.plugin = plugin; }
+    public ScoreboardData(GuardianRFTB plugin) { this.plugin = plugin; }
 
-    public List<String> getLines(GuardianBoard board, Player player) {
+    public List<String> getLines(PluginScoreboard board, GamePlayer gamePlayer, Player player) {
         List<String> lines = new ArrayList<>();
         FileConfiguration scoreboard = plugin.getStorage().getControl(GuardianFiles.SCOREBOARD);
         StringBuilder white = new StringBuilder("&f");
@@ -28,7 +29,7 @@ public class ScoreInfo {
             case LOBBY:
             default:
                 for (String line : scoreboard.getStringList("scoreboards.lobby.lines")) {
-                    String replacedLine = replaceVariables(line,player);
+                    String replacedLine = replaceVariables(line, gamePlayer, player);
                     if(!size(replacedLine)) {
                         if (!lines.contains(replacedLine)) {
                             line = replacedLine;
@@ -46,7 +47,7 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isStarting>") && !line.contains("<isSelecting>") && !line.contains("<BeastAppear>")) {
                         if (line.contains("<isWaiting>")) line = line.replace("<isWaiting>", "");
-                        String replacedLine = replaceVariables(line,player);
+                        String replacedLine = replaceVariables(line, gamePlayer, player);
                         if(!size(replacedLine)) {
                             if (!lines.contains(replacedLine)) {
                                 line = replacedLine;
@@ -66,7 +67,7 @@ public class ScoreInfo {
                     if (!line.contains("<isWaiting>") && !line.contains("<isStarting>") && !line.contains("<BeastAppear>")) {
                         if (line.contains("<isSelecting>")) line = line.replace("<isSelecting>", "");
                         if(!size(line)) {
-                            String replacedLine = replaceVariables(line,player);
+                            String replacedLine = replaceVariables(line, gamePlayer, player);
                             if (!lines.contains(replacedLine)) {
                                 line = replacedLine;
                             } else {
@@ -84,7 +85,7 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isWaiting>") && !line.contains("<isSelecting>") && !line.contains("<BeastAppear>")) {
                         if (line.contains("<isStarting>")) line = line.replace("<isStarting>", "");
-                        String replacedLine = replaceVariables(line,player);
+                        String replacedLine = replaceVariables(line, gamePlayer, player);
                         if(!size(replacedLine)) {
                             if (!lines.contains(replacedLine)) {
                                 line = replacedLine;
@@ -103,7 +104,7 @@ public class ScoreInfo {
                 for (String line : scoreboard.getStringList("scoreboards.waiting.lines")) {
                     if (!line.contains("<isWaiting>") && !line.contains("<isSelecting>") && !line.contains("<isStarting>")) {
                         if (line.contains("<BeastAppear>")) line = line.replace("<BeastAppear>", "");
-                        String replacedLine = replaceVariables(line,player);
+                        String replacedLine = replaceVariables(line, gamePlayer, player);
                         if(!size(replacedLine)) {
                             if (!lines.contains(replacedLine)) {
                                 line = replacedLine;
@@ -120,7 +121,7 @@ public class ScoreInfo {
                 return lines;
             case PLAYING:
                 for (String line : scoreboard.getStringList("scoreboards.playing.lines")) {
-                    String replacedLine = replaceVariables(line,player);
+                    String replacedLine = replaceVariables(line, gamePlayer, player);
                     if(!size(replacedLine)) {
                         if (!lines.contains(replacedLine)) {
                             line = replacedLine;
@@ -136,7 +137,7 @@ public class ScoreInfo {
                 return lines;
             case WIN_BEAST_FOR_BEAST:
                 for (String line : scoreboard.getStringList("scoreboards.beastWin.forBeast.lines")) {
-                    String replacedLine = replaceVariables(line,player);
+                    String replacedLine = replaceVariables(line, gamePlayer, player);
                     if(!size(replacedLine)) {
                         if (!lines.contains(replacedLine)) {
                             line = replacedLine;
@@ -152,7 +153,7 @@ public class ScoreInfo {
                 return lines;
             case WIN_BEAST_FOR_RUNNERS:
                 for (String line : scoreboard.getStringList("scoreboards.beastWin.forRunners.lines")) {
-                    String replacedLine = replaceVariables(line,player);
+                    String replacedLine = replaceVariables(line, gamePlayer, player);
                     if(!size(replacedLine)) {
                         if (!lines.contains(replacedLine)) {
                             line = replacedLine;
@@ -168,7 +169,7 @@ public class ScoreInfo {
                 return lines;
             case WIN_RUNNERS_FOR_BEAST:
                 for (String line : scoreboard.getStringList("scoreboards.runnersWin.forBeast.lines")) {
-                    String replacedLine = replaceVariables(line,player);
+                    String replacedLine = replaceVariables(line, gamePlayer, player);
                     if(!size(replacedLine)) {
                         if (!lines.contains(replacedLine)) {
                             line = replacedLine;
@@ -184,7 +185,7 @@ public class ScoreInfo {
                 return lines;
             case WIN_RUNNERS_FOR_RUNNERS:
                 for (String line : scoreboard.getStringList("scoreboards.runnersWin.forRunners.lines")) {
-                    String replacedLine = replaceVariables(line,player);
+                    String replacedLine = replaceVariables(line, gamePlayer, player);
                     if(!size(replacedLine)) {
                         if (!lines.contains(replacedLine)) {
                             line = replacedLine;
@@ -211,7 +212,7 @@ public class ScoreInfo {
         return false;
     }
 
-    public String getTitle(GuardianBoard board) {
+    public String getTitle(PluginScoreboard board) {
         FileConfiguration scoreboard = plugin.getStorage().getControl(GuardianFiles.SCOREBOARD);
         switch (board) {
             case LOBBY:
@@ -256,56 +257,57 @@ public class ScoreInfo {
         return "";
     }
 
-    public String replaceVariables(String text,Player player) {
+    public String replaceVariables(String text, GamePlayer gamePlayer, Player player) {
         text = text.replace("<player_name>",player.getName());
-        if(plugin.getUser(player.getUniqueId()) != null) {
-            text = text.replace("<player_coins>", "" + plugin.getUser(player.getUniqueId()).getCoins())
-                    .replace("<player_kits>","" + plugin.getUser(player.getUniqueId()).getKits().size())
-                    .replace("<player_wins>","" + plugin.getUser(player.getUniqueId()).getWins());
-        } else {
-            text = text.replace("<player_coins>", "0")
-                    .replace("<player_kits>", "1")
-                    .replace("<player_wins>", "0");
-        }
-        text = text.replace("<player_beast_kit>","Not selected")
-                .replace("<player_runner_kit>","Not selected")
-                .replace("<server_online>",plugin.getServer().getOnlinePlayers().size() + "")
-                .replace("<timeFormat>",getDateFormat());
 
-        PlayerManager manager = plugin.getUser(player.getUniqueId());
-        if(manager != null) {
-            if (manager.getGame() != null) {
-                String arenaTimeText;
-                Game playerGame = manager.getGame();
-                if(playerGame.getLastTimer() >= 2) {
-                    arenaTimeText = plugin.getSettings().getSettings().getString("settings.timer.seconds","seconds");
-                } else {
-                    arenaTimeText = plugin.getSettings().getSettings().getString("settings.timer.second","second");
-                }
-                text = text.replace("<arena_name>",playerGame.getName())
-                        .replace("<arena_online>","" + playerGame.getPlayers().size())
-                        .replace("<arena_max>","" + playerGame.getMax())
-                        .replace("<arena_need>","" + playerGame.getNeedPlayers())
-                        .replace("<arena_time_text>",arenaTimeText)
-                        .replace("<arena_beast>",plugin.getUtils().getRandomBeast(player).getDisplayName())
-                        .replace("<arena_runners>","" + playerGame.getRunners().size())
-                        .replace("<arena_mode>",playerGame.getType().getType())
-                        .replace("<arena_timeLeft>",playerGame.getLastTimer() + "")
-                        .replace("<arena_status>",playerGame.getStatus().getStatus())
-                        .replace("<player_role>",manager.getCurrentRole())
-                        .replace("<arena_timeLeft>", playerGame.getLastTimer() + "")
-                        .replace("<arena_time_number>", playerGame.getLastTimer() + "");
+        FileConfiguration settings = plugin.getSettings().getSettings();
 
-            }
+        text = text.replace("<player_coins>", String.valueOf(gamePlayer.getStatistics().getCoins()))
+            .replace("<player_kits>", String.valueOf(gamePlayer.getStatistics().getKits().size()))
+            .replace("<player_wins>", String.valueOf(gamePlayer.getStatistics().getWins())
+            .replace("<player_beast_kit>", gamePlayer.getSelectedKit(KitType.BEAST))
+            .replace("<player_runner_kit>", gamePlayer.getSelectedKit(KitType.RUNNER))
+            .replace("<player_killer_kit", gamePlayer.getSelectedKit(KitType.KILLER))
+            .replace("<server_online>", String.valueOf(plugin.getServer().getOnlinePlayers().size()))
+            .replace("<timeFormat>", getDateFormat());
+
+        if (gamePlayer.isPlaying()) {
+            Game game = gamePlayer.getGame();
+
+            String path = game.getLastTimer() >= 2 ? "seconds" : "second";
+
+            String time = settings.getString("settings.timer." + path, path);
+
+            UUID beast = game.getBeasts().isEmpty() ? null : game.getBeasts().get(0);
+
+            Player beastPlayer = beast != null ? plugin.getServer().getPlayer(beast) : null;
+
+            text = text.replace("<arena_name>", game.getName())
+                .replace("<arena_online>", String.valueOf(game.getPlayers().size()))
+                .replace("<arena_max>", String.valueOf(game.getMax()))
+                .replace("<arena_need>", String.valueOf(game.getNeedPlayers()))
+                .replace("<arena_time_text>", time)
+                .replace("<arena_beast>", beastPlayer != null ? beastPlayer.getName() : "")
+                .replace("<arena_runners>", String.valueOf(game.getRunners().size()))
+                .replace("<arena_mode>", settings.getString(game.getType().getPath(), ""))
+                .replace("<arena_timeLeft>", String.valueOf(game.getLastTimer()))
+                .replace("<arena_status>", game.getStatus().getStatus())
+                .replace("<player_role>", gamePlayer.getCurrentRole())
+                .replace("<arena_timeLeft>",  String.valueOf(game.getLastTimer()))
+                .replace("<arena_time_number>", String.valueOf(game.getLastTimer()));
         }
-        if(plugin.hasPAPI()) { text = PlaceholderAPI.setPlaceholders(player,text); }
+
+        if (plugin.hasPAPI()) {
+            text = PlaceholderAPI.setPlaceholders(player,text);
+        }
+
         return ChatColor.translateAlternateColorCodes('&',text);
     }
 
     public String getDateFormat() {
         String dateFormat = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getString("settings.dateFormat");
         if(dateFormat == null) dateFormat = "dd/MM/yyyy";
-        return "" + (new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime()));
+        return new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime());
 
     }
 

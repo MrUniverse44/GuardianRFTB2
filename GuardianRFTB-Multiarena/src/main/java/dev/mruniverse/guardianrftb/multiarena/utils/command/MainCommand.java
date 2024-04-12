@@ -5,7 +5,7 @@ import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.CoinCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.GameCommand;
 import dev.mruniverse.guardianrftb.multiarena.utils.command.sub.HoloCommand;
@@ -78,7 +78,7 @@ public class MainCommand implements CommandExecutor {
             if (args[0].equalsIgnoreCase("autoPlay")) {
                 if(sender instanceof Player) {
                     Player player = (Player)sender;
-                    PlayerManager pM = plugin.getUser(player.getUniqueId());
+                    GamePlayer pM = plugin.getGamePlayer(player);
                     String buttonMessage;
                     if(pM.toggleAutoplay()) {
                         buttonMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.buttons.autoPlay.on");

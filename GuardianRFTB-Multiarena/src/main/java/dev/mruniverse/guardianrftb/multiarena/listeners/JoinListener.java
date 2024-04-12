@@ -1,7 +1,7 @@
 package dev.mruniverse.guardianrftb.multiarena.listeners;
 
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.enums.GuardianBoard;
+import dev.mruniverse.guardianrftb.multiarena.scoreboard.PluginScoreboard;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -11,7 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class JoinListener implements Listener {
     private final GuardianRFTB plugin;
@@ -55,12 +54,12 @@ public class JoinListener implements Listener {
             if(onlyLobbyScore) {
                 if (event.getPlayer().getWorld().equals(lobbyBoard.getWorld())) {
                     if(plugin.getStorage().getControl(GuardianFiles.SCOREBOARD).getBoolean("scoreboards.lobby.toggle")) {
-                        plugin.getScoreboards().setScoreboard(GuardianBoard.LOBBY,event.getPlayer());
+                        plugin.getScoreboards().setScoreboard(PluginScoreboard.LOBBY, event.getPlayer());
                     }
                 }
             } else {
                 if(plugin.getStorage().getControl(GuardianFiles.SCOREBOARD).getBoolean("scoreboards.lobby.toggle")) {
-                    plugin.getScoreboards().setScoreboard(GuardianBoard.LOBBY,event.getPlayer());
+                    plugin.getScoreboards().setScoreboard(PluginScoreboard.LOBBY, event.getPlayer());
                 }
             }
         } catch (Throwable throwable) {

@@ -6,9 +6,11 @@ import dev.mruniverse.guardianlib.core.utils.xseries.XMaterial;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
 import dev.mruniverse.guardianrftb.multiarena.listeners.api.*;
 import dev.mruniverse.guardianrftb.multiarena.runnables.*;
+import dev.mruniverse.guardianrftb.multiarena.scoreboard.PluginScoreboard;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
+import dev.mruniverse.guardianrftb.multiarena.utils.PlayerUtil;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -31,11 +33,11 @@ public class GameInfo implements Game {
 
     private final Random random = new Random();
 
-    private final ArrayList<Player> players = new ArrayList<>();
-    private final ArrayList<Player> runners = new ArrayList<>();
-    private final ArrayList<Player> spectators = new ArrayList<>();
-    private final ArrayList<Player> beasts = new ArrayList<>();
-    private final ArrayList<Player> killers = new ArrayList<>();
+    private final ArrayList<UUID> players = new ArrayList<>();
+    private final ArrayList<UUID> runners = new ArrayList<>();
+    private final ArrayList<UUID> spectators = new ArrayList<>();
+    private final ArrayList<UUID> beasts = new ArrayList<>();
+    private final ArrayList<UUID> killers = new ArrayList<>();
 
     private final ArrayList<String> chestTypes = new ArrayList<>();
 
@@ -175,9 +177,16 @@ public class GameInfo implements Game {
         if((RealMin - players.size()) <= 0 && gameStatus.equals(GameStatus.WAITING)) {
             gameStatus = GameStatus.STARTING;
             updateSignsBlocks();
-            for(Player player : players) {
-                PlayerManager playerData = plugin.getUser(player.getUniqueId());
-                playerData.setBoard(GuardianBoard.STARTING);
+
+            for (UUID uniqueId : players) {
+
+                GamePlayer gamePlayer = plugin.getGamePlayer(uniqueId);
+
+                if (gamePlayer == null) {
+                    continue;
+                }
+
+                gamePlayer.setScoreboard(PluginScoreboard.STARTING);
             }
         }
         if(players.size() < RealMin) {
@@ -318,7 +327,12 @@ public class GameInfo implements Game {
      */
     @Override
     public void join(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getGamePlayer(player.getUniqueId());
+
+        if (currentData == null) {
+            return;
+        }
+
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         if (currentData.getGame() != null) {
@@ -369,7 +383,12 @@ public class GameInfo implements Game {
     }
 
     private void spectatorJoin(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getGamePlayer(player.getUniqueId());
+
+        if (currentData == null) {
+            return;
+        }
+
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         String nowSpectating = messages.getString("messages.spectating");
@@ -377,8 +396,10 @@ public class GameInfo implements Game {
         if(!plugin.getSettings().isSecondSpectator()) {
             player.setGameMode(GameMode.SPECTATOR);
         } else {
-            for(Player player1 : getPlayers()) {
-                if(player != player1) player1.hidePlayer(player);
+            for (Player player1 : getPlayers(getPlayers())) {
+                if (player != player1) {
+                    player1.hidePlayer(player);
+                }
             }
             player.setGameMode(GameMode.ADVENTURE);
             for(SpectatorItems items : SpectatorItems.values()) {
@@ -386,11 +407,10 @@ public class GameInfo implements Game {
             }
         }
         player.teleport(this.runnerSpawn);
-        currentData.setBoard(GuardianBoard.PLAYING);
-        players.add(player);
-        spectators.add(player);
+        currentData.setScoreboard(PluginScoreboard.PLAYING);
+        players.add(player.getUniqueId());
+        spectators.add(player.getUniqueId());
         currentData.setGame(this);
-        currentData.setPointStatus(false);
         currentData.setLastCheckpoint(null);
         player.setAllowFlight(true);
         player.setFlying(true);
@@ -398,13 +418,13 @@ public class GameInfo implements Game {
             plugin.getServer().getScheduler().cancelTask(currentData.getLeaveDelay());
             currentData.setLeaveDelay(0);
         }
-        currentData.setStatus(PlayerStatus.IN_GAME);
-        currentData.setCurrentRole(GameTeam.RUNNERS);
         if(!plugin.getSettings().isSecondSpectator()) {
             player.setGameMode(GameMode.SPECTATOR);
         } else {
-            for(Player player1 : getPlayers()) {
-                if(player != player1) player1.hidePlayer(player);
+            for(Player player1 : getPlayers(getPlayers())) {
+                if (player != player1) {
+                    player1.hidePlayer(player);
+                }
             }
             for(SpectatorItems items : SpectatorItems.values()) {
                 items.giveItem(player,plugin);
@@ -430,7 +450,12 @@ public class GameInfo implements Game {
     }
 
     private void fastJoin(Player player) {
-        PlayerManager currentData = plugin.getUser(player.getUniqueId());
+        GamePlayer currentData = plugin.getGamePlayer(player.getUniqueId());
+
+        if (currentData == null) {
+            return;
+        }
+
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String prefix = messages.getString("messages.prefix");
         player.getInventory().clear();
@@ -438,29 +463,26 @@ public class GameInfo implements Game {
         player.setFlying(false);
         player.setAllowFlight(false);
         player.teleport(this.waiting);
-        currentData.setBoard(GuardianBoard.WAITING);
+        currentData.setScoreboard(PluginScoreboard.WAITING);
         if (gameStatus.equals(GameStatus.SELECTING)) {
-            currentData.setBoard(GuardianBoard.SELECTING);
+            currentData.setScoreboard(PluginScoreboard.SELECTING);
         } else if(!gameStatus.equals(GameStatus.WAITING)) {
-            currentData.setBoard(GuardianBoard.STARTING);
+            currentData.setScoreboard(PluginScoreboard.STARTING);
         }
-        players.add(player);
-        runners.add(player);
+        players.add(player.getUniqueId());
+        runners.add(player.getUniqueId());
         currentData.setGame(this);
-        currentData.setPointStatus(false);
         currentData.setLastCheckpoint(null);
         if (currentData.getLeaveDelay() != 0) {
             plugin.getServer().getScheduler().cancelTask(currentData.getLeaveDelay());
             currentData.setLeaveDelay(0);
         }
-        currentData.setStatus(PlayerStatus.IN_GAME);
-        currentData.setCurrentRole(GameTeam.RUNNERS);
         if (gameStatus.equals(GameStatus.WAITING)) checkPlayers();
         player.setGameMode(GameMode.ADVENTURE);
         player.setFlying(false);
         player.setAllowFlight(false);
         GameJoinEvent event = new GameJoinEvent(this,player);
-        Bukkit.getPluginManager().callEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
         player.setHealth(20.0D);
         player.setFireTicks(0);
         player.getInventory().setHelmet(null);
@@ -476,46 +498,49 @@ public class GameInfo implements Game {
         if (joinMsg == null) joinMsg = "&b%player% &7has joined the game! &3(&b%game_online%&3/&b%game_max%&3)&7!";
         updateSigns();
         player.updateInventory();
-        for(Player players : players) {
-            players.showPlayer(player);
-            player.showPlayer(players);
-            plugin.getUtils().sendMessage(players,prefix + joinMsg.replace("%player%",player.getName())
-                    .replace("%game_online%",this.players.size()+"")
-                    .replace("%game_max%",this.max+""),player);
-        }
+
+        //TODO: Show and hide players
     }
 
     @Override
     public void leaveWithoutSending(Player player) {
-        this.players.remove(player);
-        this.runners.remove(player);
-        this.beasts.remove(player);
+        this.players.remove(player.getUniqueId());
+        this.runners.remove(player.getUniqueId());
+        this.beasts.remove(player.getUniqueId());
         checkDeadChests(player);
-        this.spectators.remove(player);
+        this.spectators.remove(player.getUniqueId());
         if(player.isOnline()) {
             player.getInventory().setHelmet(null);
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
-            PlayerManager currentData = plugin.getUser(player.getUniqueId());
+            GamePlayer currentData = plugin.getGamePlayer(player);
             currentData.setGame(null);
+            currentData.setScoreboard(PluginScoreboard.LOBBY);
             currentData.setLastCheckpoint(null);
-            currentData.setCurrentRole(GameTeam.RUNNERS);
         }
         GameQuitEvent event = new GameQuitEvent(this,player);
-        Bukkit.getPluginManager().callEvent(event);
+
+        plugin.getServer().getPluginManager().callEvent(event);
+
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
+
         String quitMsg;
+
         if(!gameStatus.equals(GameStatus.IN_GAME) && !gameStatus.equals(GameStatus.PLAYING) && !gameStatus.equals(GameStatus.RESTARTING)) {
             quitMsg = messages.getString("messages.game.leave-game");
         } else {
             quitMsg = messages.getString("messages.game.leave-game-in-game");
         }
-        if(quitMsg == null) quitMsg = "&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!";
-        for(Player pl : this.players) {
-            plugin.getUtils().sendMessage(pl,quitMsg.replace("%player%",player.getName())
-                    .replace("%game_online%",this.players.size()+"")
-                    .replace("%game_max%",this.max+""),player);
+
+        if(quitMsg == null) {
+            quitMsg = "&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!";
+        }
+
+        for (Player gamePlayers : getPlayers(this.players)) {
+            plugin.getUtils().sendMessage(gamePlayers, quitMsg.replace("%player%",player.getName())
+                .replace("%game_online%",this.players.size()+"")
+                .replace("%game_max%",this.max+""),player);
         }
         updateSigns();
     }
@@ -547,12 +572,16 @@ public class GameInfo implements Game {
         fastLeave(player);
     }
 
+    private List<Player> getPlayers(Collection<UUID> players) {
+        return PlayerUtil.getPlayers(plugin, players);
+    }
+
     private void fastLeave(Player player) {
-        this.players.remove(player);
-        this.runners.remove(player);
+        this.players.remove(player.getUniqueId());
+        this.runners.remove(player.getUniqueId());
         checkDeadChests(player);
-        this.beasts.remove(player);
-        this.spectators.remove(player);
+        this.beasts.remove(player.getUniqueId());
+        this.spectators.remove(player.getUniqueId());
         player.getInventory().setHelmet(null);
         player.getInventory().setChestplate(null);
         player.getInventory().setLeggings(null);
@@ -565,7 +594,7 @@ public class GameInfo implements Game {
             }
         }
         GameQuitEvent event = new GameQuitEvent(this,player);
-        Bukkit.getPluginManager().callEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
         String quitMsg;
         if(!gameStatus.equals(GameStatus.IN_GAME) && !gameStatus.equals(GameStatus.PLAYING) && !gameStatus.equals(GameStatus.RESTARTING)) {
@@ -574,20 +603,18 @@ public class GameInfo implements Game {
             quitMsg = messages.getString("messages.game.leave-game-in-game");
         }
         if(quitMsg == null) quitMsg = "&b%player% &7has left the game! &3(&b%game_online%&3/&b%game_max%&3)&7!";
-        for(Player pl : this.players) {
+        for(Player pl : getPlayers(this.players)) {
             plugin.getUtils().sendMessage(pl,quitMsg.replace("%player%",player.getName())
                     .replace("%game_online%",this.players.size()+"")
                     .replace("%game_max%",this.max+""),player);
         }
         if(player.isOnline()) {
-            PlayerManager currentData = plugin.getUser(player.getUniqueId());
-            currentData.setStatus(PlayerStatus.IN_LOBBY);
+            GamePlayer currentData = plugin.getGamePlayer(player);
             currentData.setGame(null);
-            currentData.setBoard(GuardianBoard.LOBBY);
+            currentData.setScoreboard(PluginScoreboard.LOBBY);
             currentData.setLastCheckpoint(null);
             player.setFlying(false);
             player.setAllowFlight(false);
-            currentData.setCurrentRole(GameTeam.RUNNERS);
             player.getInventory().clear();
             for (ItemStack item : plugin.getItemsInfo().getLobbyItems().keySet()) {
                 player.getInventory().setItem(plugin.getItemsInfo().getSlot(item), item);
@@ -607,8 +634,8 @@ public class GameInfo implements Game {
             lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
             lastTimer = plugin.getStorage().getControl(GuardianFiles.SETTINGS).getInt("settings.game.start-countdown",30);
             doubleCountPrevent = true;
-            for(Player player : players) {
-                plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.SELECTING);
+            for (Player gamePlayers : getPlayers(this.players)) {
+                plugin.getGamePlayer(gamePlayers).setScoreboard(PluginScoreboard.SELECTING);
             }
         }
     }
@@ -625,8 +652,8 @@ public class GameInfo implements Game {
         this.lastTimer = 10;
         StartRunnable select = new StartRunnable(plugin,this);
         lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
-        for(Player player : players) {
-            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.STARTING);
+        for (Player player : getPlayers(players)) {
+            plugin.getGamePlayer(player).setScoreboard(PluginScoreboard.STARTING);
         }
     }
 
@@ -635,11 +662,11 @@ public class GameInfo implements Game {
         this.gameStatus = GameStatus.PLAYING;
         updateSignsBlocks();
         this.lastTimer = 15;
-        for(Player player : runners) {
-            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.PLAYING);
+        for (Player player : getPlayers(runners)) {
+            plugin.getUser(player.getUniqueId()).setScoreboard(PluginScoreboard.PLAYING);
         }
-        for(Player player : beasts) {
-            plugin.getUser(player.getUniqueId()).setBoard(GuardianBoard.BEAST_SPAWN);
+        for (Player player : getPlayers(beasts)) {
+            plugin.getUser(player.getUniqueId()).setScoreboard(PluginScoreboard.BEAST_SPAWN);
         }
         BeastSpawnRunnable select = new BeastSpawnRunnable(plugin,this);
         lastListener = select.runTaskTimer(plugin,0L,20L).getTaskId();
@@ -675,7 +702,7 @@ public class GameInfo implements Game {
         if(!firework) return;
         Firework fa = player.getWorld().spawn(player.getLocation(), Firework.class);
         FireworkMeta fam = fa.getFireworkMeta();
-        int fType = getRandom().nextInt(4) + 1;
+        int fType = getRandom().nextInt(5) + 1;
         FireworkEffect.Type fireworkType = null;
         switch (fType) {
             case 1:
@@ -737,15 +764,17 @@ public class GameInfo implements Game {
     @Override
     public void winRunners() {
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
-        for(Player player : this.players) {
-            if(this.spectators.contains(player)) {
-                if(!plugin.getSettings().isSecondSpectator()) {
+        for (Player player : getPlayers(this.players)) {
+            if (this.spectators.contains(player.getUniqueId())) {
+                if (!plugin.getSettings().isSecondSpectator()) {
                     player.setGameMode(GameMode.SPECTATOR);
                 } else {
-                    for(Player player1 : getPlayers()) {
-                        if(player != player1) player1.hidePlayer(player);
+                    for (Player player1 : getPlayers(getPlayers())) {
+                        if (player != player1) {
+                            player1.hidePlayer(player);
+                        }
                     }
-                    for(SpectatorItems items : SpectatorItems.values()) {
+                    for (SpectatorItems items : SpectatorItems.values()) {
                         items.giveItem(player,plugin);
                     }
                     player.setGameMode(GameMode.ADVENTURE);
@@ -755,15 +784,15 @@ public class GameInfo implements Game {
             }
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.RUNNERS);
         }
-        for(Player runner : this.runners) {
-            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_RUNNERS);
-            plugin.getUser(runner.getUniqueId()).addWins();
+        for (Player runner : getPlayers(this.runners)) {
+            plugin.getGamePlayer(runner).setScoreboard(PluginScoreboard.WIN_RUNNERS_FOR_RUNNERS);
+            plugin.getGamePlayer(runner).getStatistics().addWins(1);
         }
-        for(Player beast : this.beasts) {
-            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+        for (Player beast : getPlayers(this.beasts)) {
+            plugin.getGamePlayer(beast).setScoreboard(PluginScoreboard.WIN_RUNNERS_FOR_BEAST);
         }
-        for(Player spectator : this.spectators) {
-            plugin.getUser(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+        for (Player spectator : getPlayers(this.spectators)) {
+            plugin.getGamePlayer(spectator).setScoreboard(PluginScoreboard.WIN_RUNNERS_FOR_BEAST);
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -774,18 +803,18 @@ public class GameInfo implements Game {
     @Override
     public void winBeasts() {
         FileConfiguration messages = plugin.getStorage().getControl(GuardianFiles.MESSAGES);
-        for(Player player : this.players) {
+        for (Player player : getPlayers(this.players)) {
             plugin.getUtils().sendGameList(player, messages.getStringList("messages.inGame.infoList.endInfo"),GameTeam.BEASTS);
         }
-        for(Player beast : this.beasts) {
-            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_BEAST);
-            plugin.getUser(beast.getUniqueId()).addWins();
+        for (Player beast : getPlayers(this.beasts)) {
+            plugin.getGamePlayer(beast).setScoreboard(PluginScoreboard.WIN_BEAST_FOR_BEAST);
+            plugin.getGamePlayer(beast).getStatistics().addWins(1);
         }
-        for(Player runner : this.runners) {
-            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+        for (Player runner : getPlayers(this.runners)) {
+            plugin.getGamePlayer(runner).setScoreboard(PluginScoreboard.WIN_BEAST_FOR_RUNNERS);
         }
-        for(Player spectator : this.spectators) {
-            plugin.getUser(spectator.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+        for (Player spectator : getPlayers(this.spectators)) {
+            plugin.getGamePlayer(spectator).setScoreboard(PluginScoreboard.WIN_BEAST_FOR_RUNNERS);
         }
         this.invincible = true;
         this.gameStatus = GameStatus.RESTARTING;
@@ -814,27 +843,27 @@ public class GameInfo implements Game {
 
     @Override
     public void deathBeast(Player beast) {
-        beasts.remove(beast);
-        spectators.add(beast);
+        beasts.remove(beast.getUniqueId());
+        spectators.add(beast.getUniqueId());
         checkDeadChests(beast);
-        plugin.getUser(beast.getUniqueId()).addDeaths();
-        BeastDeathEvent event = new BeastDeathEvent(this,beast);
-        Bukkit.getPluginManager().callEvent(event);
-        if(!plugin.getSettings().isSecondSpectator()) {
+        plugin.getGamePlayer(beast).getStatistics().addDeaths(1);
+        BeastDeathEvent event = new BeastDeathEvent(this, beast);
+        plugin.getServer().getPluginManager().callEvent(event);
+        if (!plugin.getSettings().isSecondSpectator()) {
             beast.setGameMode(GameMode.SPECTATOR);
         } else {
-            for(Player player1 : getPlayers()) {
+            for(Player player1 : getPlayers(getPlayers())) {
                 if(beast != player1) player1.hidePlayer(beast);
             }
             for(SpectatorItems items : SpectatorItems.values()) {
-                items.giveItem(beast,plugin);
+                items.giveItem(beast, plugin);
             }
             beast.setGameMode(GameMode.ADVENTURE);
             beast.setAllowFlight(true);
             beast.setFlying(true);
         }
-        if(beasts.size() == 0) {
-            plugin.getUser(beast.getUniqueId()).setBoard(GuardianBoard.WIN_RUNNERS_FOR_BEAST);
+        if (beasts.isEmpty()) {
+            plugin.getGamePlayer(beast).setScoreboard(PluginScoreboard.WIN_RUNNERS_FOR_BEAST);
             winRunners();
         }
     }
@@ -842,24 +871,26 @@ public class GameInfo implements Game {
     @Override
     public void deathKiller(Player killer) {
         KillerDeathEvent event = new KillerDeathEvent(this,killer);
-        Bukkit.getPluginManager().callEvent(event);
+        plugin.getServer().getPluginManager().callEvent(event);
     }
 
     @Override
     public void deathRunner(Player runner) {
-        runners.remove(runner);
+        runners.remove(runner.getUniqueId());
         checkDeadChests(runner);
         RunnerDeathEvent event = new RunnerDeathEvent(this,runner);
         Bukkit.getPluginManager().callEvent(event);
         if(!gameType.equals(GameType.INFECTED)) {
-            spectators.add(runner);
-            if(!plugin.getSettings().isSecondSpectator()) {
+            spectators.add(runner.getUniqueId());
+            if (!plugin.getSettings().isSecondSpectator()) {
                 runner.setGameMode(GameMode.SPECTATOR);
             } else {
-                for(Player player1 : getPlayers()) {
-                    if(runner != player1) player1.hidePlayer(runner);
+                for (Player player1 : getPlayers(getPlayers())) {
+                    if (runner != player1) {
+                        player1.hidePlayer(runner);
+                    }
                 }
-                for(SpectatorItems items : SpectatorItems.values()) {
+                for (SpectatorItems items : SpectatorItems.values()) {
                     items.giveItem(runner,plugin);
                 }
                 runner.setGameMode(GameMode.ADVENTURE);
@@ -867,15 +898,15 @@ public class GameInfo implements Game {
                 runner.setFlying(true);
             }
         } else {
-            beasts.add(runner);
+            beasts.add(runner.getUniqueId());
             runner.getInventory().clear();
             giveBeastInv(runner);
             runner.setGameMode(GameMode.ADVENTURE);
             runner.teleport(beastSpawn);
         }
-        plugin.getUser(runner.getUniqueId()).addDeaths();
-        if(runners.size() == 0) {
-            plugin.getUser(runner.getUniqueId()).setBoard(GuardianBoard.WIN_BEAST_FOR_RUNNERS);
+        plugin.getGamePlayer(runner).getStatistics().addDeaths(1);
+        if (runners.isEmpty()) {
+            plugin.getGamePlayer(runner).setScoreboard(PluginScoreboard.WIN_BEAST_FOR_RUNNERS);
             winBeasts();
         }
     }
@@ -1022,19 +1053,19 @@ public class GameInfo implements Game {
     public String getName() { return name; }
 
     @Override
-    public ArrayList<Player> getPlayers() { return players; }
+    public ArrayList<UUID> getPlayers() { return players; }
 
     @Override
-    public ArrayList<Player> getRunners() { return runners; }
+    public ArrayList<UUID> getRunners() { return runners; }
 
     @Override
-    public ArrayList<Player> getBeasts() { return beasts; }
+    public ArrayList<UUID> getBeasts() { return beasts; }
 
     @Override
-    public ArrayList<Player> getKillers() { return killers; }
+    public ArrayList<UUID> getKillers() { return killers; }
 
     @Override
-    public ArrayList<Player> getSpectators() { return spectators; }
+    public ArrayList<UUID> getSpectators() { return spectators; }
 
     @Override
     public ArrayList<Location> getSigns() { return signs; }

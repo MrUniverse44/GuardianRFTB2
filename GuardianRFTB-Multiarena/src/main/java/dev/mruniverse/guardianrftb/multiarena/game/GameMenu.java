@@ -98,7 +98,7 @@ public class GameMenu {
     private List<String> getLore(Game game) {
         List<String> newLore = new ArrayList<>();
         for(String line : lore) {
-            String newLine = "&7" + line.replace("%map_name%", game.getName()).replace("%map_status%", game.getStatus().getStatus()).replace("%map_mode%", game.getType().getType()).replace("%map_on%", game.getPlayers().size() + "").replace("%map_max%", game.getMax() + "");
+            String newLine = "&7" + line.replace("%map_name%", game.getName()).replace("%map_status%", game.getStatus().getStatus()).replace("%map_mode%", plugin.getSettings().getSettings().getString(game.getType().toPath(), game.getType().toString())).replace("%map_on%", game.getPlayers().size() + "").replace("%map_max%", game.getMax() + "");
             newLore.add(newLine);
         }
         return Utils.recolorLore(newLore);
@@ -106,7 +106,7 @@ public class GameMenu {
     private ItemStack getGameItem(Game game) {
         String name = iName.replace("%map_name%", game.getName()
                 .replace("%map_status%", game.getStatus().getStatus()
-                        .replace("%map_mode%", game.getType().getType())
+                        .replace("%map_mode%", plugin.getSettings().getSettings().getString(game.getType().toPath(), game.getType().toString()))
                         .replace("%map_on%", game.getPlayers().size() + "")
                         .replace("%map_max%", game.getMax() + "")));
         Utils utils = plugin.getLib().getUtils();

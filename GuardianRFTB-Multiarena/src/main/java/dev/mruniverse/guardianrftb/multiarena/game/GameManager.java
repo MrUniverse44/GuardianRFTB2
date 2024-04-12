@@ -20,8 +20,8 @@ public class GameManager {
     private final ArrayList<Game> games = new ArrayList<>();
     private final HashMap<World, Game> gamesWorlds = new HashMap<>();
 
-    public HashMap<String,GameChests> gameChests = new HashMap<>();
-    public HashMap<GameType,GameMenu> gameMenu = new HashMap<>();
+    public HashMap<String, GameChests> gameChests = new HashMap<>();
+    public HashMap<GameType, GameMenu> gameMenu = new HashMap<>();
 
     private final GameMainMenu gameMainMenu;
     private final GuardianRFTB plugin;

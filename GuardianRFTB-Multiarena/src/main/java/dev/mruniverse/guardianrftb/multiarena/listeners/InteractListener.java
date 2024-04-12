@@ -3,7 +3,7 @@ package dev.mruniverse.guardianrftb.multiarena.listeners;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
 import dev.mruniverse.guardianrftb.multiarena.enums.*;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import dev.mruniverse.guardianrftb.multiarena.utils.SoundsInfo;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -37,9 +37,13 @@ public class InteractListener implements Listener {
         this.plugin = plugin;
         sounds = plugin.getSoundsInfo();
         cancelMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.leave.cancelled");
-        if (cancelMessage == null) cancelMessage = "&c&lTeleport cancelled!";
+        if (cancelMessage == null) {
+            cancelMessage = "&c&lTeleport cancelled!";
+        }
         confirmMessage = plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.others.leave.confirm");
-        if (confirmMessage == null) confirmMessage = "&a&lTeleporting you to the lobby in <leaveCancelTime> seconds...[new line]&a&lRight-Click again to cancel the teleport!";
+        if (confirmMessage == null) {
+            confirmMessage = "&a&lTeleporting you to the lobby in <leaveCancelTime> seconds...[new line]&a&lRight-Click again to cancel the teleport!";
+        }
     }
 
     public void updateAll() {
@@ -57,7 +61,7 @@ public class InteractListener implements Listener {
             if(event.getItem().getItemMeta() == null) return;
             if(event.getItem().getType().equals(plugin.getItemsInfo().getExit().getType()) && event.getItem().getItemMeta().equals(plugin.getItemsInfo().getExit().getItemMeta())) {
                 event.setCancelled(true);
-                PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
+                GamePlayer playerManagerImpl = plugin.getGamePlayer(player);
                 String message;
                 int leaveInt = plugin.getSettings().getSettings().getInt("settings.leaveCancelTime");
                 if(playerManagerImpl.getLeaveDelay() != 0) {
@@ -74,7 +78,7 @@ public class InteractListener implements Listener {
                 plugin.getUtils().sendLeaveCountdown(player,leaveInt);
                 return;
             }
-            PlayerManager pm = plugin.getUser(player.getUniqueId());
+            GamePlayer pm = plugin.getGamePlayer(player);
             HashMap<ItemStack, Integer> itemToChecks = new HashMap<>(plugin.getItemsInfo().getLobbyItems());
 
             if(plugin.getItemsInfo().getKitBeastStatus()) itemToChecks.put(plugin.getItemsInfo().getKitBeast(), 0);
@@ -134,10 +138,9 @@ public class InteractListener implements Listener {
                             plugin.getUtils().sendServer(player,server);
                             return;
                         case CHECKPOINT:
-                            if(pm.getPointStatus() && pm.getLastCheckpoint() != null) {
+                            if (pm.getLastCheckpoint() != null) {
                                 player.teleport(pm.getLastCheckpoint());
                                 pm.setLastCheckpoint(null);
-                                pm.setPointStatus(false);
                                 plugin.getUtils().consumeItem(player,1,plugin.getItemsInfo().getCheckPoint());
                                 plugin.getUtils().sendMessage(player, plugin.getStorage().getControl(GuardianFiles.MESSAGES).getString("messages.game.others.checkpoint.use"));
                                 try {
@@ -160,7 +163,7 @@ public class InteractListener implements Listener {
                         case EXIT_GAME:
                         default:
                             if(plugin.getUser(player.getUniqueId()).getGame() != null) {
-                                PlayerManager playerManagerImpl = plugin.getUser(player.getUniqueId());
+                                GamePlayer playerManagerImpl = plugin.getGamePlayer(player);
                                 int leaveInt = plugin.getSettings().getSettings().getInt("settings.leaveCancelTime");
                                 if (playerManagerImpl.getLeaveDelay() != 0) {
                                     plugin.getServer().getScheduler().cancelTask(plugin.getUser(event.getPlayer().getUniqueId()).getLeaveDelay());
@@ -181,7 +184,7 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onKitMenuClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        PlayerManager data = plugin.getUser(player.getUniqueId());
+        GamePlayer data = plugin.getGamePlayer(player);
         if(event.getCurrentItem() == null) return;
         if(event.getInventory().equals(data.getKitMenu(KitType.BEAST).getInventory())) {
             HashMap<ItemStack, String> hash = data.getKitMenu(KitType.BEAST).getItems();

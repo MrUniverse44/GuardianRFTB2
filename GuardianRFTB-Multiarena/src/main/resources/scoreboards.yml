@@ -21,6 +21,9 @@
 # - <arena_timeLeft> | <arena_time_number> = time-left (you can use this variable with <arena_time_text> to do this: "60 seconds" or "1 second"
 # - <arena_status>  = Arena Status
 #
+# Should the plugin use the scoreboard system?
+enabled: true
+# Scoreboards
 scoreboards:
   animatedTitle:
     toggle: true

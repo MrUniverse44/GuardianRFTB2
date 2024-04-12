@@ -6,7 +6,8 @@ import dev.mruniverse.guardianrftb.multiarena.enums.GameType;
 import dev.mruniverse.guardianrftb.multiarena.enums.GuardianFiles;
 import dev.mruniverse.guardianrftb.multiarena.enums.SpectatorItems;
 import dev.mruniverse.guardianrftb.multiarena.interfaces.Game;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
+import dev.mruniverse.guardianrftb.multiarena.utils.PlayerUtil;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -47,14 +48,14 @@ public class DamagesListener implements Listener {
             if (event.getDamager().getType().equals(EntityType.PLAYER)) {
                 Player victim = (Player) event.getEntity();
                 Player attacker = (Player) event.getDamager();
-                PlayerManager mng = plugin.getUser(victim.getUniqueId());
+                GamePlayer mng = plugin.getGamePlayer(victim);
                 if (mng == null) return;
                 if (mng.getGame() != null) {
                     Game game = mng.getGame();
                     if (game.isInvincible()) event.setCancelled(true);
-                    if (game.getRunners().contains(victim) && game.getRunners().contains(attacker))
+                    if (game.getRunners().contains(victim.getUniqueId()) && game.getRunners().contains(attacker.getUniqueId()))
                         event.setCancelled(true);
-                    if (game.getBeasts().contains(victim) && game.getBeasts().contains(attacker))
+                    if (game.getBeasts().contains(victim.getUniqueId()) && game.getBeasts().contains(attacker.getUniqueId()))
                         event.setCancelled(true);
                 }
             }
@@ -64,16 +65,24 @@ public class DamagesListener implements Listener {
     @SuppressWarnings("deprecation")
     @EventHandler
     public void damage(EntityDamageEvent event) {
-        if (!event.getEntity().getType().equals(EntityType.PLAYER)) return;
+        if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
+            return;
+        }
+
         Player player = (Player) event.getEntity();
-        if (plugin.getUser(player.getUniqueId()) == null) return;
-        if (plugin.getUser(player.getUniqueId()).getGame() == null) return;
-        Game game = plugin.getUser(player.getUniqueId()).getGame();
-        if (game.getSpectators().contains(player)) event.setCancelled(true);
+
+        GamePlayer gamePlayer = plugin.getGamePlayer(player);
+
+        if (!gamePlayer.isPlaying()) {
+            return;
+        }
+
+        Game game = gamePlayer.getGame();
+        if (game.getSpectators().contains(player.getUniqueId())) event.setCancelled(true);
         if (game.getStatus() == GameStatus.WAITING || game.getStatus() == GameStatus.STARTING || game.getStatus() == GameStatus.SELECTING || game.isInvincible()) {
             event.setCancelled(true);
             if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                if (game.getBeasts().contains(player)) {
+                if (game.getBeasts().contains(player.getUniqueId())) {
                     player.teleport(game.getSelecting());
                 } else {
                     player.teleport(game.getWaiting());
@@ -98,15 +107,17 @@ public class DamagesListener implements Listener {
             player.getInventory().setLeggings(null);
             String deathMessage;
             deathMessage = getDeathMessage(player, event.getCause());
-            for (Player inGamePlayer : game.getPlayers()) {
+            for (Player inGamePlayer : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
                 plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
             }
-            if (game.getBeasts().contains(player)) {
+            if (game.getBeasts().contains(player.getUniqueId())) {
                 if (!plugin.getSettings().isSecondSpectator()) {
                     player.setGameMode(GameMode.SPECTATOR);
                 } else {
-                    for (Player player1 : game.getPlayers()) {
-                        if (player != player1) player1.hidePlayer(player);
+                    for (Player player1 : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
+                        if (player != player1) {
+                            player1.hidePlayer(player);
+                        }
                     }
                     for (SpectatorItems items : SpectatorItems.values()) {
                         items.giveItem(player, plugin);
@@ -123,8 +134,10 @@ public class DamagesListener implements Listener {
                     if (!plugin.getSettings().isSecondSpectator()) {
                         player.setGameMode(GameMode.SPECTATOR);
                     } else {
-                        for (Player player1 : game.getPlayers()) {
-                            if (player != player1) player1.hidePlayer(player);
+                        for (Player player1 : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
+                            if (player != player1) {
+                                player1.hidePlayer(player);
+                            }
                         }
                         for (SpectatorItems items : SpectatorItems.values()) {
                             items.giveItem(player, plugin);
@@ -156,27 +169,34 @@ public class DamagesListener implements Listener {
             if (event.getDamager() instanceof Arrow) {
                 Arrow arrow = (Arrow) event.getDamager();
                 Player shooter = (Player) arrow.getShooter();
-                if (plugin.getUser(victim.getUniqueId()) == null) return;
-                if (plugin.getUser(victim.getUniqueId()).getGame() == null) return;
-                Game game = plugin.getUser(victim.getUniqueId()).getGame();
-                if (game.getRunners().contains(victim) && game.getRunners().contains(shooter)) {
+
+                GamePlayer gameVictim = plugin.getGamePlayer(victim);
+
+                if (!gameVictim.isPlaying()) {
+                    return;
+                }
+
+                if (shooter == null) {
+                    return;
+                }
+
+                Game game = gameVictim.getGame();
+
+
+                if (game.getRunners().contains(victim.getUniqueId()) && game.getRunners().contains(shooter.getUniqueId())) {
                     event.setCancelled(true);
                     return;
                 }
-                if (game.getBeasts().contains(victim) && game.getBeasts().contains(shooter)) {
+                if (game.getBeasts().contains(victim.getUniqueId()) && game.getBeasts().contains(shooter.getUniqueId())) {
                     event.setCancelled(true);
                     return;
                 }
                 if (!event.isCancelled()) {
                     if ((victim.getHealth() - event.getFinalDamage()) <= 0) {
                         String deathMessage;
-                        if (shooter != null) {
-                            deathMessage = byBow.replace("%victim%", victim.getName()).replace("%attacker%", shooter.getName());
-                            plugin.getUser(shooter.getUniqueId()).addKills();
-                        } else {
-                            deathMessage = byBow.replace("%victim%", victim.getName()).replace("%attacker%", "Unknown Player");
-                        }
-                        for (Player inGamePlayer : game.getPlayers()) {
+                        deathMessage = byBow.replace("%victim%", victim.getName()).replace("%attacker%", shooter.getName());
+                        plugin.getGamePlayer(shooter).getStatistics().addKills(1);
+                        for (Player inGamePlayer : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
                             plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
                         }
                     }
@@ -184,20 +204,25 @@ public class DamagesListener implements Listener {
                 return;
             }
             if (event.getDamager().getType() == EntityType.PLAYER) {
-                if (plugin.getUser(victim.getUniqueId()) == null) return;
-                if (plugin.getUser(victim.getUniqueId()).getGame() == null) return;
+                GamePlayer gameVictim = plugin.getGamePlayer(victim);
+
+                if (!gameVictim.isPlaying()) {
+                    return;
+                }
+
                 Player player = (Player) event.getDamager();
-                Game game = plugin.getUser(victim.getUniqueId()).getGame();
-                if (game.getRunners().contains(victim) && game.getRunners().contains(player)) {
+
+                Game game = gameVictim.getGame();
+                if (game.getRunners().contains(victim.getUniqueId()) && game.getRunners().contains(player.getUniqueId())) {
                     event.setCancelled(true);
                     return;
                 }
-                if (game.getBeasts().contains(victim) && game.getBeasts().contains(player)) {
+                if (game.getBeasts().contains(victim.getUniqueId()) && game.getBeasts().contains(player.getUniqueId())) {
                     event.setCancelled(true);
                     return;
                 }
                 if ((player.getHealth() - event.getFinalDamage()) <= 0) {
-                    if(game.getRunners().contains(player) && game.getRunners().contains(victim) || game.getBeasts().contains(player) && game.getBeasts().contains(victim)) {
+                    if(game.getRunners().contains(player.getUniqueId()) && game.getRunners().contains(victim.getUniqueId()) || game.getBeasts().contains(player.getUniqueId()) && game.getBeasts().contains(victim.getUniqueId())) {
                         event.setCancelled(true);
                     }
                 }
@@ -208,8 +233,9 @@ public class DamagesListener implements Listener {
     @EventHandler
     public void spectatorInventoryClick(InventoryClickEvent event) {
         Player player = (Player)event.getWhoClicked();
-        PlayerManager manager = plugin.getUser(player.getUniqueId());
-        if(manager != null && manager.getGame() != null && manager.getGame().getSpectators().contains(player)) {
+
+        GamePlayer manager = plugin.getGamePlayer(player);
+        if (manager != null && manager.isPlaying() && manager.getGame().getSpectators().contains(player.getUniqueId())) {
             event.setCancelled(true);
         }
     }
@@ -226,21 +252,21 @@ public class DamagesListener implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
         if(plugin.getSettings().isSecondSpectator()) {
             Player victim = (Player) event.getEntity();
-            Game game = plugin.getUser(victim.getUniqueId()).getGame();
+            Game game = plugin.getGamePlayer(victim).getGame();
             if (game == null) return;
             if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
                 Player attacker = (Player) event.getDamager();
                 if ((game.getStatus() == GameStatus.PLAYING || game.getStatus() == GameStatus.IN_GAME)
-                        && game.getSpectators().contains(victim)
-                        && (game.getRunners().contains(attacker) || game.getSpectators().contains(attacker)|| game.getBeasts().contains(attacker) || game.getKillers().contains(attacker))) {
+                        && game.getSpectators().contains(victim.getUniqueId())
+                        && (game.getRunners().contains(attacker.getUniqueId()) || game.getSpectators().contains(attacker.getUniqueId())|| game.getBeasts().contains(attacker.getUniqueId()) || game.getKillers().contains(attacker.getUniqueId()))) {
                     event.setCancelled(true);
                 }
             }
             if (event.getEntity() instanceof Player) {
                 if (event.getDamager() instanceof Arrow && (
                         (Arrow) event.getDamager()).getShooter() instanceof Player &&
-                        game.getSpectators().size() > 0 &&
-                        game.getSpectators().contains(victim)) {
+                        !game.getSpectators().isEmpty() &&
+                        game.getSpectators().contains(victim.getUniqueId())) {
                     Arrow arrow1 = (Arrow) event.getDamager();
                     Vector vector = arrow1.getVelocity();
                     Player shooter = (Player) arrow1.getShooter();
@@ -258,8 +284,8 @@ public class DamagesListener implements Listener {
                 }
                 if (event.getDamager() instanceof Snowball && (
                         (Snowball) event.getDamager()).getShooter() instanceof Player &&
-                        game.getSpectators().size() > 0 &&
-                        game.getSpectators().contains(victim)) {
+                        !game.getSpectators().isEmpty() &&
+                        game.getSpectators().contains(victim.getUniqueId())) {
                     Snowball snowball1 = (Snowball) event.getDamager();
                     Vector vector = snowball1.getVelocity();
                     Player shooter = (Player) snowball1.getShooter();
@@ -277,8 +303,8 @@ public class DamagesListener implements Listener {
                 }
                 if (event.getDamager() instanceof EnderPearl && (
                         (EnderPearl) event.getDamager()).getShooter() instanceof Player &&
-                        game.getSpectators().size() > 0 &&
-                        game.getSpectators().contains(victim)) {
+                        !game.getSpectators().isEmpty() &&
+                        game.getSpectators().contains(victim.getUniqueId())) {
                     EnderPearl enderPearl1 = (EnderPearl) event.getDamager();
                     Vector vector = enderPearl1.getVelocity();
                     Player shooter = (Player) enderPearl1.getShooter();
@@ -296,8 +322,8 @@ public class DamagesListener implements Listener {
                 }
                 if (event.getDamager() instanceof Egg && (
                         (Egg) event.getDamager()).getShooter() instanceof Player &&
-                        game.getSpectators().size() > 0 &&
-                        game.getSpectators().contains(victim)) {
+                        !game.getSpectators().isEmpty() &&
+                        game.getSpectators().contains(victim.getUniqueId())) {
                     Egg egg1 = (Egg) event.getDamager();
                     Vector vector = egg1.getVelocity();
                     Player shooter = (Player) egg1.getShooter();
@@ -315,8 +341,8 @@ public class DamagesListener implements Listener {
                 }
                 if (event.getDamager() instanceof ThrownExpBottle && (
                         (ThrownExpBottle) event.getDamager()).getShooter() instanceof Player &&
-                        game.getSpectators().size() > 0 &&
-                        game.getSpectators().contains(victim)) {
+                        !game.getSpectators().isEmpty() &&
+                        game.getSpectators().contains(victim.getUniqueId())) {
                     ThrownExpBottle thrownExpBottle1 = (ThrownExpBottle) event.getDamager();
                     Vector vector = thrownExpBottle1.getVelocity();
                     Player shooter = (Player) thrownExpBottle1.getShooter();
@@ -338,18 +364,18 @@ public class DamagesListener implements Listener {
                     if(event.getDamager() instanceof Player) {
                         Player attacker = (Player) event.getDamager();
                         deathMessage = byPvP.replace("%victim%", victim.getName()).replace("%attacker%", attacker.getName());
-                        plugin.getUser(attacker.getUniqueId()).addKills();
+                        plugin.getGamePlayer(attacker).getStatistics().addKills(1);
                     } else {
                         deathMessage = byDefault.replace("%victim%", victim.getName());
                     }
-                    for (Player inGamePlayer : game.getPlayers()) {
+                    for (Player inGamePlayer : PlayerUtil.getPlayers(plugin, game.getPlayers())) {
                         plugin.getUtils().sendMessage(inGamePlayer, deathMessage);
                     }
                 }
             }
             if (event.getDamager() instanceof Player) {
                 Player player = (Player) event.getDamager();
-                if (game.getSpectators().contains(player) || game.getSpectators().contains(victim))
+                if (game.getSpectators().contains(player.getUniqueId()) || game.getSpectators().contains(victim.getUniqueId()))
                     event.setCancelled(true);
             }
         }

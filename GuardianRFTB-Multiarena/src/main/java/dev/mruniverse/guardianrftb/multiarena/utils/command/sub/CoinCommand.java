@@ -2,7 +2,7 @@ package dev.mruniverse.guardianrftb.multiarena.utils.command.sub;
 
 import dev.mruniverse.guardianlib.core.utils.Utils;
 import dev.mruniverse.guardianrftb.multiarena.GuardianRFTB;
-import dev.mruniverse.guardianrftb.multiarena.interfaces.PlayerManager;
+import dev.mruniverse.guardianrftb.multiarena.storage.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,10 +21,10 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getUser(player.getUniqueId());
-                    if(manager != null) {
+                    GamePlayer manager = main.getGamePlayer(player);
+                    if (manager != null) {
                         int number = Integer.parseInt(arguments[2]);
-                        manager.setCoins(number);
+                        manager.getStatistics().setCoins(number);
                         utils.sendMessage(sender,"&aCoins of &b" + playerName + "&a now is &b" + number);
                         return;
                     }
@@ -42,10 +42,10 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getUser(player.getUniqueId());
-                    if(manager != null) {
+                    GamePlayer manager = main.getGamePlayer(player);
+                    if (manager != null) {
                         int number = Integer.parseInt(arguments[2]);
-                        manager.addCoins(number);
+                        manager.getStatistics().addCoins(number);
                         utils.sendMessage(sender,"&Added &b" + number + "&a coins to &b" + playerName + "&a.");
                         return;
                     }
@@ -63,10 +63,10 @@ public class CoinCommand {
                 String playerName = arguments[1];
                 Player player = Bukkit.getPlayer(playerName);
                 if(player != null) {
-                    PlayerManager manager = main.getUser(player.getUniqueId());
+                    GamePlayer manager = main.getGamePlayer(player);
                     if(manager != null) {
                         int number = Integer.parseInt(arguments[2]);
-                        manager.removeCoins(number);
+                        manager.getStatistics().removeCoins(number);
                         utils.sendMessage(sender,"&aRemoved &b" + number + "&a coins to &b" + playerName + "&a.");
                         return;
                     }
