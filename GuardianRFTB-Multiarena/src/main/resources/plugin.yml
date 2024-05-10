@@ -3,6 +3,7 @@ version: ${project.version}
 main: dev.mruniverse.guardianrftb.multiarena.GuardianRFTB
 authors: [ MrUniverse44, Sebastnchan ]
 description: Run From the Beast Minigame but with new Features and Original systems.
+load: POSTWORLD
 depend:
   - GuardianLIB
 commands:
